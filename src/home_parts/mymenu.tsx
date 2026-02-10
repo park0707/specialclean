@@ -2,6 +2,14 @@ import { Menu,Transition } from "@headlessui/react";
 import { Fragment } from "react/jsx-runtime";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "../logincontext";
+import {
+  HomeIcon,
+  InformationCircleIcon,
+  ArrowRightOnRectangleIcon,
+  ArrowLeftOnRectangleIcon,
+  UserPlusIcon,
+} from '@heroicons/react/24/outline';
+
 export function Mymenu(){
     const {id} = useAuth()
     const itemclass = (active:boolean) => `${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
@@ -23,11 +31,12 @@ export function Mymenu(){
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="absolute right-0 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+                <Menu.Items className="absolute right-0 mt-2 w-45 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
                     <Menu.Item>
                         {
                             ({active}) => (
                                 <Link to="/" className={itemclass(active)}>
+                                    <HomeIcon className="w-5 h-5 inline-block mr-3  text-blue-500"/>
                                     홈으로
                                 </Link>
                             )
@@ -37,6 +46,7 @@ export function Mymenu(){
                         {
                             ({active}) => (
                                 <div className={itemclass(active)}>
+                                    <InformationCircleIcon className="w-5 h-5 inline-block mr-3 text-blue-500"/>
                                     정보
                                 </div>
                             )
@@ -47,11 +57,13 @@ export function Mymenu(){
                             id ?
                             ({active}) => (
                                 <div className={itemclass(active)}>
+                                    <ArrowLeftOnRectangleIcon className="w-5 h-5 inline-block mr-3  text-blue-500"/>
                                     로그아웃    
                                 </div>
                             ) :
                             ({active}) => (
                                 <div className={itemclass(active)}>
+                                    <ArrowRightOnRectangleIcon className="w-5 h-5 inline-block mr-3  text-blue-500"/>
                                     로그인 / 회원 가입
                                 </div>
                             )
