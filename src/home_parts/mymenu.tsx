@@ -2,15 +2,19 @@ import { Menu,Transition } from "@headlessui/react";
 import { Fragment } from "react/jsx-runtime";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "../logincontext";
+import { useState } from "react";
+import LoginDialog from "./menu_parts/login";
 import {
   HomeIcon,
   InformationCircleIcon,
   ArrowRightOnRectangleIcon,
-  ArrowLeftOnRectangleIcon
+  ArrowLeftOnRectangleIcon,
+  UserIcon  
 } from '@heroicons/react/24/outline';
 
 export function Mymenu(){
     const {id} = useAuth()
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
     const itemclass = (active:boolean) => `${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
         } block px-4 py-2 text-[15px] w-full`;
     return(
@@ -30,7 +34,7 @@ export function Mymenu(){
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="absolute right-0 mt-2 w-45 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+                <Menu.Items className="absolute right-0 mt-2 w-45 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-40">
                     <Menu.Item>
                         {
                             ({active}) => (
@@ -61,7 +65,7 @@ export function Mymenu(){
                                 </div>
                             ) :
                             ({active}) => (
-                                <div className={itemclass(active)}>
+                                <div className={itemclass(active)} onClick={()=>setIsLoginOpen(true)}>
                                     <ArrowRightOnRectangleIcon className="w-5 h-5 inline-block mr-3  text-blue-500"/>
                                     로그인 / 회원 가입
                                 </div>
@@ -69,8 +73,23 @@ export function Mymenu(){
                             
                         }
                     </Menu.Item>
+                    {
+                        id &&
+                        <Menu.Item>
+                        {
+                                ({active}) => (
+                                    <div className={itemclass(active)}>
+                                        <UserIcon className="w-5 h-5 inline-block mr-3 text-blue-500"/>
+                                        마이페이지
+                                    </div>
+                                )
+                                //마이페이지 나중에 만들고 Link로 바꾸기
+                        }
+                        </Menu.Item>
+                    }
                 </Menu.Items>
             </Transition>
+            <LoginDialog isOpen={isLoginOpen} closeModal={()=>setIsLoginOpen(false)}/>
         </Menu>
     )
 }

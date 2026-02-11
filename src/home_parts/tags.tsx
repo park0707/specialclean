@@ -5,7 +5,7 @@ import { useState } from "react"
 export default function MenuTabs() {
   const [selectedTab, setSelectedTab] = useState<'지역'|'가격'|'분류'|'작업 시간'>('지역');
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center z-30">
       <div className="relative w-[700px] h-[400px] bg-gray-200 border border-gray-400 rounded-b-lg rounded-tr-lg">
         {/* 큰 왼쪽 탭 */}
         <div className="absolute -top-10 -ml-[0.1px] flex">
