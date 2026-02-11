@@ -7,9 +7,9 @@ const items = [
   { id: 2, name: '이사 청소' },
   { id: 3, name: '사무실 청소' },
   { id: 4, name: '에어컨 청소' },
-]; // 검색창 클릭 시 예시로 보이는 데이터
+]; // 검색창 클릭 시 예시로 보이는 데이터, 나중에 수정해야 함, 아예 다른 파일에서 복잡하게 구현하고 여기서 호출하는 방법도 고려
 
-export function SearchBox() {
+export default function SearchBox() {
   const [query, setQuery] = useState('');
 
   const filtered =

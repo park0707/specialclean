@@ -1,13 +1,16 @@
 import { Outlet } from '@tanstack/react-router'
 import { AuthProvider } from './logincontext'
+import { SearchProvider } from './searchcontext'
 function App() {
   
 
   return (
     <div className="p-0 m-0">
-      <AuthProvider>
-        <Outlet/>
-      </AuthProvider>
+      <SearchProvider>
+        <AuthProvider>
+          <Outlet/>
+        </AuthProvider>
+      </SearchProvider>
       
     </div>
   )

@@ -6,8 +6,7 @@ import {
   HomeIcon,
   InformationCircleIcon,
   ArrowRightOnRectangleIcon,
-  ArrowLeftOnRectangleIcon,
-  UserPlusIcon,
+  ArrowLeftOnRectangleIcon
 } from '@heroicons/react/24/outline';
 
 export function Mymenu(){
