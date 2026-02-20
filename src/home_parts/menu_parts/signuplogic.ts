@@ -1,9 +1,7 @@
 import { useEffect } from "react";
 export function useSignUpLogic(id:string,pw:string,pwcon:string,
-    setidok:React.Dispatch<React.SetStateAction<number>>,setpwok:React.Dispatch<React.SetStateAction<number>>){
-    useEffect(() => {
-        //아이디 사용 가능 여부 조사
-    },[id])
+    setpwok:React.Dispatch<React.SetStateAction<number>>){
+    
 
     useEffect(() => {
         if(!pw.trim())

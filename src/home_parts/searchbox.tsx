@@ -36,7 +36,7 @@ export default function SearchBox() {
           />
           {/*돋보기 모양 아이콘에 나중에 button으로 감싸고 클릭 시 검색 되도록, 그리고 엔터 눌러도 검색 되도록 해야 함 */}
 
-          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
+          <Combobox.Options className="absolute z-40 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
             {filtered.length === 0 && query !== '' ? (
               <div className="px-3 py-2 text-gray-500">검색 결과 없음</div>
             ) : (

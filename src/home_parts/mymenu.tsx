@@ -4,6 +4,8 @@ import { Link } from "@tanstack/react-router";
 import { useAuth } from "../logincontext";
 import { useState } from "react";
 import LoginDialog from "./menu_parts/login";
+import {auth} from '../lib/firebase';
+import { signOut } from "firebase/auth";
 import {
   HomeIcon,
   InformationCircleIcon,
@@ -13,10 +15,17 @@ import {
 } from '@heroicons/react/24/outline';
 
 export function Mymenu(){
-    const {id} = useAuth()
+    const {user} = useAuth()
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const itemclass = (active:boolean) => `${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-        } block px-4 py-2 text-[15px] w-full`;
+        } block px-4 py-2 text-[15px] w-full cursor-pointer`;
+    const handleLogout = async () => {
+        try {
+            await signOut(auth); // 현재 로그인된 사용자 세션 종료
+        } catch (err) {
+            console.error(err);
+        }
+    };
     return(
         
 
@@ -57,9 +66,9 @@ export function Mymenu(){
                     </Menu.Item>
                     <Menu.Item>
                         {
-                            id ?
+                            user ?
                             ({active}) => (
-                                <div className={itemclass(active)}>
+                                <div className={itemclass(active)} onClick={handleLogout}>
                                     <ArrowLeftOnRectangleIcon className="w-5 h-5 inline-block mr-3  text-blue-500"/>
                                     로그아웃    
                                 </div>
@@ -74,7 +83,7 @@ export function Mymenu(){
                         }
                     </Menu.Item>
                     {
-                        id &&
+                        user &&
                         <Menu.Item>
                         {
                                 ({active}) => (
