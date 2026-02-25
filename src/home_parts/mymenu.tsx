@@ -11,7 +11,8 @@ import {
   InformationCircleIcon,
   ArrowRightOnRectangleIcon,
   ArrowLeftOnRectangleIcon,
-  UserIcon  
+  UserIcon, 
+  Bars3Icon
 } from '@heroicons/react/24/outline';
 
 export function Mymenu(){
@@ -32,7 +33,7 @@ export function Mymenu(){
         <Menu as="div" className="relative inline-block text-left">
             <Menu.Button className="inline-flex items-center gap-1 rounded-md bg-white 
             px-1 py-1 text-sm font-medium text-gray-700 shadow hover:bg-gray-50 cursor-pointer">
-                <img src="/images/메뉴.png" alt="메뉴" className="w-[50px] h-auto text-black"/>
+                <Bars3Icon className="w-9 h-9 text-black"/>
             </Menu.Button>
             <Transition
             as={Fragment}
@@ -87,10 +88,10 @@ export function Mymenu(){
                         <Menu.Item>
                         {
                                 ({active}) => (
-                                    <div className={itemclass(active)}>
+                                    <Link to="/mypage" className={itemclass(active)}>
                                         <UserIcon className="w-5 h-5 inline-block mr-3 text-blue-500"/>
                                         마이페이지
-                                    </div>
+                                    </Link>
                                 )
                                 //마이페이지 나중에 만들고 Link로 바꾸기
                         }

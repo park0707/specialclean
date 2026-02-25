@@ -4,7 +4,7 @@ import { Fragment, useEffect } from 'react'
 import { useState } from 'react'
 import { useSignUpLogic } from './signuplogic';
 import {auth} from '../../lib/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword,sendEmailVerification, signOut } from 'firebase/auth';
 
 
 interface signupprops {
@@ -18,6 +18,7 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
     const [pwcon, setPwcon] = useState('')
     const [idok, setIdok] = useState(0) //0은 초기값, 1은 이미 사용 중, 2는 이메일 형식 불일치 3은 사용 가능
     const [pwok, setPwok] = useState(0) //0은 초기값 1이면 pw 미입력, 2이면 pw 미입력, 3이면 불일치
+    const [msg, setMsg] = useState(''); // 이메일 인증이나 기타 사용자에게 표시하고 싶은 메시지
     const handleSignUp = async () => {
       const email = id.trim();
       const password = pw.trim();
@@ -30,11 +31,17 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
       }
 
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+        if (cred.user) {
+          await sendEmailVerification(cred.user); // [web:41][web:45]
+        }
+        await signOut(auth);
+
         setId('');
         setPw('');
         setPwcon('');
-        closeModal();
+        setMsg('회원 가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.');
       } catch (err: any) {
         if (err.code === 'auth/email-already-in-use') {
           setIdok(1); // 이미 사용 중인 이메일
@@ -113,7 +120,9 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
                 onClick={handleSignUp}>
                   회원 가입
                 </button>
-                
+                {
+                  msg && <div className="text-green-500 text-sm pl-1">{msg}</div>
+                }
               </div>
             </DialogPanel>
           </Transition.Child>
