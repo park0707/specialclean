@@ -58,10 +58,10 @@ export function Mymenu(){
                     <Menu.Item>
                         {
                             ({active}) => (
-                                <div className={itemclass(active)}>
-                                    <InformationCircleIcon className="w-5 h-5 inline-block mr-3 text-blue-500"/>
+                                <Link to="/info" className={itemclass(active)}>
+                                    <InformationCircleIcon className="w-5 h-5 inline-block mr-3  text-blue-500"/>
                                     정보
-                                </div>
+                                </Link>
                             )
                         }
                     </Menu.Item>

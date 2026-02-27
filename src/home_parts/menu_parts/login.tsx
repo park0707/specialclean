@@ -69,6 +69,7 @@ export default function LoginDialog({ isOpen, closeModal }: loginprops) {
     const handleGoogleLogin = async () => {
       try {
         const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
         // 구글 계정 선택 팝업 → 로그인
         await signInWithPopup(auth, provider);
         // 성공하면 AuthProvider의 onAuthStateChanged가 user를 채워줌

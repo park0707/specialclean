@@ -1,17 +1,20 @@
 import { Outlet } from '@tanstack/react-router'
 import { AuthProvider } from './logincontext'
 import { SearchProvider } from './searchcontext'
+import Footer from './footer'
 function App() {
   
 
   return (
-    <div className="p-0 m-0">
-      <SearchProvider>
+    <div className="flex flex-col p-0 m-0 min-h-screen">
+      <main className="flex-1">
         <AuthProvider>
-          <Outlet/>
+          <SearchProvider>
+            <Outlet />
+          </SearchProvider>
         </AuthProvider>
-      </SearchProvider>
-      
+      </main>
+      <Footer/>
     </div>
   )
 }

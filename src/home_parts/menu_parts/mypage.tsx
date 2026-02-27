@@ -1,5 +1,5 @@
 //ai돌려서 만든 초안, 내가 직접 수정할 필요 있음. (2026-02-21)
-// src/pages/MyPage.tsx
+// 회원 탈퇴 버튼 동작 구현해야 함
 import { useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { useAuth } from "../../logincontext"
