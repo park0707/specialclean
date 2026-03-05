@@ -58,7 +58,7 @@ export function Mymenu(){
                     <Menu.Item>
                         {
                             ({active}) => (
-                                <Link to="/info" className={itemclass(active)}>
+                                <Link to="/info" search={{menu:"privacy"}} className={itemclass(active)}>
                                     <InformationCircleIcon className="w-5 h-5 inline-block mr-3  text-blue-500"/>
                                     정보
                                 </Link>

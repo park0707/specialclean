@@ -54,6 +54,7 @@ const MENUS = [
     sections: [
       '문의 안내',
       '문의 양식',
+      '업체 신청',
     ],
   },
   {
@@ -64,6 +65,11 @@ const MENUS = [
       '회원 가입 관련',
       '서비스 이용 관련',
     ],
+  },{
+    id: 'notice',
+    label: '공지사항',
+    component: () => <div>공지사항 콘텐츠</div>, //나중에 추가
+    sections: ['공지사항'],
   }
 ];
 

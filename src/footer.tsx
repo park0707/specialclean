@@ -11,6 +11,7 @@ export default function Footer() {
         <Link to="/info" className={footerLinkClass} search={{menu:'contact'}}>문의하기</Link>
         <Link to="/info" className={footerLinkClass} search={{menu:'faq'}}>자주 묻는 질문</Link>
         <Link to="/info" className={footerLinkClass} search={{menu:'about'}}>사이트 소개</Link>
+        <Link to="/info" className={footerLinkClass} search={{menu:'notice'}}>공지사항</Link>
         <p className="text-sm text-gray-500">© 2026 클린 매칭 서비스. All rights reserved.</p>
       </div>
     </footer>

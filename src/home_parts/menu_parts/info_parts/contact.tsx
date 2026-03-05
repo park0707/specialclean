@@ -1,6 +1,7 @@
 // src/pages/info/Contact.tsx
 import { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
+import Application from './application';
 
 interface Props {
   activeSection: string;
@@ -142,6 +143,9 @@ export default function ContactPage({ activeSection }: Props) {
         )}
       </div>
     );
+  }
+  if (activeSection === '업체 신청') {
+    return <Application />;
   }
 
   return null;
