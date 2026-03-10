@@ -1,8 +1,9 @@
 // src/pages/apply/BusinessApplyForm.tsx
 import { useState,useRef } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc,setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import emailjs from '@emailjs/browser';
+import { useAuth } from '../../../logincontext';
 
 // 업체 신청에 저장할 타입 (참고용)
 export interface BusinessApplicationInput {
@@ -26,6 +27,7 @@ export interface BusinessApplicationInput {
 }
 
 export default function Application() {
+  const { user } = useAuth();
   const [form, setForm] = useState<BusinessApplicationInput>({
     name: '',
     regionWide: '',
@@ -124,32 +126,38 @@ export default function Application() {
         .filter((t) => t.length > 0);
 
       // Firestore에 신청 데이터 저장
-      const dcref = await addDoc(collection(db, 'businessApplications'), {
-        name: form.name,
-        regionWide: form.regionWide,
-        regionDetail: form.regionDetail,
-        serviceAreas: form.serviceAreas,
-        services: servicesArray,
-        openingHours: {
-          weekday: { open: weekdayOpen, close: weekdayClose },
-          weekend: { open: weekendOpen, close: weekendClose },
-        },
-        phone: form.phone,
-        shortDescription: form.shortDescription,
-        description: form.description,
-        serviceRadiusKm: radius || 0,
-        ratingAvg: 0,
-        ratingCount: 0,
-        reviewCount: 0,
-        bookmarkCount: 0,
-        tags: tagsArray,
-        ownerEmail: form.ownerEmail ?? '',
-        status: 'submitted',
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}_${String(now.getDate()).padStart(2, '0')}`;
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}_${String(now.getMinutes()).padStart(2, '0')}`;
+    const safeDocId = `${dateStr}_${timeStr}_${form.name.replace(/\s+/g, '')}`;
 
-      const dcid = dcref.id;
+    const dcref = doc(db, 'businessApplications', safeDocId);
+    await setDoc(dcref, {
+      name: form.name,
+      regionWide: form.regionWide,
+      regionDetail: form.regionDetail,
+      serviceAreas: form.serviceAreas,
+      services: servicesArray,
+      openingHours: {
+        weekday: { open: weekdayOpen, close: weekdayClose },
+        weekend: { open: weekendOpen, close: weekendClose },
+      },
+      phone: form.phone,
+      shortDescription: form.shortDescription,
+      description: form.description,
+      serviceRadiusKm: radius || 0,
+      ratingAvg: 0,
+      ratingCount: 0,
+      reviewCount: 0,
+      bookmarkCount: 0,
+      tags: tagsArray,
+      ownerEmail: form.ownerEmail ?? '',
+      status: 'submitted',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+
+    const dcid = safeDocId;
       await emailjs.send(
       import.meta.env.VITE_EMAILJS_SERVICE_ID,
       import.meta.env.VITE_EMAILJS_TEMPLATE2_ID, // 업체 신청용 템플릿 ID
@@ -188,7 +196,19 @@ export default function Application() {
       setSubmitting(false);
     }
   };
-
+  if (!user) {
+    return (
+      <div className="max-w-3xl mx-auto py-16 flex flex-col items-center justify-center gap-3 text-center">
+        <div className="text-4xl">🔒</div>
+        <p className="text-base font-medium text-gray-700">
+          로그인한 유저만 이용 가능합니다.
+        </p>
+        <p className="text-sm text-gray-400">
+          업체 등록 신청을 하려면 먼저 로그인해 주세요.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="max-w-3xl mx-auto" ref={msgRef}>
       <h2 className="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-200">
