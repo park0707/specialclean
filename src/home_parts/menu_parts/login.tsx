@@ -6,6 +6,7 @@ import SignUpDialog from './signup'
 import {auth} from '../../lib/firebase';
 import { signInWithEmailAndPassword,sendEmailVerification } from 'firebase/auth';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import ForgotPasswordDialog from './ForgotPasswordDialog';
 interface loginprops {
   isOpen: boolean
   closeModal: () => void
@@ -17,6 +18,7 @@ export default function LoginDialog({ isOpen, closeModal }: loginprops) {
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState(''); // 로그인 관련 안내/에러
     const [isresend, setisresend] = useState(false); // 인증메일 재전송 버튼 활성화 여부
+    const [isForgotOpen, setIsForgotOpen] = useState(false); // 비밀번호 찾기 모달 열림 여부
     const [lastuser, setLastUser] = useState<null|import('firebase/auth').User>(null); // 마지막 로그인 시도한 이메일 주소 (인증메일 재전송용)
 
 
@@ -158,7 +160,7 @@ export default function LoginDialog({ isOpen, closeModal }: loginprops) {
                 <button
                   type="button"
                   className="w-full text-sm text-gray-500 hover:text-gray-700 underline-offset-2 hover:underline cursor-pointer"
-                  // onClick={handleFindPassword}  // 나중에 비밀번호 찾기 모달/페이지 연결
+                  onClick={() => setIsForgotOpen(true)}
                 >
                   비밀번호 찾기
                 </button>
@@ -181,6 +183,7 @@ export default function LoginDialog({ isOpen, closeModal }: loginprops) {
         </div>
       </Dialog>
         <SignUpDialog isOpen={isSignUpOpen} closeModal={()=>{setIsSignUpOpen(false)}}/>
+        <ForgotPasswordDialog isOpen={isForgotOpen} closeModal={()=>{setIsForgotOpen(false)}}/>
     </Transition>
   )
 }

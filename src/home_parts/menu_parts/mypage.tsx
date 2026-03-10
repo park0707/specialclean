@@ -30,7 +30,7 @@ type Tab = '북마크' | '내 리뷰' | '프로필'
 
 export default function MyPage() {
   const [activeTab, setActiveTab] = useState<Tab>('북마크')
-  const { user } = useAuth()
+  const { user,isAdmin } = useAuth()
   const [isEditing, setIsEditing] = useState(false);
   const [displayNameInput, setDisplayNameInput] = useState(user?.displayName ?? '');
   const [saving, setSaving] = useState(false);
@@ -123,6 +123,13 @@ export default function MyPage() {
                     className="w-4 h-4 inline-block ml-2 text-gray-400 cursor-pointer hover:text-gray-600"
                     onClick={handleStartEdit}
                     />
+                    {
+                      isAdmin && (
+                        <span className="inline-block rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                          관리자
+                        </span>
+                      )
+                    }
                 </>
                 )}
             </div>
@@ -181,14 +188,26 @@ export default function MyPage() {
                     </div>
                   </div>
                   <div>
+                    <label className="mb-1 block text-sm font-medium text-gray-700">계정 유형</label>
+                    {isAdmin ? (
+                      <span className="inline-block rounded bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
+                        관리자 계정
+                      </span>
+                    ) : (
+                      <span className="inline-block rounded bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+                        일반 사용자
+                      </span>
+                    )}
+                  </div>
+                  <div>
                     <label className="mb-1 block text-sm font-medium text-gray-700">로그인 방식</label>
                     {
                         user?.providerData.find((p) => p.providerId === 'google.com') ? (
-                            <span className="inline-block rounded bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                            <span className="inline-block rounded bg-green-100 px-2 py-1 text-sm font-medium text-green-700">
                               구글 로그인
                             </span>
                         ) : (
-                            <span className="inline-block rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+                            <span className="inline-block rounded bg-blue-100 px-2 py-1 text-sm font-medium text-blue-700">
                               이메일 로그인
                             </span>
                         )
