@@ -1,6 +1,6 @@
 //id,pw의 변화에 따라 보이는 문자들 다르게 보이도록 수정해야 함
 import { Dialog, DialogPanel, DialogTitle, Transition } from '@headlessui/react'
-import { Fragment, useEffect } from 'react'
+import { Fragment } from 'react'
 import { useState } from 'react'
 import { useSignUpLogic } from './signuplogic';
 import {auth} from '../../lib/firebase';

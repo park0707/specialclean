@@ -1,7 +1,6 @@
 //ai돌려서 만든 초안, 내가 직접 수정할 필요 있음. (2026-02-21)
 // 회원 탈퇴 버튼 동작 구현해야 함, 우선 북마크, 리뷰 등을 저장할 firestore 만든 후 회원 탈퇴시 해당 정보도 삭제 되도록 해야 되서 나중에 하기로
 import { useState } from "react"
-import { Link } from "@tanstack/react-router"
 import { useAuth } from "../../logincontext"
 import { PencilIcon } from "@heroicons/react/24/outline"
 import { updateProfile } from "firebase/auth"

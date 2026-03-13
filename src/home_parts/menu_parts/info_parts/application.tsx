@@ -1,6 +1,6 @@
 // src/pages/apply/BusinessApplyForm.tsx
 import { useState,useRef } from 'react';
-import { collection, doc,setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc,setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import emailjs from '@emailjs/browser';
 import { useAuth } from '../../../logincontext';

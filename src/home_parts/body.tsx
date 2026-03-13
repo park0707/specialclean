@@ -1,5 +1,6 @@
 import SearchBox from "./searchbox"
 import MenuTabs from "./tags"
+import SearchResult from "./SearchResult"
 export default function Body(){
     return(
         <div className="w-full h-full items-center justify-center flex flex-col">
@@ -7,9 +8,10 @@ export default function Body(){
                 쉽고 빠른 특수 청소 업체 매칭 서비스
             </div>
             <div className="w-full h-full items-center justify-center flex pt-4 flex-col gap-6">
-                
+
                 <SearchBox/>
                 <MenuTabs/>
+                <SearchResult/>
             </div>
         </div>
     )
