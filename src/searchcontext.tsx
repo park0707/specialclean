@@ -1,27 +1,57 @@
-import React, { createContext,useContext,useState } from "react";
-interface SearchContextType {
-    text:String,
-    setText: React.Dispatch<React.SetStateAction<String>>,
-    tags:String[],
-    setTags:React.Dispatch<React.SetStateAction<String[]>>
+// src/searchcontext.tsx
+import { createContext, useContext, useState } from 'react';
+
+interface SearchState {
+  query: string;
+  region: string;
+  selectedServices: string[];
+  selectedTags: string[];
 }
 
-const SearchContext = createContext<SearchContextType|undefined>(undefined);
-
-export function SearchProvider({children}:{children:React.ReactNode}){
-    const [text, setText] = useState<String>("");
-    const [tags, setTags] = useState<String[]>([]);
-    return(
-        <SearchContext.Provider value={{text,setText,tags,setTags}}>
-            {children}
-        </SearchContext.Provider>
-    )
+interface SearchContextValue extends SearchState {
+  setQuery: (v: string) => void;
+  setRegion: (v: string) => void;
+  setSelectedServices: (v: string[] | ((prev: string[]) => string[])) => void;
+  setSelectedTags: (v: string[] | ((prev: string[]) => string[])) => void;
+  resetFilters: () => void;
 }
 
-export function useSearch(){
-    const ctx = useContext(SearchContext);
-    if(!ctx){
-        throw new Error('Search context error');
-    }
-    return ctx;
-}
+const SearchContext = createContext<SearchContextValue | null>(null);
+
+export const SearchProvider = ({ children }: { children: React.ReactNode }) => {
+  const [query, setQuery] = useState('');
+  const [region, setRegion] = useState('');
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const resetFilters = () => {
+    setQuery('');
+    setRegion('');
+    setSelectedServices([]);
+    setSelectedTags([]);
+  };
+
+  return (
+    <SearchContext.Provider
+      value={{
+        query,
+        setQuery,
+        region,
+        setRegion,
+        selectedServices,
+        setSelectedServices,
+        selectedTags,
+        setSelectedTags,
+        resetFilters,
+      }}
+    >
+      {children}
+    </SearchContext.Provider>
+  );
+};
+
+export const useSearch = (): SearchContextValue => {
+  const ctx = useContext(SearchContext);
+  if (!ctx) throw new Error('useSearch must be used within SearchProvider');
+  return ctx;
+};
