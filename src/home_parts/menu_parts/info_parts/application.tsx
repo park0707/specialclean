@@ -6,36 +6,37 @@ import emailjs from '@emailjs/browser';
 import { useAuth } from '../../../logincontext';
 import { SIDO_LIST } from '../../../lib/regions';
 import { geocodeAddress } from '../../../lib/geocode';
+import { SERVICE_CATEGORIES, TAG_OPTIONS } from '../../../lib/companyFormOptions';
 
 // ── 타입 ──────────────────────────────────────────────
 type CoverageType = 'nationwide' | 'regional' | 'radius';
 
 interface BaseFormInput {
   name: string;
-  services: string;
   phone: string;
   shortDescription: string;
   description: string;
-  tags: string;
-  ownerEmail: string;
+  businessRegNumber: string;
   weekdayOpen: string;
   weekdayClose: string;
   weekendOpen: string;
   weekendClose: string;
+  priceMin: string;
+  priceMax: string;
 }
 
 const INITIAL_FORM: BaseFormInput = {
   name: '',
-  services: '',
   phone: '',
   shortDescription: '',
   description: '',
-  tags: '',
-  ownerEmail: '',
+  businessRegNumber: '',
   weekdayOpen: '',
   weekdayClose: '',
   weekendOpen: '',
   weekendClose: '',
+  priceMin: '',
+  priceMax: '',
 };
 
 // ── 컴포넌트 ──────────────────────────────────────────
@@ -47,6 +48,14 @@ export default function Application() {
   const [selectedSido, setSelectedSido] = useState<string[]>([]);
   const [baseAddress, setBaseAddress] = useState('');
   const [serviceRadiusKm, setServiceRadiusKm] = useState(30);
+
+  // 서비스·태그 (칩 멀티선택)
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // 운영시간 미운영 체크박스
+  const [weekdayClosed, setWeekdayClosed] = useState(false);
+  const [weekendClosed, setWeekendClosed] = useState(true);
 
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -65,6 +74,18 @@ export default function Application() {
     );
   };
 
+  const toggleService = (item: string) => {
+    setSelectedServices((prev) =>
+      prev.includes(item) ? prev.filter((s) => s !== item) : [...prev, item],
+    );
+  };
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
@@ -77,15 +98,57 @@ export default function Application() {
       return;
     }
     if (
-      !form.name || !form.phone || !form.services ||
+      !form.name || !form.phone ||
       !form.shortDescription || !form.description ||
-      !form.tags || !form.ownerEmail ||
-      !form.weekdayOpen || !form.weekdayClose ||
-      !form.weekendOpen || !form.weekendClose
+      !form.businessRegNumber
     ) {
       setErrorMsg('모든 필수 항목을 입력해 주세요.');
       msgRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
+    }
+
+    if (selectedServices.length === 0) {
+      setErrorMsg('제공 서비스를 1개 이상 선택해주세요.');
+      msgRef.current?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    if (selectedTags.length === 0) {
+      setErrorMsg('태그를 1개 이상 선택해주세요.');
+      msgRef.current?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    // ── 운영시간 검사 (미운영 아닐 때만) ──
+    const weekdayOpen = weekdayClosed ? 0 : Number(form.weekdayOpen);
+    const weekdayClose = weekdayClosed ? 0 : Number(form.weekdayClose);
+    const weekendOpen = weekendClosed ? 0 : Number(form.weekendOpen);
+    const weekendClose = weekendClosed ? 0 : Number(form.weekendClose);
+
+    if (!weekdayClosed) {
+      if (!form.weekdayOpen || !form.weekdayClose) {
+        setErrorMsg('평일 운영 시간을 입력해주세요.');
+        msgRef.current?.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      const isValidHour = (h: number) => Number.isInteger(h) && h >= 0 && h <= 24;
+      if (!isValidHour(weekdayOpen) || !isValidHour(weekdayClose)) {
+        setErrorMsg('운영 시간은 0 이상 24 이하의 정수로 입력해 주세요.');
+        msgRef.current?.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+    if (!weekendClosed) {
+      if (!form.weekendOpen || !form.weekendClose) {
+        setErrorMsg('주말 운영 시간을 입력해주세요.');
+        msgRef.current?.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      const isValidHour = (h: number) => Number.isInteger(h) && h >= 0 && h <= 24;
+      if (!isValidHour(weekendOpen) || !isValidHour(weekendClose)) {
+        setErrorMsg('운영 시간은 0 이상 24 이하의 정수로 입력해 주세요.');
+        msgRef.current?.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
     }
 
     // ── 유형별 유효성 검사 ──
@@ -107,24 +170,9 @@ export default function Application() {
       }
     }
 
-    // ── 운영시간 검사 ──
-    const weekdayOpen = Number(form.weekdayOpen);
-    const weekdayClose = Number(form.weekdayClose);
-    const weekendOpen = Number(form.weekendOpen);
-    const weekendClose = Number(form.weekendClose);
-    const isValidHour = (h: number) => Number.isInteger(h) && h >= 0 && h <= 24;
-    if (!isValidHour(weekdayOpen) || !isValidHour(weekdayClose) ||
-        !isValidHour(weekendOpen) || !isValidHour(weekendClose)) {
-      setErrorMsg('운영 시간은 0 이상 24 이하의 정수로 입력해 주세요.');
-      return;
-    }
-
     setSubmitting(true);
 
     try {
-      const servicesArray = form.services.split(',').map((s) => s.trim()).filter(Boolean);
-      const tagsArray = form.tags.split(',').map((t) => t.trim()).filter(Boolean);
-
       // ── 문서 ID 생성 ──
       const now = new Date();
       const dateStr = `${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}_${String(now.getDate()).padStart(2, '0')}`;
@@ -155,25 +203,36 @@ export default function Application() {
         };
       }
 
+      // ── 가격 범위 구성 ──
+      const priceRange =
+        form.priceMin || form.priceMax
+          ? {
+              min: form.priceMin ? Number(form.priceMin) : null,
+              max: form.priceMax ? Number(form.priceMax) : null,
+            }
+          : null;
+
       // ── Firestore 저장 ──
       const dcref = doc(db, 'businessApplications', safeDocId);
       await setDoc(dcref, {
         name: form.name,
         ...coverageData,
-        services: servicesArray,
+        services: selectedServices,
         openingHours: {
-          weekday: { open: weekdayOpen, close: weekdayClose },
-          weekend: { open: weekendOpen, close: weekendClose },
+          weekday: { open: weekdayOpen, close: weekdayClose, closed: weekdayClosed },
+          weekend: { open: weekendOpen, close: weekendClose, closed: weekendClosed },
         },
         phone: form.phone,
         shortDescription: form.shortDescription,
         description: form.description,
+        businessRegNumber: form.businessRegNumber,
+        ...(priceRange && { priceRange }),
         ratingAvg: 0,
         ratingCount: 0,
         reviewCount: 0,
         bookmarkCount: 0,
-        tags: tagsArray,
-        ownerEmail: form.ownerEmail,
+        tags: selectedTags,
+        ownerEmail: user!.email,
         status: 'submitted',
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -183,7 +242,7 @@ export default function Application() {
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE2_ID,
-        { business_name: form.name, owner_email: form.ownerEmail, document_id: safeDocId },
+        { business_name: form.name, owner_email: user!.email, document_id: safeDocId },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
       );
 
@@ -194,6 +253,10 @@ export default function Application() {
       setSelectedSido([]);
       setBaseAddress('');
       setServiceRadiusKm(30);
+      setSelectedServices([]);
+      setSelectedTags([]);
+      setWeekdayClosed(false);
+      setWeekendClosed(true);
       msgRef.current?.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
@@ -256,6 +319,26 @@ export default function Application() {
               value={form.phone} onChange={handleChange}
             />
           </div>
+        </div>
+
+        {/* ── 사업자등록번호 ── */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">사업자등록번호 *</label>
+          <input
+            type="text" name="businessRegNumber" required
+            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+            placeholder="예: 123-45-67890"
+            value={form.businessRegNumber} onChange={handleChange}
+          />
+        </div>
+
+        {/* ── 대표 이메일 (자동 표시) ── */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">대표 이메일</label>
+          <div className="w-full rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-500">
+            {user.email}
+          </div>
+          <p className="mt-1 text-xs text-gray-400">로그인 계정 이메일이 자동으로 사용됩니다.</p>
         </div>
 
         {/* ── 서비스 범위 ── */}
@@ -353,53 +436,125 @@ export default function Application() {
           )}
         </div>
 
-        {/* ── 제공 서비스 ── */}
+        {/* ── 제공 서비스 (칩 멀티선택) ── */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">제공 서비스 (쉼표로 구분) *</label>
-          <input
-            type="text" name="services" required
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-            placeholder="예: 유품정리, 쓰레기집 청소, 화재 복구"
-            value={form.services} onChange={handleChange}
-          />
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            제공 서비스 * (1개 이상 선택)
+          </label>
+          {selectedServices.length === 0 && (
+            <p className="text-xs text-red-400 mb-2">최소 1개 이상 선택해주세요.</p>
+          )}
+          <div className="space-y-4">
+            {SERVICE_CATEGORIES.map(({ category, items }) => (
+              <div key={category}>
+                <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                  {category}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {items.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => toggleService(item)}
+                      className={`rounded-full px-3 py-1 text-sm border transition-colors duration-150 cursor-pointer ${
+                        selectedServices.includes(item)
+                          ? 'bg-blue-500 text-white border-blue-500'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          {selectedServices.length > 0 && (
+            <div className="mt-2 text-xs text-blue-600">
+              선택됨: {selectedServices.join(', ')}
+            </div>
+          )}
         </div>
 
         {/* ── 운영 시간 ── */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            운영 시간 * (0~24시, 24시간 운영이면 0~24, 미운영 시 0~0)
+            운영 시간 * (0~24시)
           </label>
-          <div className="space-y-2">
-            {(
-              [
-                { label: '평일', openKey: 'weekdayOpen', closeKey: 'weekdayClose' },
-                { label: '주말·공휴일', openKey: 'weekendOpen', closeKey: 'weekendClose' },
-              ] as const
-            ).map(({ label, openKey, closeKey }) => (
-              <div key={label} className="flex flex-col md:flex-row md:items-center gap-2">
-                <span className="w-24 text-sm text-gray-700">{label}</span>
-                <div className="flex items-center gap-2">
+          <div className="space-y-3">
+            {/* 평일 */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-24 text-sm text-gray-700">평일</span>
+                <input
+                  type="checkbox"
+                  id="weekdayClosed"
+                  checked={weekdayClosed}
+                  onChange={(e) => setWeekdayClosed(e.target.checked)}
+                  className="accent-blue-500"
+                />
+                <label htmlFor="weekdayClosed" className="text-sm text-gray-600 cursor-pointer">
+                  평일 미운영
+                </label>
+              </div>
+              {!weekdayClosed && (
+                <div className="flex items-center gap-2 ml-24">
                   <input
-                    type="number" name={openKey} min={0} max={24} required
+                    type="number" name="weekdayOpen" min={0} max={24} required
                     className="w-24 rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
                     placeholder="0"
-                    value={form[openKey]} onChange={handleChange}
+                    value={form.weekdayOpen} onChange={handleChange}
                   />
                   <span className="text-sm text-gray-600">시 ~</span>
                   <input
-                    type="number" name={closeKey} min={0} max={24} required
+                    type="number" name="weekdayClose" min={0} max={24} required
                     className="w-24 rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
                     placeholder="24"
-                    value={form[closeKey]} onChange={handleChange}
+                    value={form.weekdayClose} onChange={handleChange}
                   />
                   <span className="text-sm text-gray-600">시</span>
                 </div>
+              )}
+            </div>
+
+            {/* 주말 */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-24 text-sm text-gray-700">주말·공휴일</span>
+                <input
+                  type="checkbox"
+                  id="weekendClosed"
+                  checked={weekendClosed}
+                  onChange={(e) => setWeekendClosed(e.target.checked)}
+                  className="accent-blue-500"
+                />
+                <label htmlFor="weekendClosed" className="text-sm text-gray-600 cursor-pointer">
+                  주말·공휴일 미운영
+                </label>
               </div>
-            ))}
+              {!weekendClosed && (
+                <div className="flex items-center gap-2 ml-24">
+                  <input
+                    type="number" name="weekendOpen" min={0} max={24} required
+                    className="w-24 rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="0"
+                    value={form.weekendOpen} onChange={handleChange}
+                  />
+                  <span className="text-sm text-gray-600">시 ~</span>
+                  <input
+                    type="number" name="weekendClose" min={0} max={24} required
+                    className="w-24 rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="24"
+                    value={form.weekendClose} onChange={handleChange}
+                  />
+                  <span className="text-sm text-gray-600">시</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* ── 소개 / 태그 ── */}
+        {/* ── 한 줄 소개 ── */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">한 줄 소개 *</label>
           <input
@@ -409,6 +564,8 @@ export default function Application() {
             value={form.shortDescription} onChange={handleChange}
           />
         </div>
+
+        {/* ── 상세 설명 ── */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">상세 설명 *</label>
           <textarea
@@ -418,25 +575,56 @@ export default function Application() {
             value={form.description} onChange={handleChange}
           />
         </div>
+
+        {/* ── 태그 (칩 멀티선택) ── */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">태그 (쉼표로 구분) *</label>
-          <input
-            type="text" name="tags" required
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-            placeholder="예: 고독사, 긴급 출동, 여성 팀"
-            value={form.tags} onChange={handleChange}
-          />
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            태그 * (업체 특징 선택, 1개 이상)
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {TAG_OPTIONS.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => toggleTag(tag)}
+                className={`rounded-full px-3 py-1 text-sm border transition-colors duration-150 cursor-pointer ${
+                  selectedTags.includes(tag)
+                    ? 'bg-emerald-500 text-white border-emerald-500'
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-emerald-400'
+                }`}
+              >
+                #{tag}
+              </button>
+            ))}
+          </div>
+          {selectedTags.length > 0 && (
+            <div className="mt-2 text-xs text-emerald-600">
+              선택됨: {selectedTags.map((t) => `#${t}`).join(' ')}
+            </div>
+          )}
         </div>
 
-        {/* ── 대표 이메일 ── */}
+        {/* ── 가격대 범위 ── */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">대표 이메일 *</label>
-          <input
-            type="email" name="ownerEmail" required
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-            placeholder="예: company@example.com"
-            value={form.ownerEmail} onChange={handleChange}
-          />
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            가격대 범위 (만원 단위, 선택)
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              type="number" name="priceMin" min={0}
+              placeholder="최소 (예: 30)"
+              className="w-28 rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+              value={form.priceMin} onChange={handleChange}
+            />
+            <span className="text-sm text-gray-500">만원 ~</span>
+            <input
+              type="number" name="priceMax" min={0}
+              placeholder="최대 (예: 200)"
+              className="w-28 rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+              value={form.priceMax} onChange={handleChange}
+            />
+            <span className="text-sm text-gray-500">만원</span>
+          </div>
         </div>
 
         <button
