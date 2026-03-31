@@ -1,13 +1,13 @@
 // src/home_parts/tags.tsx
 import { useState } from 'react';
 import { useSearch } from '../searchcontext';
-import { SIDO_LIST } from '../lib/regions';
 import { SERVICE_CATEGORIES, TAG_GROUPS } from '../lib/companyFormOptions';
+import LocationSearchInput from './LocationSearchInput.tsx';
 
 type FilterTab = '지역' | '서비스 종류' | '업체 특성';
 
 export default function Tags() {
-  const { region, setRegion, selectedServices, setSelectedServices, selectedTags, setSelectedTags } =
+  const { selectedServices, setSelectedServices, selectedTags, setSelectedTags } =
     useSearch();
   const [activeTab, setActiveTab] = useState<FilterTab>('지역');
 
@@ -26,7 +26,7 @@ export default function Tags() {
   const tabs: FilterTab[] = ['지역', '서비스 종류', '업체 특성'];
 
   return (
-    <div className="w-full border-b border-gray-200 bg-white">
+    <div className="w-full bg-white flex flex-col items-center">
       {/* 탭 헤더 */}
       <div className="flex border-b border-gray-200">
         {tabs.map((tab) => (
@@ -57,34 +57,14 @@ export default function Tags() {
 
       {/* 탭 콘텐츠 */}
       <div className="p-4">
+
         {/* 지역 탭 */}
         {activeTab === '지역' && (
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setRegion('')}
-              className={`rounded-full px-3 py-1 text-sm border transition-colors duration-150 cursor-pointer ${
-                region === ''
-                  ? 'bg-blue-500 text-white border-blue-500'
-                  : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-              }`}
-            >
-              전체
-            </button>
-            {SIDO_LIST.map((sido) => (
-              <button
-                key={sido}
-                type="button"
-                onClick={() => setRegion(sido === region ? '' : sido)}
-                className={`rounded-full px-3 py-1 text-sm border transition-colors duration-150 cursor-pointer ${
-                  region === sido
-                    ? 'bg-blue-500 text-white border-blue-500'
-                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                }`}
-              >
-                {sido}
-              </button>
-            ))}
+          <div>
+            <p className="text-sm text-gray-500 mb-3">
+              작업을 원하는 주소를 검색하세요
+            </p>
+            <LocationSearchInput />
           </div>
         )}
 
@@ -176,6 +156,7 @@ export default function Tags() {
             )}
           </div>
         )}
+
       </div>
     </div>
   );

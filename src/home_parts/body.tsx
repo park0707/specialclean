@@ -1,5 +1,6 @@
 import SearchBox from "./searchbox"
 import MenuTabs from "./tags"
+import BusinessList from "./BusinessList"
 export default function Body(){
     return(
         <div className="w-full h-full items-center justify-center flex flex-col">
@@ -10,6 +11,7 @@ export default function Body(){
                 
                 <SearchBox/>
                 <MenuTabs/>
+                <BusinessList/>
             </div>
         </div>
     )
