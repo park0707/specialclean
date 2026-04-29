@@ -1,22 +1,25 @@
-// src/home_parts/BusinessList.tsx
 import { useEffect, useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useSearch } from '../searchcontext';
+import { useAuth } from '../logincontext';
 import { applyAllFilters } from '../lib/filterBusinesses';
 import type { Business } from '../lib/filterBusinesses';
 
 export default function BusinessList() {
   const { query: textQuery, locationResult, selectedServices, selectedTags } =
     useSearch();
+  const { loading: authLoading } = useAuth();
 
   const [allBusinesses, setAllBusinesses] = useState<Business[]>([]);
   const [filtered, setFiltered] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // ── Firestore fetch (최초 1회) ────────────────────────
+  // ── Firestore fetch (authLoading 끝난 후 1회) ─────────
   useEffect(() => {
+    if (authLoading) return;
+
     const fetchBusinesses = async () => {
       setLoading(true);
       setError('');
@@ -35,10 +38,11 @@ export default function BusinessList() {
         setLoading(false);
       }
     };
-    fetchBusinesses();
-  }, []);
 
-  // ── 필터 적용 (필터값 바뀔 때마다 재계산) ────────────
+    fetchBusinesses();
+  }, [authLoading]);
+
+  // ── 필터 적용 ────────────────────────────────────────
   useEffect(() => {
     const result = applyAllFilters(allBusinesses, {
       loc: locationResult,
@@ -49,7 +53,6 @@ export default function BusinessList() {
     setFiltered(result);
   }, [allBusinesses, locationResult, selectedServices, selectedTags, textQuery]);
 
-  // ── 로딩 ─────────────────────────────────────────────
   if (loading) {
     return (
       <div className="w-full flex justify-center py-16 text-sm text-gray-400">
@@ -58,7 +61,6 @@ export default function BusinessList() {
     );
   }
 
-  // ── 에러 ─────────────────────────────────────────────
   if (error) {
     return (
       <div className="w-full flex justify-center py-16 text-sm text-red-400">
@@ -67,7 +69,6 @@ export default function BusinessList() {
     );
   }
 
-  // ── 결과 없음 ─────────────────────────────────────────
   if (filtered.length === 0) {
     return (
       <div className="w-full flex flex-col items-center justify-center py-16 gap-2 text-center">
@@ -82,7 +83,6 @@ export default function BusinessList() {
     );
   }
 
-  // ── 업체 카드 목록 ────────────────────────────────────
   return (
     <div className="w-full max-w-3xl mx-auto flex flex-col gap-4 px-4 pb-10">
       <p className="text-xs text-gray-400 pt-2">
@@ -95,7 +95,6 @@ export default function BusinessList() {
   );
 }
 
-// ── 업체 카드 컴포넌트 ─────────────────────────────────
 interface BusinessCardProps {
   biz: Business;
 }
@@ -103,16 +102,13 @@ interface BusinessCardProps {
 const BusinessCard = ({ biz }: BusinessCardProps) => {
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow duration-150">
-      {/* 업체명 + 커버리지 */}
       <div className="flex items-start justify-between gap-2 mb-1.5">
         <h3 className="text-base font-semibold text-gray-800">{biz.name}</h3>
         <CoverageBadge type={biz.coverageType} sido={biz.coverageSido} />
       </div>
 
-      {/* 한 줄 소개 */}
       <p className="text-sm text-gray-500 mb-3">{biz.shortDescription}</p>
 
-      {/* 서비스 태그들 */}
       {biz.services?.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-2">
           {biz.services.slice(0, 4).map((s) => (
@@ -131,7 +127,6 @@ const BusinessCard = ({ biz }: BusinessCardProps) => {
         </div>
       )}
 
-      {/* 업체 특성 태그들 */}
       {biz.tags?.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
           {biz.tags.slice(0, 4).map((t) => (
@@ -150,7 +145,6 @@ const BusinessCard = ({ biz }: BusinessCardProps) => {
         </div>
       )}
 
-      {/* 연락처 */}
       <div className="flex items-center justify-between pt-2 border-t border-gray-100">
         <span className="text-sm text-gray-600">{biz.phone}</span>
         <div className="flex items-center gap-3 text-xs text-gray-400">
@@ -164,7 +158,6 @@ const BusinessCard = ({ biz }: BusinessCardProps) => {
   );
 };
 
-// ── 커버리지 뱃지 ──────────────────────────────────────
 interface CoverageBadgeProps {
   type: Business['coverageType'];
   sido?: string[];
