@@ -17,6 +17,7 @@ export default function LocationSearchInput() {
     if (!locationQuery.trim() || locationResult) {
       setSuggestions([]);
       setOpen(false);
+      setLoading(false);
       return;
     }
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -50,7 +51,7 @@ export default function LocationSearchInput() {
   }, []);
 
   const handleSelect = (result: GeoResult) => {
-    setLocationQuery(result.fullAddress);
+    setLocationQuery(result.displayName ?? result.fullAddress);
     setLocationResult(result);
     setOpen(false);
     setSuggestions([]);
@@ -63,15 +64,22 @@ export default function LocationSearchInput() {
     setOpen(false);
   };
 
+  // ↓ 추가: 검색창 포커스 시 기존 suggestions 있으면 드롭박스 재오픈
+  const handleFocus = () => {
+    if (suggestions.length > 0 && !locationResult) {
+      setOpen(true);
+    }
+  };
+
   return (
     <div ref={wrapperRef} className="relative w-full">
 
-      {/* 입력창 + 초기화 버튼 — 항상 고정 높이 */}
       <div className="flex items-center gap-2 w-100 h-10">
         <div className="relative flex-1 h-full">
           <input
             type="text"
             value={locationQuery}
+            onFocus={handleFocus} 
             onChange={(e) => {
               setLocationQuery(e.target.value);
               if (locationResult) setLocationResult(null);
@@ -90,7 +98,6 @@ export default function LocationSearchInput() {
           )}
         </div>
 
-        {/* 초기화 버튼 — 항상 자리 차지, 입력 없을 땐 투명 */}
         <button
           type="button"
           onClick={handleClear}
@@ -105,7 +112,6 @@ export default function LocationSearchInput() {
         </button>
       </div>
 
-      {/* 확정된 위치 표시 — 항상 고정 높이 (없으면 빈 줄) */}
       <p className="mt-1.5 text-xs h-4 leading-4 truncate">
         {locationResult ? (
           <span className="text-blue-600">
@@ -116,7 +122,6 @@ export default function LocationSearchInput() {
         )}
       </p>
 
-      {/* 자동완성 드롭다운 */}
       {open && suggestions.length > 0 && (
         <ul className="absolute z-50 mt-1 w-full rounded border border-gray-200 bg-white shadow-lg max-h-52 overflow-y-auto">
           {suggestions.map((s, i) => (
@@ -125,8 +130,14 @@ export default function LocationSearchInput() {
               onClick={() => handleSelect(s)}
               className="px-3 py-2.5 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-0"
             >
-              <span className="font-medium">{s.fullAddress}</span>
-              <span className="ml-2 text-xs text-gray-400">{s.sido}</span>
+              <div className="font-medium text-gray-800">
+                {s.displayName ?? s.fullAddress}
+              </div>
+              {s.detailAddress && (
+                <div className="text-xs text-gray-400 mt-0.5">
+                  {s.detailAddress}
+                </div>
+              )}
             </li>
           ))}
         </ul>

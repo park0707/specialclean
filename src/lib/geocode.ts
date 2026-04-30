@@ -6,6 +6,15 @@ export interface GeoPoint {
   lng: number;
 }
 
+export interface GeoResult {
+  lat: number;
+  lng: number;
+  sido: string;
+  fullAddress: string;
+  displayName?: string;
+  detailAddress?: string;
+}
+
 export const geocodeAddress = async (address: string): Promise<GeoPoint> => {
   const apiKey = import.meta.env.VITE_KAKAO_REST_API_KEY;
   const url = `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`;
@@ -27,16 +36,6 @@ export const geocodeAddress = async (address: string): Promise<GeoPoint> => {
   };
 };
 
-// ── 추가 1: 주소 검색 결과 타입 ──────────────────────────
-export interface GeoResult {
-  lat: number;
-  lng: number;
-  sido: string;        // 예: "경기", "서울" (정규화 후)
-  fullAddress: string; // 예: "경기 수원시 영통구 매탄동 XX아파트"
-}
-
-// ── 추가 2: 자동완성용 검색 함수 ─────────────────────────
-// 1차: 주소 검색 API → 결과 없으면 2차: 키워드 검색 API (fallback)
 export const searchAddressWithMeta = async (query: string): Promise<GeoResult[]> => {
   const apiKey = import.meta.env.VITE_KAKAO_REST_API_KEY;
   const headers = { Authorization: `KakaoAK ${apiKey}` };
@@ -54,6 +53,8 @@ export const searchAddressWithMeta = async (query: string): Promise<GeoResult[]>
       lng: parseFloat(doc.x),
       sido: normalizeSido(doc.address?.region_1depth_name ?? ''),
       fullAddress: doc.address_name,
+      displayName: undefined,
+      detailAddress: undefined,
     }));
   }
 
@@ -69,11 +70,12 @@ export const searchAddressWithMeta = async (query: string): Promise<GeoResult[]>
     lng: parseFloat(doc.x),
     sido: normalizeSido(doc.address_name?.split(' ')[0] ?? ''),
     fullAddress: doc.address_name,
+    displayName: doc.place_name ?? undefined,
+    detailAddress: doc.place_name ? doc.address_name : undefined,
   }));
 };
 
-// ── 추가 3: Haversine 거리 계산 ──────────────────────────
-// 두 좌표 간 직선 거리(km) 반환
+// Haversine 거리 계산
 export const getDistanceKm = (
   lat1: number,
   lng1: number,
