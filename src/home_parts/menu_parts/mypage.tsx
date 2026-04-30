@@ -83,10 +83,13 @@ export default function MyPage() {
       {/* ── 헤더 ── */}
       <header className="border-b bg-white">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-          <div className="flex items-center gap-[2px] ">
+          <Link
+            to="/"
+            className="flex items-center gap-[2px] cursor-pointer"
+          >
             <img src="/images/로고.png" alt="로고" className="w-[40px] h-auto"/>
-            <div className="logo_text text-[25px] text-[#1d4ed8] pt-1">클린 매칭</div>  
-          </div>
+            <div className="logo_text text-[25px] text-[#1d4ed8] pt-1">클린 매칭</div>
+          </Link>
           <div className="flex items-center ">
             <Mymenu/>
           </div>

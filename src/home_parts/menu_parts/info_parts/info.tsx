@@ -6,6 +6,7 @@ import AboutPage from './about';
 import ContactPage from './contact';
 import { Mymenu } from '../../mymenu';
 import { useSearch } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 // 상단 큰 항목 정의
 const MENUS = [
   {
@@ -104,10 +105,13 @@ export default function InfoLayout() {
     <div className="min-h-screen bg-gray-50">
       {/* 상단 큰 항목 탭 */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10 flex gap-40 items-center justify-center">
-        <div className="flex items-center gap-[2px] ">
-            <img src="/images/로고.png" alt="로고" className="w-[40px] h-auto"/>
-            <div className="logo_text text-[25px] text-[#1d4ed8] pt-1">클린 매칭</div>  
-        </div>
+        <Link
+          to="/"
+          className="flex items-center gap-[2px] cursor-pointer"
+        >
+          <img src="/images/로고.png" alt="로고" className="w-[40px] h-auto"/>
+          <div className="logo_text text-[25px] text-[#1d4ed8] pt-1">클린 매칭</div>
+        </Link>
         <div className="max-w-5xl flex">
           {MENUS.map((menu) => (
             <button
