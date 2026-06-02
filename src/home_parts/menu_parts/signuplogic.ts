@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-export function useSignUpLogic(id:string,pw:string,pwcon:string,
+export function useSignUpLogic(_id:string,pw:string,pwcon:string,
     setpwok:React.Dispatch<React.SetStateAction<number>>){
     
 
