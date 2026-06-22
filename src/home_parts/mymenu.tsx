@@ -97,7 +97,7 @@ export function Mymenu() {
                                     }}
                                 >
                                     <AcademicCapIcon className="w-5 h-5 inline-block mr-3 text-blue-500" />
-                                    서비스 튜토리얼 시작
+                                    튜토리얼
                                 </button>
                             )
                         }

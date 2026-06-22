@@ -5,7 +5,7 @@ import { useAuth } from "../../logincontext"
 import { useTutorial } from "../../tutorialcontext"
 import { PencilIcon } from "@heroicons/react/24/outline"
 import { updateProfile } from "firebase/auth"
-import { doc, getDoc, updateDoc, arrayRemove } from "firebase/firestore"
+import { doc, getDoc, updateDoc, arrayRemove, collection, getDocs, serverTimestamp } from "firebase/firestore"
 import { db } from "../../lib/firebase"
 import ChangePasswordDialog from "./ChangePasswordDialog"
 import DeleteAccountDialog from "./DeleteAccountDialog"
@@ -34,10 +34,40 @@ interface RecentViewedItem {
   region: string;
 }
 
+interface BusinessApplication {
+  id: string;
+  name: string;
+  phone: string;
+  businessRegNumber: string;
+  ownerEmail: string;
+  ownerUid?: string;
+  shortDescription: string;
+  description: string;
+  services: string[];
+  tags: string[];
+  website?: string;
+  coverageType: 'nationwide' | 'regional' | 'radius';
+  coverageSido?: string[];
+  baseAddress?: string;
+  geoPoint?: { lat: number; lng: number };
+  serviceRadiusKm?: number;
+  openingHours?: {
+    weekday: { open: number; close: number; closed: boolean };
+    weekend: { open: number; close: number; closed: boolean };
+  };
+  ratingAvg?: number;
+  ratingCount?: number;
+  reviewCount?: number;
+  bookmarkCount?: number;
+  status: 'submitted' | 'approved' | string;
+  createdAt: any;
+  updatedAt: any;
+}
+
 // 더미 데이터 (나중에 Firebase 연동 시 교체)
 const dummyReviews: DummyReview[] = [];
 
-type Tab = '북마크' | '내 리뷰' | '프로필'
+type Tab = '북마크' | '내 리뷰' | '프로필' | '업체 신청 목록'
 
 export default function MyPage() {
   const [activeTab, setActiveTab] = useState<Tab>('북마크')
@@ -51,6 +81,11 @@ export default function MyPage() {
   const [recentViewed, setRecentViewed] = useState<RecentViewedItem[]>([]);
   const [bookmarks, setBookmarks] = useState<BookmarkedBusiness[]>([]);
   const [bookmarksLoading, setBookmarksLoading] = useState(false);
+
+  const [applications, setApplications] = useState<BusinessApplication[]>([]);
+  const [applicationsLoading, setApplicationsLoading] = useState(false);
+  const [selectedApp, setSelectedApp] = useState<BusinessApplication | null>(null);
+  const [appFilter, setAppFilter] = useState<'submitted' | 'approved'>('submitted');
 
   useEffect(() => {
     try {
@@ -125,9 +160,81 @@ export default function MyPage() {
       alert('북마크 해제 중 오류가 발생했습니다.');
     }
   };
+  useEffect(() => {
+    if (!user || !isAdmin) return;
+    
+    const fetchApplications = async () => {
+      setApplicationsLoading(true);
+      try {
+        const querySnapshot = await getDocs(collection(db, 'businessApplications'));
+        const list: BusinessApplication[] = [];
+        querySnapshot.forEach((doc) => {
+          list.push({
+            id: doc.id,
+            ...doc.data()
+          } as BusinessApplication);
+        });
+        
+        list.sort((a, b) => {
+          const aTime = a.createdAt?.seconds || 0;
+          const bTime = b.createdAt?.seconds || 0;
+          return bTime - aTime;
+        });
+        
+        setApplications(list);
+      } catch (e) {
+        console.error('Failed to fetch business applications:', e);
+      } finally {
+        setApplicationsLoading(false);
+      }
+    };
+
+    void fetchApplications();
+  }, [user, isAdmin, activeTab]);
+
+  const handleApprove = async (app: BusinessApplication) => {
+    if (!user || !isAdmin) return;
+    if (!window.confirm(`'${app.name}' 업체를 승인하시겠습니까?`)) return;
+
+    try {
+      setSaving(true);
+      
+      const appRef = doc(db, 'businessApplications', app.id);
+      await updateDoc(appRef, {
+        status: 'approved',
+        updatedAt: serverTimestamp()
+      });
+
+      if (app.ownerUid) {
+        try {
+          const userRef = doc(db, 'users', app.ownerUid);
+          await updateDoc(userRef, {
+            role: 'manager'
+          });
+          console.log(`User ${app.ownerUid} promoted to manager.`);
+        } catch (userErr) {
+          console.warn('Failed to update user role to manager in Firestore:', userErr);
+        }
+      }
+
+      alert('성공적으로 승인되었습니다.');
+      setSelectedApp(null);
+      
+      setApplications((prev) =>
+        prev.map((item) => (item.id === app.id ? { ...item, status: 'approved' } : item))
+      );
+    } catch (e) {
+      console.error('Failed to approve business application:', e);
+      alert('승인 처리 중 오류가 발생했습니다.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const tabs: Tab[] = ['프로필', '북마크', '내 리뷰']
-
+  if (isAdmin) {
+    tabs.push('업체 신청 목록')
+  }
   const handleStartEdit = () => {
     if (!user) return;
     setDisplayNameInput(user.displayName ?? '');
@@ -257,6 +364,7 @@ export default function MyPage() {
               id={
                 tab === '북마크' ? 'mypage-bookmark-tab' :
                 tab === '내 리뷰' ? 'mypage-review-tab' :
+                tab === '업체 신청 목록' ? 'mypage-applications-tab' :
                 'mypage-profile-tab'
               }
               onClick={() => setActiveTab(tab)}
@@ -446,6 +554,100 @@ export default function MyPage() {
                 )}
               </div>
             )}
+
+            {/* ── 업체 신청 목록 탭 ── */}
+            {activeTab === '업체 신청 목록' && isAdmin && (
+              <div className="space-y-4">
+                {/* 상태 필터 탭 */}
+                <div className="flex gap-2 border-b pb-3">
+                  <button
+                    onClick={() => setAppFilter('submitted')}
+                    className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold border transition ${
+                      appFilter === 'submitted'
+                        ? 'bg-blue-500 text-white border-blue-500'
+                        : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    승인 대기 중 (
+                    {applications.filter((a) => a.status === 'submitted').length}
+                    )
+                  </button>
+                  <button
+                    onClick={() => setAppFilter('approved')}
+                    className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold border transition ${
+                      appFilter === 'approved'
+                        ? 'bg-emerald-500 text-white border-emerald-500'
+                        : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    승인 완료 (
+                    {applications.filter((a) => a.status === 'approved').length}
+                    )
+                  </button>
+                </div>
+
+                {applicationsLoading ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">신청 목록을 불러오는 중입니다...</p>
+                  </div>
+                ) : (
+                  (() => {
+                    const filteredApps = applications.filter((app) => {
+                      if (appFilter === 'submitted') {
+                        return app.status === 'submitted';
+                      }
+                      return app.status === 'approved';
+                    });
+
+                    if (filteredApps.length === 0) {
+                      return (
+                        <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                          <p className="text-gray-500 text-sm font-medium">
+                            {appFilter === 'submitted' ? '승인 대기 중인 업체가 없습니다.' : '승인 완료된 업체가 없습니다.'}
+                          </p>
+                        </div>
+                      );
+                    }
+
+                    return filteredApps.map((app) => (
+                      <div
+                        key={app.id}
+                        onClick={() => setSelectedApp(app)}
+                        className="flex items-center justify-between rounded-xl bg-white p-5 shadow-sm hover:shadow-md border border-transparent hover:border-blue-200 transition duration-150 cursor-pointer"
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-semibold text-gray-800">{app.name}</h4>
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                                app.status === 'submitted'
+                                  ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                                  : 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                              }`}
+                            >
+                              {app.status === 'submitted' ? '대기 중' : '승인 완료'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-500">신청자: {app.ownerEmail}</p>
+                          <p className="text-xs text-gray-400">
+                            신청일: {app.createdAt ? new Date(app.createdAt.seconds * 1000).toLocaleString() : '날짜 없음'}
+                          </p>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedApp(app);
+                          }}
+                          className="rounded border border-gray-200 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 hover:border-gray-300 font-medium cursor-pointer"
+                        >
+                          신청서 확인
+                        </button>
+                      </div>
+                    ));
+                  })()
+                )}
+              </div>
+            )}
           </div>
 
           {/* ── 우측 사이드바: 최근 본 업체 ── */}
@@ -474,6 +676,195 @@ export default function MyPage() {
           </aside>
         </div>
       </main>
+
+      {/* ── 업체 신청 상세 보기 모달 ── */}
+      {selectedApp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 overflow-y-auto">
+          <div className="relative w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl border border-gray-100 max-h-[90vh] overflow-y-auto flex flex-col">
+            {/* 헤더 */}
+            <div className="flex items-center justify-between border-b pb-4 mb-4">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900">{selectedApp.name}</h3>
+                <p className="text-xs text-gray-500 mt-0.5">신청자 이메일: {selectedApp.ownerEmail}</p>
+              </div>
+              <button
+                onClick={() => setSelectedApp(null)}
+                className="text-gray-400 hover:text-gray-600 text-xl font-bold cursor-pointer"
+              >
+                &times;
+              </button>
+            </div>
+
+            {/* 본문 */}
+            <div className="flex-1 space-y-5 overflow-y-auto pr-1">
+              {/* 기본 정보 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg text-sm">
+                <div>
+                  <span className="font-semibold text-gray-500 block text-xs mb-0.5">연락처</span>
+                  <span className="text-gray-800 font-medium">{selectedApp.phone}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-gray-500 block text-xs mb-0.5">사업자등록번호</span>
+                  <span className="text-gray-800 font-medium">{selectedApp.businessRegNumber}</span>
+                </div>
+                <div className="md:col-span-2">
+                  <span className="font-semibold text-gray-500 block text-xs mb-0.5">웹사이트</span>
+                  {selectedApp.website ? (
+                    <a
+                      href={selectedApp.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline font-medium break-all"
+                    >
+                      {selectedApp.website}
+                    </a>
+                  ) : (
+                    <span className="text-gray-400 font-normal">등록되지 않음</span>
+                  )}
+                </div>
+              </div>
+
+              {/* 서비스 범위 */}
+              <div>
+                <h5 className="font-bold text-sm text-gray-700 mb-2">📍 서비스 범위</h5>
+                <div className="bg-gray-50 p-4 rounded-lg text-sm space-y-1">
+                  <p>
+                    <span className="font-medium text-gray-500">유형:</span>{' '}
+                    <span className="font-semibold text-blue-600">
+                      {selectedApp.coverageType === 'nationwide' && '🌐 전국 출장'}
+                      {selectedApp.coverageType === 'regional' && '📍 특정 광역권 선택'}
+                      {selectedApp.coverageType === 'radius' && '🏠 거점 반경 설정'}
+                    </span>
+                  </p>
+                  {selectedApp.coverageType === 'regional' && selectedApp.coverageSido && (
+                    <p>
+                      <span className="font-medium text-gray-500">대상 시/도:</span>{' '}
+                      <span className="text-gray-800 font-medium">{selectedApp.coverageSido.join(', ')}</span>
+                    </p>
+                  )}
+                  {selectedApp.coverageType === 'radius' && (
+                    <>
+                      <p>
+                        <span className="font-medium text-gray-500">본사 주소:</span>{' '}
+                        <span className="text-gray-800 font-medium">{selectedApp.baseAddress}</span>
+                      </p>
+                      <p>
+                        <span className="font-medium text-gray-500">서비스 반경:</span>{' '}
+                        <span className="text-gray-800 font-semibold text-blue-600">
+                          {selectedApp.serviceRadiusKm}km
+                        </span>
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* 제공 서비스 및 태그 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h5 className="font-bold text-sm text-gray-700 mb-2">🛠️ 제공 서비스</h5>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedApp.services && selectedApp.services.length > 0 ? (
+                      selectedApp.services.map((service) => (
+                        <span
+                          key={service}
+                          className="rounded-full bg-blue-50 px-2.5 py-1 text-xs text-blue-600 font-medium border border-blue-100"
+                        >
+                          {service}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-xs text-gray-400">등록된 서비스 없음</span>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-sm text-gray-700 mb-2">🏷️ 태그 목록</h5>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedApp.tags && selectedApp.tags.length > 0 ? (
+                      selectedApp.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs text-emerald-600 font-medium border border-emerald-100"
+                        >
+                          #{tag}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-xs text-gray-400">등록된 태그 없음</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* 운영 시간 */}
+              {selectedApp.openingHours && (
+                <div>
+                  <h5 className="font-bold text-sm text-gray-700 mb-2">⏰ 운영 시간</h5>
+                  <div className="bg-gray-50 p-4 rounded-lg text-sm grid grid-cols-2 gap-4">
+                    <div>
+                      <span className="font-medium text-gray-500 block mb-1">평일</span>
+                      {selectedApp.openingHours.weekday.closed ? (
+                        <span className="text-red-500 font-semibold">휴무</span>
+                      ) : (
+                        <span className="text-gray-800 font-semibold">
+                          {selectedApp.openingHours.weekday.open}시 ~ {selectedApp.openingHours.weekday.close}시
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-500 block mb-1">주말·공휴일</span>
+                      {selectedApp.openingHours.weekend.closed ? (
+                        <span className="text-red-500 font-semibold">휴무</span>
+                      ) : (
+                        <span className="text-gray-800 font-semibold">
+                          {selectedApp.openingHours.weekend.open}시 ~ {selectedApp.openingHours.weekend.close}시
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 한 줄 소개 및 상세 설명 */}
+              <div className="space-y-3">
+                <div>
+                  <h5 className="font-bold text-sm text-gray-700 mb-1">💬 한 줄 소개</h5>
+                  <p className="bg-gray-50 p-3 rounded-lg text-sm text-gray-800 font-semibold border-l-4 border-blue-400">
+                    {selectedApp.shortDescription}
+                  </p>
+                </div>
+                <div>
+                  <h5 className="font-bold text-sm text-gray-700 mb-1">📋 상세 설명</h5>
+                  <p className="bg-gray-50 p-4 rounded-lg text-sm text-gray-700 whitespace-pre-wrap leading-relaxed min-h-[100px]">
+                    {selectedApp.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 푸터 버튼 */}
+            <div className="border-t pt-4 mt-6 flex justify-end gap-2.5">
+              <button
+                onClick={() => setSelectedApp(null)}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition cursor-pointer"
+              >
+                닫기
+              </button>
+              {selectedApp.status === 'submitted' && (
+                <button
+                  onClick={() => handleApprove(selectedApp)}
+                  disabled={saving}
+                  className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition cursor-pointer"
+                >
+                  {saving ? '승인 중...' : '승인하기'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
