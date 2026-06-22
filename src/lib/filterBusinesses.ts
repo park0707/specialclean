@@ -85,11 +85,7 @@ export const filterByText = (
 ): Business[] => {
   if (!query.trim()) return businesses;
   const q = query.toLowerCase();
-  return businesses.filter(
-    (biz) =>
-      biz.name.toLowerCase().includes(q) ||
-      biz.shortDescription?.toLowerCase().includes(q),
-  );
+  return businesses.filter((biz) => biz.name.toLowerCase().includes(q));
 };
 
 // ── 전체 필터 한번에 적용 ─────────────────────────────────

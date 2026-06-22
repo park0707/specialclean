@@ -8,29 +8,38 @@ import ChangePasswordDialog from "./ChangePasswordDialog"
 import DeleteAccountDialog from "./DeleteAccountDialog"
 import { Mymenu } from "../mymenu"
 
+interface DummyBookmark {
+  id: number;
+  name: string;
+  region: string;
+  rating: number;
+  tags: string[];
+}
+
+interface DummyReview {
+  id: number;
+  companyName: string;
+  rating: number;
+  content: string;
+  date: string;
+}
+
+interface DummyRecentViewed {
+  id: number;
+  name: string;
+  region: string;
+}
+
 // 더미 데이터 (나중에 Firebase 연동 시 교체)
-const dummyBookmarks = [
-  { id: 1, name: '클린케어 특수청소', region: '서울 강남구', rating: 4.8, tags: ['특수청소', '쓰레기집'], },
-  { id: 2, name: '새빛 청소 서비스', region: '경기 수원시', rating: 4.5, tags: ['유품정리', '폐기물'], },
-  { id: 3, name: '프로클린 특수', region: '서울 마포구', rating: 4.2, tags: ['화재복구', '곰팡이'], },
-]
-
-const dummyReviews = [
-  { id: 1, companyName: '클린케어 특수청소', rating: 5, content: '정말 깔끔하게 해주셨어요. 다음에도 이용할게요!', date: '2026-02-20', },
-  { id: 2, companyName: '새빛 청소 서비스', rating: 4, content: '시간 약속을 잘 지켜주셔서 좋았습니다.', date: '2026-02-18', },
-]
-
-const dummyRecentViewed = [
-  { id: 10, name: '해피클린', region: '인천 남동구' },
-  { id: 11, name: '원스톱 청소', region: '서울 송파구' },
-  { id: 12, name: '그린특수청소', region: '경기 성남시' },
-]
+const dummyBookmarks: DummyBookmark[] = [];
+const dummyReviews: DummyReview[] = [];
+const dummyRecentViewed: DummyRecentViewed[] = [];
 
 type Tab = '북마크' | '내 리뷰' | '프로필'
 
 export default function MyPage() {
   const [activeTab, setActiveTab] = useState<Tab>('북마크')
-  const { user,isAdmin } = useAuth()
+  const { user, isAdmin, isManager } = useAuth()
   const [isEditing, setIsEditing] = useState(false);
   const [displayNameInput, setDisplayNameInput] = useState(user?.displayName ?? '');
   const [saving, setSaving] = useState(false);
@@ -128,11 +137,15 @@ export default function MyPage() {
                     onClick={handleStartEdit}
                     />
                     {
-                      isAdmin && (
+                      isAdmin ? (
                         <span className="inline-block rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
                           관리자
                         </span>
-                      )
+                      ) : isManager ? (
+                        <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                          업체 관리자
+                        </span>
+                      ) : null
                     }
                 </>
                 )}
@@ -197,6 +210,10 @@ export default function MyPage() {
                       <span className="inline-block rounded bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
                         관리자 계정
                       </span>
+                    ) : isManager ? (
+                      <span className="inline-block rounded bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
+                        업체 관리자
+                      </span>
                     ) : (
                       <span className="inline-block rounded bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
                         일반 사용자
@@ -247,66 +264,80 @@ export default function MyPage() {
             />
             {/* ── 북마크 탭 ── */}
             {activeTab === '북마크' && (
-              <>
-                {dummyBookmarks.map((company) => (
-                  <div
-                    key={company.id}
-                    className="flex items-center justify-between rounded-xl bg-white p-5 shadow-sm"
-                  >
-                    <div>
-                      <h4 className="font-semibold">{company.name}</h4>
-                      <p className="mt-1 text-sm text-gray-500">{company.region}</p>
-                      <div className="mt-2 flex gap-2">
-                        {company.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+              <div className="space-y-4">
+                {dummyBookmarks.length === 0 ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">북마크한 업체가 없습니다.</p>
+                    <p className="text-gray-400 text-xs mt-1">마음에 드는 청소 업체를 찾아 북마크해 보세요.</p>
+                  </div>
+                ) : (
+                  dummyBookmarks.map((company) => (
+                    <div
+                      key={company.id}
+                      className="flex items-center justify-between rounded-xl bg-white p-5 shadow-sm"
+                    >
+                      <div>
+                        <h4 className="font-semibold">{company.name}</h4>
+                        <p className="mt-1 text-sm text-gray-500">{company.region}</p>
+                        <div className="mt-2 flex gap-2">
+                          {company.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        <span className="text-sm font-medium text-yellow-500">
+                          ⭐ {company.rating}
+                        </span>
+                        <button className="rounded border px-3 py-1 text-xs text-blue-500 hover:bg-blue-50">
+                          상세보기
+                        </button>
+                        <button className="text-xs text-gray-400 hover:text-red-400">
+                          북마크 해제
+                        </button>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <span className="text-sm font-medium text-yellow-500">
-                        ⭐ {company.rating}
-                      </span>
-                      <button className="rounded border px-3 py-1 text-xs text-blue-500 hover:bg-blue-50">
-                        상세보기
-                      </button>
-                      <button className="text-xs text-gray-400 hover:text-red-400">
-                        북마크 해제
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </>
+                  ))
+                )}
+              </div>
             )}
 
             {/* ── 내 리뷰 탭 ── */}
             {activeTab === '내 리뷰' && (
-              <>
-                {dummyReviews.map((review) => (
-                  <div key={review.id} className="rounded-xl bg-white p-5 shadow-sm">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-semibold">{review.companyName}</h4>
-                      <span className="text-xs text-gray-400">{review.date}</span>
-                    </div>
-                    <span className="mt-1 inline-block text-sm text-yellow-500">
-                      {'⭐'.repeat(review.rating)}
-                    </span>
-                    <p className="mt-2 text-sm text-gray-700">{review.content}</p>
-                    <div className="mt-3 flex gap-2">
-                      <button className="rounded border px-3 py-1 text-xs text-gray-600 hover:bg-gray-50">
-                        수정
-                      </button>
-                      <button className="rounded border px-3 py-1 text-xs text-red-400 hover:bg-red-50">
-                        삭제
-                      </button>
-                    </div>
+              <div className="space-y-4">
+                {dummyReviews.length === 0 ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">작성한 후기가 없습니다.</p>
+                    <p className="text-gray-400 text-xs mt-1">이용한 청소 서비스의 솔직한 후기를 남겨 보세요.</p>
                   </div>
-                ))}
-              </>
+                ) : (
+                  dummyReviews.map((review) => (
+                    <div key={review.id} className="rounded-xl bg-white p-5 shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold">{review.companyName}</h4>
+                        <span className="text-xs text-gray-400">{review.date}</span>
+                      </div>
+                      <span className="mt-1 inline-block text-sm text-yellow-500">
+                        {'⭐'.repeat(review.rating)}
+                      </span>
+                      <p className="mt-2 text-sm text-gray-700">{review.content}</p>
+                      <div className="mt-3 flex gap-2">
+                        <button className="rounded border px-3 py-1 text-xs text-gray-600 hover:bg-gray-50">
+                          수정
+                        </button>
+                        <button className="rounded border px-3 py-1 text-xs text-red-400 hover:bg-red-50">
+                          삭제
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             )}
           </div>
 
@@ -314,21 +345,25 @@ export default function MyPage() {
           <aside className="hidden w-64 shrink-0 lg:block">
             <div className="rounded-xl bg-white p-4 shadow-sm">
               <h3 className="mb-3 text-sm font-semibold text-gray-700">최근 본 업체</h3>
-              <ul className="space-y-3">
-                {dummyRecentViewed.map((item) => (
-                  <li
-                    key={item.id}
-                    className="cursor-pointer rounded-lg border p-3 text-sm hover:bg-gray-50"
-                  >
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-xs text-gray-400">{item.region}</p>
-                  </li>
-                ))}
-              </ul>
+              {dummyRecentViewed.length === 0 ? (
+                <p className="text-gray-400 text-xs py-4 text-center">최근 본 업체가 없습니다.</p>
+              ) : (
+                <ul className="space-y-3">
+                  {dummyRecentViewed.map((item) => (
+                    <li
+                      key={item.id}
+                      className="cursor-pointer rounded-lg border p-3 text-sm hover:bg-gray-50"
+                    >
+                      <p className="font-medium">{item.name}</p>
+                      <p className="text-xs text-gray-400">{item.region}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </aside>
         </div>
       </main>
     </div>
-  )
+  );
 }

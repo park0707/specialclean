@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useSearch } from '../searchcontext';
 import { useAuth } from '../logincontext';
 import { applyAllFilters } from '../lib/filterBusinesses';
 import type { Business } from '../lib/filterBusinesses';
+import { useNavigate } from '@tanstack/react-router';
 
 export default function BusinessList() {
   const { query: textQuery, locationResult, selectedServices, selectedTags } =
@@ -15,6 +16,13 @@ export default function BusinessList() {
   const [filtered, setFiltered] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // 페이지네이션 상태
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  
+  // 스크롤 이동을 위한 ref
+  const listTopRef = useRef<HTMLDivElement>(null);
 
   // ── Firestore fetch (authLoading 끝난 후 1회) ─────────
   useEffect(() => {
@@ -53,6 +61,18 @@ export default function BusinessList() {
     setFiltered(result);
   }, [allBusinesses, locationResult, selectedServices, selectedTags, textQuery]);
 
+  // ── 필터 조건 변경 시 페이지 번호 리셋 ─────────────────────
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [locationResult, selectedServices, selectedTags, textQuery]);
+
+  // ── 페이지 번호 변경 시 목록 상단으로 스크롤 ──────────────────
+  useEffect(() => {
+    if (listTopRef.current) {
+      listTopRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentPage]);
+
   if (loading) {
     return (
       <div className="w-full flex justify-center py-16 text-sm text-gray-400">
@@ -83,14 +103,91 @@ export default function BusinessList() {
     );
   }
 
+  // 페이지네이션 계산
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const paginatedBusinesses = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const blockSize = 5;
+  const currentBlock = Math.floor((currentPage - 1) / blockSize);
+  const startPage = currentBlock * blockSize + 1;
+  const endPage = Math.min(startPage + blockSize - 1, totalPages);
+
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+
   return (
-    <div className="w-full max-w-3xl mx-auto flex flex-col gap-4 px-4 pb-10">
+    <div ref={listTopRef} className="w-full max-w-3xl mx-auto flex flex-col gap-4 px-4 pb-10">
       <p className="text-xs text-gray-400 pt-2">
-        총 {filtered.length}개 업체
+        총 {filtered.length}개 업체 중 {(currentPage - 1) * itemsPerPage + 1}~{Math.min(currentPage * itemsPerPage, filtered.length)}번째 업체 표시
       </p>
-      {filtered.map((biz) => (
+      {paginatedBusinesses.map((biz) => (
         <BusinessCard key={biz.id} biz={biz} />
       ))}
+
+      {/* 페이지네이션 컨트롤 */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-1.5 mt-8 pb-6">
+          {/* 처음으로 (<<) */}
+          <button
+            onClick={() => setCurrentPage(1)}
+            disabled={currentPage === 1}
+            className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-sm font-medium cursor-pointer"
+            title="첫 페이지로"
+          >
+            &lt;&lt;
+          </button>
+          
+          {/* 이전 블록 (<) */}
+          <button
+            onClick={() => setCurrentPage(startPage - 1)}
+            disabled={startPage === 1}
+            className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-sm font-medium cursor-pointer"
+            title="이전 블록으로"
+          >
+            &lt;
+          </button>
+
+          {/* 페이지 번호 */}
+          {pageNumbers.map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`flex items-center justify-center w-9 h-9 rounded-lg border text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                currentPage === page
+                  ? 'border-blue-600 bg-blue-600 text-white shadow-sm shadow-blue-100'
+                  : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          {/* 다음 블록 (>) */}
+          <button
+            onClick={() => setCurrentPage(endPage + 1)}
+            disabled={endPage === totalPages}
+            className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-sm font-medium cursor-pointer"
+            title="다음 블록으로"
+          >
+            &gt;
+          </button>
+
+          {/* 마지막으로 (>>) */}
+          <button
+            onClick={() => setCurrentPage(totalPages)}
+            disabled={currentPage === totalPages}
+            className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-sm font-medium cursor-pointer"
+            title="마지막 페이지로"
+          >
+            &gt;&gt;
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -100,8 +197,17 @@ interface BusinessCardProps {
 }
 
 const BusinessCard = ({ biz }: BusinessCardProps) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate({ to: `/business/${biz.id}` });
+  };
+
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow duration-150">
+    <div 
+      onClick={handleCardClick}
+      className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-150 cursor-pointer"
+    >
       <div className="flex items-start justify-between gap-2 mb-1.5">
         <h3 className="text-base font-semibold text-gray-800">{biz.name}</h3>
         <CoverageBadge type={biz.coverageType} sido={biz.coverageSido} />

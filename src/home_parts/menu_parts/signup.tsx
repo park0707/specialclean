@@ -1,10 +1,11 @@
 //id,pw의 변화에 따라 보이는 문자들 다르게 보이도록 수정해야 함
 import { Dialog, DialogPanel, DialogTitle, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSignUpLogic } from './signuplogic';
 import {auth} from '../../lib/firebase';
 import { createUserWithEmailAndPassword,sendEmailVerification, signOut } from 'firebase/auth';
+import { syncUserDocument } from '../../lib/firebaseuser';
 
 
 interface signupprops {
@@ -19,6 +20,19 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
     const [idok, setIdok] = useState(0) //0은 초기값, 1은 이미 사용 중, 2는 이메일 형식 불일치 3은 사용 가능
     const [pwok, setPwok] = useState(0) //0은 초기값 1이면 pw 미입력, 2이면 pw 미입력, 3이면 불일치
     const [msg, setMsg] = useState(''); // 이메일 인증이나 기타 사용자에게 표시하고 싶은 메시지
+
+    // 모달이 닫히거나 열릴 때 기존 상태들을 리셋하여 이전 메시지/입력값이 잔존하지 않도록 방지
+    useEffect(() => {
+      if (!isOpen) {
+        setId('');
+        setPw('');
+        setPwcon('');
+        setIdok(0);
+        setPwok(0);
+        setMsg('');
+      }
+    }, [isOpen]);
+
     const handleSignUp = async () => {
       const email = id.trim();
       const password = pw.trim();
@@ -35,13 +49,15 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
 
         if (cred.user) {
           await sendEmailVerification(cred.user); // [web:41][web:45]
+          await syncUserDocument(cred.user);
         }
         await signOut(auth);
 
         setId('');
         setPw('');
         setPwcon('');
-        setMsg('회원 가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.');
+        alert('회원 가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.');
+        closeModal();
       } catch (err: any) {
         if (err.code === 'auth/email-already-in-use') {
           setIdok(1); // 이미 사용 중인 이메일

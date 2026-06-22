@@ -16,7 +16,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 export function Mymenu(){
-    const {user} = useAuth()
+    const {user, hasUnreadNotice} = useAuth()
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const itemclass = (active:boolean) => `${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
         } block px-4 py-2 text-[15px] w-full cursor-pointer`;
@@ -31,9 +31,15 @@ export function Mymenu(){
         
 
         <Menu as="div" className="relative inline-block text-left">
-            <Menu.Button className="inline-flex items-center gap-1 rounded-md bg-white 
+            <Menu.Button className="relative inline-flex items-center gap-1 rounded-md bg-white 
             px-1 py-1 text-sm font-medium text-gray-700 shadow hover:bg-gray-50 cursor-pointer">
                 <Bars3Icon className="w-9 h-9 text-black"/>
+                {hasUnreadNotice && (
+                    <span className="absolute top-1 right-1 flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                )}
             </Menu.Button>
             <Transition
             as={Fragment}
@@ -61,6 +67,9 @@ export function Mymenu(){
                                 <Link to="/info" search={{menu:"privacy"}} className={itemclass(active)}>
                                     <InformationCircleIcon className="w-5 h-5 inline-block mr-3  text-blue-500"/>
                                     정보
+                                    {hasUnreadNotice && (
+                                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 ml-1.5 align-middle animate-pulse" />
+                                    )}
                                 </Link>
                             )
                         }

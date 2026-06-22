@@ -4,9 +4,12 @@ import PrivacyPolicy from './privacypolicy';
 import TermsOfService from './termsofservice';
 import AboutPage from './about';
 import ContactPage from './contact';
+import NoticePage from './notice';
+import FaqPage from './faq';
 import { Mymenu } from '../../mymenu';
 import { useSearch } from '@tanstack/react-router';
 import { Link } from '@tanstack/react-router';
+import { useAuth } from '../../../logincontext';
 // 상단 큰 항목 정의
 const MENUS = [
   {
@@ -61,15 +64,16 @@ const MENUS = [
   {
     id: 'faq',
     label: '자주 묻는 질문',
-    component: () => <div>자주 묻는 질문 콘텐츠</div>, //나중에 추가
+    component: FaqPage,
     sections: [
-      '회원 가입 관련',
-      '서비스 이용 관련',
+      '이용 안내 (고객)',
+      '업체 파트너 안내',
+      '예약 및 환불',
     ],
   },{
     id: 'notice',
     label: '공지사항',
-    component: () => <div>공지사항 콘텐츠</div>, //나중에 추가
+    component: NoticePage,
     sections: ['공지사항'],
   }
 ];
@@ -78,6 +82,7 @@ export default function InfoLayout() {
 
    
   const search = useSearch({ from: '/info' });
+  const { hasUnreadNotice } = useAuth();
 
   const initialMenu = (search as any).menu ?? MENUS[0].id;
   const initialSection = MENUS.find((m) => m.id === initialMenu)?.sections[0] ?? MENUS[0].sections[0];
@@ -117,13 +122,19 @@ export default function InfoLayout() {
             <button
               key={menu.id}
               onClick={() => handleMenuChange(menu.id)}
-              className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors ${
+              className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors flex items-center gap-1.5 ${
                 activeMenu === menu.id
                   ? 'border-blue-500 text-blue-500'
                   : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
               }`}
             >
               {menu.label}
+              {menu.id === 'notice' && hasUnreadNotice && (
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -153,7 +164,7 @@ export default function InfoLayout() {
 
         {/* 오른쪽 본문 */}
         <main className="flex-1 bg-white rounded-xl border border-gray-200 p-8 min-h-[600px]">
-          <CurrentComponent activeSection={activeSection} />
+          <CurrentComponent activeSection={activeSection} noticeId={(search as any).id} />
         </main>
       </div>
     </div>

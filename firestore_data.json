@@ -1,0 +1,2447 @@
+{
+  "users": [
+    {
+      "id": "BG2dwC53z7SjwfVdLzybvDk6RRy1",
+      "uid": "BG2dwC53z7SjwfVdLzybvDk6RRy1",
+      "role": "user",
+      "email": "forwork1817@gmail.com"
+    },
+    {
+      "id": "Gj26Vx0ZGGeMQcpHq6MXyzHCgov1",
+      "email": "rkskek1817@gmail.com",
+      "uid": "Gj26Vx0ZGGeMQcpHq6MXyzHCgov1",
+      "role": "user"
+    },
+    {
+      "id": "cKPjUy8Y5RQBmfGw5gnL32yWsg22",
+      "email": "phj20030707@gmail.com",
+      "uid": "cKPjUy8Y5RQBmfGw5gnL32yWsg22",
+      "role": "admin"
+    }
+  ],
+  "businessApplications": [
+    {
+      "id": "2026_03_22_19_36_전국출장더미1",
+      "description": "전국 출장 더미 1 데이터\n상세 설명란",
+      "shortDescription": "전국 출장 더미 1 데이터",
+      "bookmarkCount": 0,
+      "name": "전국 출장 더미 1",
+      "businessRegNumber": "123-456-789",
+      "ownerEmail": "phj20030707@gmail.com",
+      "updatedAt": "2026-03-22T10:36:30.781Z",
+      "createdAt": "2026-03-22T10:36:30.781Z",
+      "reviewCount": 0,
+      "openingHours": {
+        "weekday": {
+          "open": 0,
+          "closed": false,
+          "close": 24
+        },
+        "weekend": {
+          "open": 0,
+          "close": 24,
+          "closed": false
+        }
+      },
+      "services": [
+        "고독사 현장 청소",
+        "유품 정리",
+        "쓰레기집(저장강박) 청소",
+        "화재 현장 청소",
+        "이사 후 빈집 청소",
+        "바이오해저드 방역",
+        "의료·병원 청소"
+      ],
+      "status": "approved",
+      "phone": "010-0000-0000",
+      "ratingAvg": 0,
+      "ratingCount": 0,
+      "tags": [
+        "24시간 출동",
+        "여성 팀 구성",
+        "폐기물처리업 허가"
+      ],
+      "coverageType": "nationwide"
+    },
+    {
+      "id": "2026_03_22_19_46_광역권더미1",
+      "services": [
+        "변사·부패 현장 복구",
+        "유품 선별 및 보존 처리",
+        "대량 폐기물 수거·처리",
+        "그을음·연기 냄새 제거",
+        "신규 입주 청소",
+        "바이러스·세균 방역",
+        "차량 내부 특수청소"
+      ],
+      "status": "approved",
+      "openingHours": {
+        "weekday": {
+          "closed": false,
+          "close": 24,
+          "open": 0
+        },
+        "weekend": {
+          "open": 0,
+          "close": 0,
+          "closed": true
+        }
+      },
+      "coverageType": "regional",
+      "phone": "010-0000-0000",
+      "ratingAvg": 0,
+      "tags": [
+        "긴급 당일 처리",
+        "소독업 신고 업체",
+        "남성 팀 구성"
+      ],
+      "ratingCount": 0,
+      "shortDescription": "광역권 더미 1",
+      "bookmarkCount": 0,
+      "coverageSido": [
+        "경남"
+      ],
+      "description": "광역권 더미 1 상세란",
+      "reviewCount": 0,
+      "name": "광역권 더미 1",
+      "businessRegNumber": "000-000-000",
+      "ownerEmail": "phj20030707@gmail.com",
+      "updatedAt": "2026-03-22T10:46:12.973Z",
+      "createdAt": "2026-03-22T10:46:12.973Z"
+    },
+    {
+      "id": "dummy_biz_001",
+      "description": "바른길연구소 1호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 32,
+      "shortDescription": "바른길연구소 1호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "createdAt": "2026-06-18T10:43:19.582Z",
+      "updatedAt": "2026-06-18T10:43:19.582Z",
+      "ownerEmail": "owner1@example.com",
+      "name": "바른길연구소 1호점",
+      "businessRegNumber": "187-98-35472",
+      "reviewCount": 4,
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "close": 18,
+          "closed": false,
+          "open": 9
+        }
+      },
+      "status": "approved",
+      "services": [
+        "유품 선별 및 보존 처리",
+        "쓰레기집(저장강박) 청소",
+        "혈흔 제거",
+        "공사 후 분진·폐기물 청소",
+        "오물·분변 처리",
+        "동물 사체 처리",
+        "변사·부패 현장 복구"
+      ],
+      "tags": [
+        "24시간 출동",
+        "긴급 당일 처리",
+        "전담 매니저 배정",
+        "여성 팀 구성",
+        "소독업 신고 업체"
+      ],
+      "ratingCount": 7,
+      "ratingAvg": 3.7,
+      "phone": "010-2462-9432",
+      "coverageType": "nationwide"
+    },
+    {
+      "id": "dummy_biz_002",
+      "coverageType": "nationwide",
+      "tags": [
+        "소독업 신고 업체",
+        "주말·공휴일 운영",
+        "방문 견적 무료",
+        "후불 결제 가능",
+        "2시간 이내 출동"
+      ],
+      "ratingCount": 17,
+      "ratingAvg": 3.9,
+      "phone": "010-5549-7172",
+      "status": "approved",
+      "services": [
+        "고독사 현장 청소",
+        "유품 선별 및 보존 처리",
+        "귀중품 분류 및 인계",
+        "수해·침수 복구 청소"
+      ],
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "close": 18,
+          "closed": true,
+          "open": 9
+        }
+      },
+      "reviewCount": 11,
+      "createdAt": "2026-06-18T10:43:19.980Z",
+      "updatedAt": "2026-06-18T10:43:19.980Z",
+      "ownerEmail": "owner2@example.com",
+      "businessRegNumber": "327-90-31905",
+      "name": "우리119 2호점",
+      "bookmarkCount": 81,
+      "shortDescription": "우리119 2호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "description": "우리119 2호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다."
+    },
+    {
+      "id": "dummy_biz_003",
+      "openingHours": {
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        }
+      },
+      "services": [
+        "바이러스·세균 방역",
+        "유품 기증·기탁 연계",
+        "귀중품 분류 및 인계",
+        "수해·침수 복구 청소",
+        "유품 선별 및 보존 처리",
+        "극단적 선택 현장 처리",
+        "혈흔 제거"
+      ],
+      "status": "approved",
+      "phone": "010-8685-1488",
+      "ratingAvg": 4.5,
+      "tags": [
+        "카드 결제 가능",
+        "특수청소관리사 자격 보유",
+        "소독업 신고 업체",
+        "전담 매니저 배정",
+        "365일 연중무휴"
+      ],
+      "ratingCount": 18,
+      "coverageType": "nationwide",
+      "description": "바른연구소 3호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "바른연구소 3호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 37,
+      "name": "바른연구소 3호점",
+      "businessRegNumber": "595-10-34030",
+      "ownerEmail": "owner3@example.com",
+      "updatedAt": "2026-06-18T10:43:20.274Z",
+      "createdAt": "2026-06-18T10:43:20.274Z",
+      "reviewCount": 12
+    },
+    {
+      "id": "dummy_biz_004",
+      "tags": [
+        "긴급 당일 처리",
+        "24시간 출동",
+        "정찰제 운영",
+        "주말·공휴일 운영",
+        "폐기물처리업 허가",
+        "소독업 신고 업체"
+      ],
+      "ratingCount": 23,
+      "ratingAvg": 3.7,
+      "phone": "010-3975-8433",
+      "coverageType": "nationwide",
+      "openingHours": {
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        },
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        }
+      },
+      "status": "approved",
+      "services": [
+        "고독사 현장 청소",
+        "곰팡이 제거",
+        "수해·침수 복구 청소"
+      ],
+      "createdAt": "2026-06-18T10:43:20.562Z",
+      "updatedAt": "2026-06-18T10:43:20.562Z",
+      "ownerEmail": "owner4@example.com",
+      "name": "클린119 4호점",
+      "businessRegNumber": "915-90-52957",
+      "reviewCount": 16,
+      "description": "클린119 4호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 34,
+      "shortDescription": "클린119 4호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다."
+    },
+    {
+      "id": "dummy_biz_005",
+      "description": "든든리사이클 5호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 19,
+      "shortDescription": "든든리사이클 5호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "createdAt": "2026-06-18T10:43:20.850Z",
+      "updatedAt": "2026-06-18T10:43:20.850Z",
+      "ownerEmail": "owner5@example.com",
+      "name": "든든리사이클 5호점",
+      "businessRegNumber": "408-54-29176",
+      "reviewCount": 10,
+      "openingHours": {
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        }
+      },
+      "status": "approved",
+      "services": [
+        "수해·침수 복구 청소",
+        "공실 청소",
+        "극단적 선택 현장 처리",
+        "고시원·원룸 공용공간 청소"
+      ],
+      "tags": [
+        "카드 결제 가능",
+        "주말·공휴일 운영",
+        "특수청소관리사 자격 보유",
+        "친환경 약품 사용"
+      ],
+      "ratingCount": 15,
+      "ratingAvg": 4.8,
+      "phone": "010-7077-7991",
+      "coverageType": "nationwide"
+    },
+    {
+      "id": "dummy_biz_006",
+      "coverageType": "nationwide",
+      "phone": "010-8434-2008",
+      "ratingAvg": 4.5,
+      "ratingCount": 15,
+      "tags": [
+        "사진·영상 작업 기록 제공",
+        "24시간 출동",
+        "카드 결제 가능",
+        "365일 연중무휴"
+      ],
+      "services": [
+        "신규 입주 청소",
+        "폐업 점포 청소",
+        "범죄 현장 청소"
+      ],
+      "status": "approved",
+      "openingHours": {
+        "weekend": {
+          "close": 18,
+          "closed": false,
+          "open": 9
+        },
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        }
+      },
+      "reviewCount": 10,
+      "businessRegNumber": "725-98-44415",
+      "name": "에코솔루션 6호점",
+      "ownerEmail": "owner6@example.com",
+      "updatedAt": "2026-06-18T10:43:21.215Z",
+      "createdAt": "2026-06-18T10:43:21.215Z",
+      "shortDescription": "에코솔루션 6호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 47,
+      "description": "에코솔루션 6호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다."
+    },
+    {
+      "id": "dummy_biz_007",
+      "description": "초록119 7호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 92,
+      "shortDescription": "초록119 7호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "updatedAt": "2026-06-18T10:43:21.484Z",
+      "createdAt": "2026-06-18T10:43:21.484Z",
+      "name": "초록119 7호점",
+      "businessRegNumber": "332-35-55386",
+      "ownerEmail": "owner7@example.com",
+      "reviewCount": 14,
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": true,
+          "close": 18
+        },
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        }
+      },
+      "status": "approved",
+      "services": [
+        "동물 사체 처리",
+        "유품 기증·기탁 연계",
+        "폐업 점포 청소",
+        "바이오해저드 방역"
+      ],
+      "ratingCount": 20,
+      "tags": [
+        "긴급 당일 처리",
+        "24시간 출동",
+        "소독업 신고 업체",
+        "남성 팀 구성",
+        "외국어 상담 가능",
+        "특수청소관리사 자격 보유"
+      ],
+      "phone": "010-5478-4566",
+      "ratingAvg": 4.9,
+      "coverageType": "nationwide"
+    },
+    {
+      "id": "dummy_biz_008",
+      "description": "그린클리닝 8호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 91,
+      "shortDescription": "그린클리닝 8호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "createdAt": "2026-06-18T10:43:21.733Z",
+      "updatedAt": "2026-06-18T10:43:21.733Z",
+      "ownerEmail": "owner8@example.com",
+      "name": "그린클리닝 8호점",
+      "businessRegNumber": "993-33-71676",
+      "reviewCount": 9,
+      "openingHours": {
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        },
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        }
+      },
+      "status": "approved",
+      "services": [
+        "공사 후 분진·폐기물 청소",
+        "해충 방제",
+        "동물 사체 처리",
+        "대량 폐기물 수거·처리",
+        "의료·병원 청소"
+      ],
+      "tags": [
+        "긴급 당일 처리",
+        "친환경 약품 사용",
+        "카드 결제 가능",
+        "2시간 이내 출동",
+        "전담 매니저 배정"
+      ],
+      "ratingCount": 14,
+      "ratingAvg": 4.2,
+      "phone": "010-6632-9944",
+      "coverageType": "nationwide"
+    },
+    {
+      "id": "dummy_biz_009",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": true,
+          "close": 18
+        },
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        }
+      },
+      "status": "approved",
+      "services": [
+        "고독사 현장 청소",
+        "동물 사체 처리",
+        "유품 기증·기탁 연계",
+        "변사·부패 현장 복구"
+      ],
+      "tags": [
+        "방문 견적 무료",
+        "2시간 이내 출동",
+        "야간 출동",
+        "365일 연중무휴"
+      ],
+      "ratingCount": 27,
+      "phone": "010-4198-7293",
+      "ratingAvg": 4.3,
+      "coverageType": "nationwide",
+      "description": "미래클린 9호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 15,
+      "shortDescription": "미래클린 9호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "updatedAt": "2026-06-18T10:43:21.992Z",
+      "createdAt": "2026-06-18T10:43:21.992Z",
+      "name": "미래클린 9호점",
+      "businessRegNumber": "236-61-66247",
+      "ownerEmail": "owner9@example.com",
+      "reviewCount": 18
+    },
+    {
+      "id": "dummy_biz_010",
+      "businessRegNumber": "790-22-74581",
+      "name": "늘푸른119 10호점",
+      "ownerEmail": "owner10@example.com",
+      "updatedAt": "2026-06-18T10:43:22.248Z",
+      "createdAt": "2026-06-18T10:43:22.248Z",
+      "reviewCount": 4,
+      "description": "늘푸른119 10호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "늘푸른119 10호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 19,
+      "phone": "010-7378-3216",
+      "ratingAvg": 4.4,
+      "tags": [
+        "야간 출동",
+        "AS 보장",
+        "유족 심리 배려 서비스",
+        "긴급 당일 처리",
+        "친환경 약품 사용"
+      ],
+      "ratingCount": 7,
+      "coverageType": "nationwide",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": true
+        },
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        }
+      },
+      "services": [
+        "유품 선별 및 보존 처리",
+        "폐업 점포 청소",
+        "범죄 현장 청소"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "dummy_biz_011",
+      "reviewCount": 17,
+      "ownerEmail": "owner11@example.com",
+      "businessRegNumber": "219-82-53498",
+      "name": "에코방역 11호점",
+      "createdAt": "2026-06-18T10:43:22.510Z",
+      "updatedAt": "2026-06-18T10:43:22.510Z",
+      "shortDescription": "에코방역 11호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "충북",
+        "인천",
+        "경기"
+      ],
+      "bookmarkCount": 4,
+      "description": "에코방역 11호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "coverageType": "regional",
+      "ratingAvg": 3.9,
+      "phone": "010-5293-1694",
+      "ratingCount": 25,
+      "tags": [
+        "주말·공휴일 운영",
+        "배상책임보험 가입",
+        "후불 결제 가능",
+        "소독업 신고 업체"
+      ],
+      "services": [
+        "곰팡이 제거",
+        "차량 내부 특수청소",
+        "동물 사체 처리",
+        "범죄 현장 청소",
+        "공실 청소",
+        "공사 후 분진·폐기물 청소",
+        "혈흔 제거"
+      ],
+      "status": "approved",
+      "openingHours": {
+        "weekend": {
+          "close": 18,
+          "closed": false,
+          "open": 9
+        },
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        }
+      }
+    },
+    {
+      "id": "dummy_biz_012",
+      "coverageType": "regional",
+      "ratingAvg": 3.9,
+      "phone": "010-7906-6784",
+      "tags": [
+        "정찰제 운영",
+        "방문 견적 무료",
+        "여성 팀 구성",
+        "주말·공휴일 운영",
+        "폐기물처리업 허가"
+      ],
+      "ratingCount": 25,
+      "services": [
+        "고시원·원룸 공용공간 청소",
+        "동물 사체 처리",
+        "유품 선별 및 보존 처리",
+        "공실 청소",
+        "바이오해저드 방역",
+        "그을음·연기 냄새 제거",
+        "공사 후 분진·폐기물 청소"
+      ],
+      "status": "approved",
+      "openingHours": {
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        },
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        }
+      },
+      "reviewCount": 17,
+      "ownerEmail": "owner12@example.com",
+      "name": "그린솔루션 12호점",
+      "businessRegNumber": "982-77-36375",
+      "createdAt": "2026-06-18T10:43:22.780Z",
+      "updatedAt": "2026-06-18T10:43:22.780Z",
+      "shortDescription": "그린솔루션 12호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "전남",
+        "서울",
+        "세종"
+      ],
+      "bookmarkCount": 58,
+      "description": "그린솔루션 12호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다."
+    },
+    {
+      "id": "dummy_biz_013",
+      "description": "든든클리닝 13호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "든든클리닝 13호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 43,
+      "coverageSido": [
+        "부산",
+        "경기"
+      ],
+      "businessRegNumber": "629-62-15632",
+      "name": "든든클리닝 13호점",
+      "ownerEmail": "owner13@example.com",
+      "updatedAt": "2026-06-18T10:43:23.032Z",
+      "createdAt": "2026-06-18T10:43:23.032Z",
+      "reviewCount": 19,
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        },
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        }
+      },
+      "services": [
+        "범죄 현장 청소",
+        "바이러스·세균 방역",
+        "폐업 점포 청소",
+        "공실 청소",
+        "오물·분변 처리",
+        "의료·병원 청소"
+      ],
+      "status": "approved",
+      "phone": "010-9879-9420",
+      "ratingAvg": 4.6,
+      "tags": [
+        "카드 결제 가능",
+        "원스톱 처리 (청소+방역+폐기)",
+        "야간 출동",
+        "전담 매니저 배정",
+        "외국어 상담 가능",
+        "사진·영상 작업 기록 제공"
+      ],
+      "ratingCount": 28,
+      "coverageType": "regional"
+    },
+    {
+      "id": "dummy_biz_014",
+      "coverageType": "regional",
+      "tags": [
+        "카드 결제 가능",
+        "긴급 당일 처리",
+        "배상책임보험 가입",
+        "후불 결제 가능",
+        "2시간 이내 출동",
+        "방문 견적 무료"
+      ],
+      "ratingCount": 15,
+      "phone": "010-8698-6811",
+      "ratingAvg": 4.2,
+      "status": "approved",
+      "services": [
+        "해충 방제",
+        "변사·부패 현장 복구",
+        "폐업 점포 청소",
+        "바이러스·세균 방역",
+        "신규 입주 청소",
+        "대량 폐기물 수거·처리",
+        "곰팡이 제거"
+      ],
+      "openingHours": {
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": true
+        }
+      },
+      "reviewCount": 10,
+      "updatedAt": "2026-06-18T10:43:23.361Z",
+      "createdAt": "2026-06-18T10:43:23.361Z",
+      "businessRegNumber": "862-78-47910",
+      "name": "스마트케어특수청소 14호점",
+      "ownerEmail": "owner14@example.com",
+      "bookmarkCount": 37,
+      "coverageSido": [
+        "부산"
+      ],
+      "shortDescription": "스마트케어특수청소 14호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "description": "스마트케어특수청소 14호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다."
+    },
+    {
+      "id": "dummy_biz_015",
+      "reviewCount": 13,
+      "updatedAt": "2026-06-18T10:43:23.611Z",
+      "createdAt": "2026-06-18T10:43:23.611Z",
+      "name": "푸른솔루션 15호점",
+      "businessRegNumber": "329-95-11385",
+      "ownerEmail": "owner15@example.com",
+      "bookmarkCount": 51,
+      "coverageSido": [
+        "부산",
+        "서울",
+        "대전"
+      ],
+      "shortDescription": "푸른솔루션 15호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "description": "푸른솔루션 15호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "coverageType": "regional",
+      "tags": [
+        "유족 심리 배려 서비스",
+        "친환경 약품 사용",
+        "배상책임보험 가입"
+      ],
+      "ratingCount": 19,
+      "phone": "010-7869-6918",
+      "ratingAvg": 4.7,
+      "status": "approved",
+      "services": [
+        "쓰레기집(저장강박) 청소",
+        "화재 현장 청소",
+        "고시원·원룸 공용공간 청소"
+      ],
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        },
+        "weekend": {
+          "close": 18,
+          "closed": false,
+          "open": 9
+        }
+      }
+    },
+    {
+      "id": "dummy_biz_016",
+      "ownerEmail": "owner16@example.com",
+      "businessRegNumber": "873-44-27740",
+      "name": "미래클리닝 16호점",
+      "createdAt": "2026-06-18T10:43:23.842Z",
+      "updatedAt": "2026-06-18T10:43:23.842Z",
+      "reviewCount": 3,
+      "description": "미래클리닝 16호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "미래클리닝 16호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "서울"
+      ],
+      "bookmarkCount": 13,
+      "ratingAvg": 4.9,
+      "phone": "010-7733-2386",
+      "ratingCount": 5,
+      "tags": [
+        "사진·영상 작업 기록 제공",
+        "원스톱 처리 (청소+방역+폐기)",
+        "비밀 보장",
+        "주말·공휴일 운영",
+        "특수청소관리사 자격 보유",
+        "소독업 신고 업체"
+      ],
+      "coverageType": "regional",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": true,
+          "close": 18
+        },
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        }
+      },
+      "services": [
+        "동물 사체 처리",
+        "오물·분변 처리",
+        "바이러스·세균 방역",
+        "유품 기증·기탁 연계",
+        "수해·침수 복구 청소"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "dummy_biz_017",
+      "tags": [
+        "야간 출동",
+        "외국어 상담 가능",
+        "후불 결제 가능",
+        "카드 결제 가능",
+        "방문 견적 무료"
+      ],
+      "ratingCount": 20,
+      "ratingAvg": 4.7,
+      "phone": "010-5559-2609",
+      "coverageType": "regional",
+      "openingHours": {
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        },
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        }
+      },
+      "status": "approved",
+      "services": [
+        "곰팡이 제거",
+        "오물·분변 처리",
+        "유품 정리",
+        "공실 청소"
+      ],
+      "createdAt": "2026-06-18T10:43:24.205Z",
+      "updatedAt": "2026-06-18T10:43:24.205Z",
+      "ownerEmail": "owner17@example.com",
+      "businessRegNumber": "596-45-46868",
+      "name": "아름다운케어 17호점",
+      "reviewCount": 14,
+      "description": "아름다운케어 17호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "coverageSido": [
+        "전북"
+      ],
+      "bookmarkCount": 94,
+      "shortDescription": "아름다운케어 17호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다."
+    },
+    {
+      "id": "dummy_biz_018",
+      "services": [
+        "극단적 선택 현장 처리",
+        "유품 기증·기탁 연계",
+        "유품 선별 및 보존 처리"
+      ],
+      "status": "approved",
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        },
+        "weekend": {
+          "close": 18,
+          "closed": true,
+          "open": 9
+        }
+      },
+      "coverageType": "regional",
+      "ratingAvg": 3.5,
+      "phone": "010-4855-1424",
+      "tags": [
+        "야간 출동",
+        "폐기물처리업 허가",
+        "비밀 보장"
+      ],
+      "ratingCount": 11,
+      "shortDescription": "에코클린케어 18호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "전북"
+      ],
+      "bookmarkCount": 37,
+      "description": "에코클린케어 18호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "reviewCount": 7,
+      "ownerEmail": "owner18@example.com",
+      "name": "에코클린케어 18호점",
+      "businessRegNumber": "870-40-38554",
+      "createdAt": "2026-06-18T10:43:24.461Z",
+      "updatedAt": "2026-06-18T10:43:24.462Z"
+    },
+    {
+      "id": "dummy_biz_019",
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "close": 18,
+          "closed": false,
+          "open": 9
+        }
+      },
+      "services": [
+        "차량 내부 특수청소",
+        "폐업 점포 청소",
+        "이사 후 빈집 청소",
+        "의료·병원 청소",
+        "동물 사체 처리",
+        "변사·부패 현장 복구"
+      ],
+      "status": "approved",
+      "ratingAvg": 5,
+      "phone": "010-4181-3426",
+      "tags": [
+        "작업자 상해보험 가입",
+        "비밀 보장",
+        "주말·공휴일 운영",
+        "여성 팀 구성",
+        "야간 출동"
+      ],
+      "ratingCount": 26,
+      "coverageType": "regional",
+      "description": "미래119 19호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "미래119 19호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "충남"
+      ],
+      "bookmarkCount": 95,
+      "ownerEmail": "owner19@example.com",
+      "businessRegNumber": "542-74-12883",
+      "name": "미래119 19호점",
+      "createdAt": "2026-06-18T10:43:24.697Z",
+      "updatedAt": "2026-06-18T10:43:24.697Z",
+      "reviewCount": 18
+    },
+    {
+      "id": "dummy_biz_020",
+      "reviewCount": 0,
+      "ownerEmail": "owner20@example.com",
+      "name": "가온클린 20호점",
+      "businessRegNumber": "632-45-94930",
+      "createdAt": "2026-06-18T10:43:24.953Z",
+      "updatedAt": "2026-06-18T10:43:24.953Z",
+      "shortDescription": "가온클린 20호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "울산",
+        "전남",
+        "인천"
+      ],
+      "bookmarkCount": 71,
+      "description": "가온클린 20호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "coverageType": "regional",
+      "ratingAvg": 4.5,
+      "phone": "010-1883-6204",
+      "ratingCount": 1,
+      "tags": [
+        "여성 팀 구성",
+        "정찰제 운영",
+        "24시간 출동",
+        "폐기물처리업 허가",
+        "원스톱 처리 (청소+방역+폐기)",
+        "긴급 당일 처리"
+      ],
+      "services": [
+        "신규 입주 청소",
+        "이사 후 빈집 청소",
+        "쓰레기집(저장강박) 청소",
+        "해충 방제"
+      ],
+      "status": "approved",
+      "openingHours": {
+        "weekend": {
+          "closed": false,
+          "close": 18,
+          "open": 9
+        },
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        }
+      }
+    },
+    {
+      "id": "dummy_biz_021",
+      "description": "해피연구소 21호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 59,
+      "coverageSido": [
+        "울산",
+        "충남"
+      ],
+      "shortDescription": "해피연구소 21호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "updatedAt": "2026-06-18T10:43:25.201Z",
+      "createdAt": "2026-06-18T10:43:25.201Z",
+      "name": "해피연구소 21호점",
+      "businessRegNumber": "382-38-78162",
+      "ownerEmail": "owner21@example.com",
+      "reviewCount": 7,
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": true,
+          "close": 18
+        },
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        }
+      },
+      "status": "approved",
+      "services": [
+        "공실 청소",
+        "고시원·원룸 공용공간 청소",
+        "의료·병원 청소"
+      ],
+      "tags": [
+        "소독업 신고 업체",
+        "배상책임보험 가입",
+        "방문 견적 무료"
+      ],
+      "ratingCount": 10,
+      "phone": "010-2352-6243",
+      "ratingAvg": 4.6,
+      "coverageType": "regional"
+    },
+    {
+      "id": "dummy_biz_022",
+      "shortDescription": "든든솔루션 22호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 32,
+      "coverageSido": [
+        "강원",
+        "제주",
+        "전남"
+      ],
+      "description": "든든솔루션 22호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "reviewCount": 15,
+      "businessRegNumber": "965-10-96945",
+      "name": "든든솔루션 22호점",
+      "ownerEmail": "owner22@example.com",
+      "updatedAt": "2026-06-18T10:43:25.622Z",
+      "createdAt": "2026-06-18T10:43:25.622Z",
+      "services": [
+        "수해·침수 복구 청소",
+        "유품 폐기 처리",
+        "공사 후 분진·폐기물 청소",
+        "극단적 선택 현장 처리",
+        "의료·병원 청소",
+        "대량 폐기물 수거·처리"
+      ],
+      "status": "approved",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": true,
+          "close": 18
+        },
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        }
+      },
+      "coverageType": "regional",
+      "phone": "010-1650-5374",
+      "ratingAvg": 4,
+      "tags": [
+        "24시간 출동",
+        "정찰제 운영",
+        "긴급 당일 처리",
+        "소독업 신고 업체",
+        "야간 출동",
+        "배상책임보험 가입"
+      ],
+      "ratingCount": 22
+    },
+    {
+      "id": "dummy_biz_023",
+      "ownerEmail": "owner23@example.com",
+      "businessRegNumber": "529-92-33096",
+      "name": "가온클리닝 23호점",
+      "createdAt": "2026-06-18T10:43:25.877Z",
+      "updatedAt": "2026-06-18T10:43:25.877Z",
+      "reviewCount": 0,
+      "description": "가온클리닝 23호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "가온클리닝 23호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "경북"
+      ],
+      "bookmarkCount": 6,
+      "ratingAvg": 0,
+      "phone": "010-9152-5521",
+      "ratingCount": 0,
+      "tags": [
+        "후불 결제 가능",
+        "24시간 출동",
+        "정찰제 운영"
+      ],
+      "coverageType": "regional",
+      "openingHours": {
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        },
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        }
+      },
+      "services": [
+        "공사 후 분진·폐기물 청소",
+        "변사·부패 현장 복구",
+        "고독사 현장 청소",
+        "유품 정리",
+        "동물 사체 처리",
+        "대량 폐기물 수거·처리",
+        "화재 현장 청소"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "dummy_biz_024",
+      "ownerEmail": "owner24@example.com",
+      "name": "바른환경방역 24호점",
+      "businessRegNumber": "915-73-38398",
+      "createdAt": "2026-06-18T10:43:26.123Z",
+      "updatedAt": "2026-06-18T10:43:26.123Z",
+      "reviewCount": 10,
+      "description": "바른환경방역 24호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "바른환경방역 24호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "부산"
+      ],
+      "bookmarkCount": 43,
+      "ratingAvg": 4.1,
+      "phone": "010-6652-1966",
+      "ratingCount": 15,
+      "tags": [
+        "비밀 보장",
+        "작업자 상해보험 가입",
+        "친환경 약품 사용",
+        "24시간 출동"
+      ],
+      "coverageType": "regional",
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": true
+        }
+      },
+      "services": [
+        "대량 폐기물 수거·처리",
+        "극단적 선택 현장 처리",
+        "화재 현장 청소",
+        "변사·부패 현장 복구",
+        "오물·분변 처리",
+        "의료·병원 청소"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "dummy_biz_025",
+      "ownerEmail": "owner25@example.com",
+      "businessRegNumber": "227-81-26882",
+      "name": "초록방역 25호점",
+      "createdAt": "2026-06-18T10:43:26.372Z",
+      "updatedAt": "2026-06-18T10:43:26.372Z",
+      "reviewCount": 9,
+      "description": "초록방역 25호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "초록방역 25호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "coverageSido": [
+        "대전",
+        "울산"
+      ],
+      "bookmarkCount": 35,
+      "ratingAvg": 4.2,
+      "phone": "010-1349-1633",
+      "tags": [
+        "폐기물처리업 허가",
+        "소독업 신고 업체",
+        "AS 보장"
+      ],
+      "ratingCount": 14,
+      "coverageType": "regional",
+      "openingHours": {
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        },
+        "weekend": {
+          "open": 9,
+          "closed": true,
+          "close": 18
+        }
+      },
+      "services": [
+        "유품 선별 및 보존 처리",
+        "범죄 현장 청소",
+        "유품 기증·기탁 연계",
+        "수해·침수 복구 청소",
+        "이사 후 빈집 청소",
+        "곰팡이 제거"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "dummy_biz_026",
+      "businessRegNumber": "805-40-60525",
+      "name": "다온솔루션 26호점",
+      "ownerEmail": "owner26@example.com",
+      "updatedAt": "2026-06-18T10:43:27.261Z",
+      "createdAt": "2026-06-18T10:43:27.261Z",
+      "reviewCount": 4,
+      "description": "다온솔루션 26호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "다온솔루션 26호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 99,
+      "coverageSido": [
+        "서울"
+      ],
+      "phone": "010-2826-4930",
+      "ratingAvg": 4.3,
+      "tags": [
+        "유족 심리 배려 서비스",
+        "작업자 상해보험 가입",
+        "24시간 출동",
+        "외국어 상담 가능"
+      ],
+      "ratingCount": 7,
+      "coverageType": "regional",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        },
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        }
+      },
+      "services": [
+        "바이오해저드 방역",
+        "혈흔 제거",
+        "극단적 선택 현장 처리",
+        "고시원·원룸 공용공간 청소"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "dummy_biz_027",
+      "phone": "010-9914-1083",
+      "ratingAvg": 4.6,
+      "tags": [
+        "사진·영상 작업 기록 제공",
+        "주말·공휴일 운영",
+        "정찰제 운영"
+      ],
+      "ratingCount": 2,
+      "coverageType": "regional",
+      "openingHours": {
+        "weekend": {
+          "close": 18,
+          "closed": true,
+          "open": 9
+        },
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        }
+      },
+      "services": [
+        "화재 현장 청소",
+        "변사·부패 현장 복구",
+        "범죄 현장 청소"
+      ],
+      "status": "approved",
+      "name": "클린룸케어 27호점",
+      "businessRegNumber": "629-81-57666",
+      "ownerEmail": "owner27@example.com",
+      "updatedAt": "2026-06-18T10:43:27.524Z",
+      "createdAt": "2026-06-18T10:43:27.524Z",
+      "reviewCount": 1,
+      "description": "클린룸케어 27호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "클린룸케어 27호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 10,
+      "coverageSido": [
+        "경기",
+        "부산"
+      ]
+    },
+    {
+      "id": "dummy_biz_028",
+      "shortDescription": "하나연구소 28호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 51,
+      "coverageSido": [
+        "대구",
+        "부산"
+      ],
+      "description": "하나연구소 28호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "reviewCount": 7,
+      "name": "하나연구소 28호점",
+      "businessRegNumber": "366-68-50942",
+      "ownerEmail": "owner28@example.com",
+      "updatedAt": "2026-06-18T10:43:27.758Z",
+      "createdAt": "2026-06-18T10:43:27.758Z",
+      "services": [
+        "의료·병원 청소",
+        "폐업 점포 청소",
+        "악취 원인 제거 및 탈취",
+        "고시원·원룸 공용공간 청소",
+        "범죄 현장 청소",
+        "극단적 선택 현장 처리"
+      ],
+      "status": "approved",
+      "openingHours": {
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        },
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        }
+      },
+      "coverageType": "regional",
+      "phone": "010-2508-3844",
+      "ratingAvg": 4.7,
+      "tags": [
+        "전담 매니저 배정",
+        "유족 심리 배려 서비스",
+        "사진·영상 작업 기록 제공",
+        "원스톱 처리 (청소+방역+폐기)"
+      ],
+      "ratingCount": 11
+    },
+    {
+      "id": "dummy_biz_029",
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "close": 18,
+          "closed": false,
+          "open": 9
+        }
+      },
+      "services": [
+        "유품 선별 및 보존 처리",
+        "화재 현장 청소",
+        "수해·침수 복구 청소",
+        "그을음·연기 냄새 제거"
+      ],
+      "status": "approved",
+      "phone": "010-7756-1953",
+      "ratingAvg": 4.4,
+      "ratingCount": 28,
+      "tags": [
+        "소독업 신고 업체",
+        "친환경 약품 사용",
+        "폐기물처리업 허가",
+        "작업자 상해보험 가입",
+        "정찰제 운영",
+        "방문 견적 무료"
+      ],
+      "coverageType": "regional",
+      "description": "신속클리닝 29호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "신속클리닝 29호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 38,
+      "coverageSido": [
+        "경남"
+      ],
+      "businessRegNumber": "566-32-23461",
+      "name": "신속클리닝 29호점",
+      "ownerEmail": "owner29@example.com",
+      "updatedAt": "2026-06-18T10:43:28.018Z",
+      "createdAt": "2026-06-18T10:43:28.018Z",
+      "reviewCount": 19
+    },
+    {
+      "id": "dummy_biz_030",
+      "reviewCount": 17,
+      "createdAt": "2026-06-18T10:43:28.272Z",
+      "updatedAt": "2026-06-18T10:43:28.272Z",
+      "ownerEmail": "owner30@example.com",
+      "name": "든든연구소 30호점",
+      "businessRegNumber": "641-54-32621",
+      "coverageSido": [
+        "인천",
+        "충남"
+      ],
+      "bookmarkCount": 7,
+      "shortDescription": "든든연구소 30호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "description": "든든연구소 30호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "coverageType": "regional",
+      "tags": [
+        "폐기물처리업 허가",
+        "남성 팀 구성",
+        "비밀 보장",
+        "주말·공휴일 운영",
+        "소독업 신고 업체",
+        "작업자 상해보험 가입"
+      ],
+      "ratingCount": 25,
+      "ratingAvg": 3.8,
+      "phone": "010-2420-4909",
+      "status": "approved",
+      "services": [
+        "혈흔 제거",
+        "유품 기증·기탁 연계",
+        "쓰레기집(저장강박) 청소",
+        "이사 후 빈집 청소",
+        "동물 사체 처리",
+        "바이러스·세균 방역",
+        "의료·병원 청소"
+      ],
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        }
+      }
+    },
+    {
+      "id": "dummy_biz_031",
+      "tags": [
+        "특수청소관리사 자격 보유",
+        "비밀 보장",
+        "원스톱 처리 (청소+방역+폐기)",
+        "유족 심리 배려 서비스"
+      ],
+      "ratingCount": 9,
+      "phone": "010-9253-1068",
+      "ratingAvg": 4.9,
+      "coverageType": "radius",
+      "openingHours": {
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        },
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        }
+      },
+      "serviceRadiusKm": 37,
+      "status": "approved",
+      "services": [
+        "고독사 현장 청소",
+        "공사 후 분진·폐기물 청소",
+        "오물·분변 처리",
+        "고시원·원룸 공용공간 청소"
+      ],
+      "baseAddress": "경상북도 안동시 풍천면 도청대로 455",
+      "updatedAt": "2026-06-18T10:43:28.508Z",
+      "createdAt": "2026-06-18T10:43:28.508Z",
+      "businessRegNumber": "155-60-85868",
+      "name": "스마트케어클리닝 31호점",
+      "ownerEmail": "owner31@example.com",
+      "geoPoint": {
+        "lat": 36.58894234590402,
+        "lng": 128.53110104263646
+      },
+      "reviewCount": 6,
+      "description": "스마트케어클리닝 31호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 90,
+      "shortDescription": "스마트케어클리닝 31호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다."
+    },
+    {
+      "id": "dummy_biz_032",
+      "description": "초록클리닝 32호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 16,
+      "shortDescription": "초록클리닝 32호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "updatedAt": "2026-06-18T10:43:28.737Z",
+      "createdAt": "2026-06-18T10:43:28.737Z",
+      "name": "초록클리닝 32호점",
+      "businessRegNumber": "693-23-32364",
+      "ownerEmail": "owner32@example.com",
+      "geoPoint": {
+        "lat": 35.782149418246256,
+        "lng": 127.147041066888
+      },
+      "reviewCount": 16,
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "closed": false,
+          "close": 20
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        }
+      },
+      "serviceRadiusKm": 43,
+      "status": "approved",
+      "services": [
+        "해충 방제",
+        "고시원·원룸 공용공간 청소",
+        "고독사 현장 청소",
+        "유품 선별 및 보존 처리",
+        "변사·부패 현장 복구",
+        "곰팡이 제거",
+        "신규 입주 청소"
+      ],
+      "baseAddress": "전북특별자치도 전주시 완산구 효자로 225",
+      "tags": [
+        "정찰제 운영",
+        "야간 출동",
+        "방문 견적 무료",
+        "소독업 신고 업체",
+        "365일 연중무휴"
+      ],
+      "ratingCount": 23,
+      "phone": "010-7840-8343",
+      "ratingAvg": 4.1,
+      "coverageType": "radius"
+    },
+    {
+      "id": "dummy_biz_033",
+      "phone": "010-3830-2728",
+      "ratingAvg": 5,
+      "tags": [
+        "24시간 출동",
+        "특수청소관리사 자격 보유",
+        "유족 심리 배려 서비스",
+        "사진·영상 작업 기록 제공",
+        "전담 매니저 배정",
+        "카드 결제 가능"
+      ],
+      "ratingCount": 24,
+      "coverageType": "radius",
+      "serviceRadiusKm": 72,
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        }
+      },
+      "baseAddress": "서울특별시 중구 태평로1가 31",
+      "services": [
+        "유품 선별 및 보존 처리",
+        "범죄 현장 청소",
+        "오물·분변 처리"
+      ],
+      "status": "approved",
+      "name": "든든케어 33호점",
+      "businessRegNumber": "918-37-72547",
+      "ownerEmail": "owner33@example.com",
+      "updatedAt": "2026-06-18T10:43:28.976Z",
+      "createdAt": "2026-06-18T10:43:28.976Z",
+      "geoPoint": {
+        "lng": 126.93268351297318,
+        "lat": 37.569829761621854
+      },
+      "reviewCount": 16,
+      "description": "든든케어 33호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "든든케어 33호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 15
+    },
+    {
+      "id": "dummy_biz_034",
+      "description": "정직한119 34호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "정직한119 34호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 98,
+      "name": "정직한119 34호점",
+      "businessRegNumber": "228-23-19241",
+      "ownerEmail": "owner34@example.com",
+      "updatedAt": "2026-06-18T10:43:29.241Z",
+      "createdAt": "2026-06-18T10:43:29.241Z",
+      "geoPoint": {
+        "lat": 35.15313178181085,
+        "lng": 129.0332202512183
+      },
+      "reviewCount": 4,
+      "serviceRadiusKm": 36,
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "close": 18,
+          "closed": false,
+          "open": 9
+        }
+      },
+      "services": [
+        "극단적 선택 현장 처리",
+        "혈흔 제거",
+        "수해·침수 복구 청소"
+      ],
+      "baseAddress": "부산광역시 연제구 중앙대로 1001",
+      "status": "approved",
+      "phone": "010-3017-6702",
+      "ratingAvg": 3.5,
+      "tags": [
+        "작업자 상해보험 가입",
+        "주말·공휴일 운영",
+        "카드 결제 가능"
+      ],
+      "ratingCount": 7,
+      "coverageType": "radius"
+    },
+    {
+      "id": "dummy_biz_035",
+      "bookmarkCount": 58,
+      "shortDescription": "우리119 35호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "description": "우리119 35호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "geoPoint": {
+        "lat": 35.571610590437075,
+        "lng": 129.3332374619842
+      },
+      "reviewCount": 2,
+      "updatedAt": "2026-06-18T10:43:29.489Z",
+      "createdAt": "2026-06-18T10:43:29.489Z",
+      "name": "우리119 35호점",
+      "businessRegNumber": "823-91-96491",
+      "ownerEmail": "owner35@example.com",
+      "status": "approved",
+      "baseAddress": "울산광역시 남구 중앙로 201",
+      "services": [
+        "동물 사체 처리",
+        "고독사 현장 청소",
+        "폐업 점포 청소"
+      ],
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "closed": true,
+          "close": 18,
+          "open": 9
+        }
+      },
+      "serviceRadiusKm": 57,
+      "coverageType": "radius",
+      "tags": [
+        "방문 견적 무료",
+        "AS 보장",
+        "긴급 당일 처리",
+        "여성 팀 구성",
+        "외국어 상담 가능"
+      ],
+      "ratingCount": 4,
+      "phone": "010-5827-8507",
+      "ratingAvg": 3.8
+    },
+    {
+      "id": "dummy_biz_036",
+      "tags": [
+        "여성 팀 구성",
+        "특수청소관리사 자격 보유",
+        "남성 팀 구성",
+        "비밀 보장",
+        "배상책임보험 가입",
+        "2시간 이내 출동"
+      ],
+      "ratingCount": 25,
+      "ratingAvg": 5,
+      "phone": "010-2369-2395",
+      "coverageType": "radius",
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        }
+      },
+      "serviceRadiusKm": 24,
+      "status": "approved",
+      "services": [
+        "유품 정리",
+        "혈흔 제거",
+        "수해·침수 복구 청소",
+        "극단적 선택 현장 처리",
+        "유품 선별 및 보존 처리",
+        "쓰레기집(저장강박) 청소"
+      ],
+      "baseAddress": "세종특별자치시 한누리대로 2130",
+      "createdAt": "2026-06-18T10:43:29.732Z",
+      "updatedAt": "2026-06-18T10:43:29.732Z",
+      "ownerEmail": "owner36@example.com",
+      "name": "스마트케어 36호점",
+      "businessRegNumber": "337-20-31571",
+      "reviewCount": 17,
+      "geoPoint": {
+        "lat": 36.43851923021829,
+        "lng": 127.3363612257702
+      },
+      "description": "스마트케어 36호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 71,
+      "shortDescription": "스마트케어 36호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다."
+    },
+    {
+      "id": "dummy_biz_037",
+      "name": "그린연구소 37호점",
+      "businessRegNumber": "667-64-81436",
+      "ownerEmail": "owner37@example.com",
+      "updatedAt": "2026-06-18T10:43:30.567Z",
+      "createdAt": "2026-06-18T10:43:30.567Z",
+      "geoPoint": {
+        "lng": 129.3277136673785,
+        "lat": 35.52378106691248
+      },
+      "reviewCount": 2,
+      "description": "그린연구소 37호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "그린연구소 37호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 79,
+      "phone": "010-4477-2869",
+      "ratingAvg": 4.2,
+      "tags": [
+        "24시간 출동",
+        "여성 팀 구성",
+        "카드 결제 가능",
+        "후불 결제 가능",
+        "비밀 보장",
+        "방문 견적 무료"
+      ],
+      "ratingCount": 4,
+      "coverageType": "radius",
+      "serviceRadiusKm": 49,
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "close": 18,
+          "closed": true,
+          "open": 9
+        }
+      },
+      "services": [
+        "그을음·연기 냄새 제거",
+        "유품 폐기 처리",
+        "고독사 현장 청소",
+        "곰팡이 제거",
+        "대량 폐기물 수거·처리",
+        "신규 입주 청소"
+      ],
+      "baseAddress": "울산광역시 남구 중앙로 201",
+      "status": "approved"
+    },
+    {
+      "id": "dummy_biz_038",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        },
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        }
+      },
+      "serviceRadiusKm": 20,
+      "status": "approved",
+      "services": [
+        "극단적 선택 현장 처리",
+        "유품 선별 및 보존 처리",
+        "혈흔 제거"
+      ],
+      "baseAddress": "충청남도 홍성군 홍북읍 충남대로 21",
+      "tags": [
+        "야간 출동",
+        "주말·공휴일 운영",
+        "후불 결제 가능",
+        "원스톱 처리 (청소+방역+폐기)",
+        "배상책임보험 가입",
+        "2시간 이내 출동"
+      ],
+      "ratingCount": 19,
+      "ratingAvg": 3.7,
+      "phone": "010-7294-7717",
+      "coverageType": "radius",
+      "description": "라온클리닝 38호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 83,
+      "shortDescription": "라온클리닝 38호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "createdAt": "2026-06-18T10:43:30.813Z",
+      "updatedAt": "2026-06-18T10:43:30.813Z",
+      "ownerEmail": "owner38@example.com",
+      "name": "라온클리닝 38호점",
+      "businessRegNumber": "933-99-81646",
+      "reviewCount": 13,
+      "geoPoint": {
+        "lat": 36.62005580260681,
+        "lng": 126.6833138983802
+      }
+    },
+    {
+      "id": "dummy_biz_039",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        },
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        }
+      },
+      "serviceRadiusKm": 76,
+      "status": "approved",
+      "baseAddress": "경상남도 창원시 의창구 중앙대로 300",
+      "services": [
+        "대량 폐기물 수거·처리",
+        "고시원·원룸 공용공간 청소",
+        "의료·병원 청소",
+        "귀중품 분류 및 인계",
+        "공실 청소"
+      ],
+      "ratingCount": 7,
+      "tags": [
+        "카드 결제 가능",
+        "특수청소관리사 자격 보유",
+        "AS 보장",
+        "친환경 약품 사용",
+        "폐기물처리업 허가"
+      ],
+      "phone": "010-5638-7599",
+      "ratingAvg": 4.1,
+      "coverageType": "radius",
+      "description": "안심방역 39호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 17,
+      "shortDescription": "안심방역 39호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "updatedAt": "2026-06-18T10:43:31.063Z",
+      "createdAt": "2026-06-18T10:43:31.063Z",
+      "name": "안심방역 39호점",
+      "businessRegNumber": "781-20-52287",
+      "ownerEmail": "owner39@example.com",
+      "geoPoint": {
+        "lng": 128.64655671673168,
+        "lat": 35.21944689232853
+      },
+      "reviewCount": 4
+    },
+    {
+      "id": "dummy_biz_040",
+      "description": "에코클린클리닝 40호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 19,
+      "shortDescription": "에코클린클리닝 40호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "createdAt": "2026-06-18T10:43:31.296Z",
+      "updatedAt": "2026-06-18T10:43:31.296Z",
+      "ownerEmail": "owner40@example.com",
+      "name": "에코클린클리닝 40호점",
+      "businessRegNumber": "341-39-96328",
+      "geoPoint": {
+        "lat": 35.87695196988762,
+        "lng": 128.57862793266958
+      },
+      "reviewCount": 15,
+      "openingHours": {
+        "weekend": {
+          "closed": false,
+          "close": 18,
+          "open": 9
+        },
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        }
+      },
+      "serviceRadiusKm": 48,
+      "status": "approved",
+      "services": [
+        "고독사 현장 청소",
+        "극단적 선택 현장 처리",
+        "쓰레기집(저장강박) 청소",
+        "귀중품 분류 및 인계",
+        "악취 원인 제거 및 탈취"
+      ],
+      "baseAddress": "대구광역시 중구 공평로 88",
+      "tags": [
+        "주말·공휴일 운영",
+        "야간 출동",
+        "친환경 약품 사용",
+        "후불 결제 가능",
+        "긴급 당일 처리",
+        "배상책임보험 가입"
+      ],
+      "ratingCount": 22,
+      "ratingAvg": 3.9,
+      "phone": "010-8001-8570",
+      "coverageType": "radius"
+    },
+    {
+      "id": "dummy_biz_041",
+      "description": "스마트클린환경 41호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "스마트클린환경 41호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 11,
+      "ownerEmail": "owner41@example.com",
+      "name": "스마트클린환경 41호점",
+      "businessRegNumber": "591-40-28772",
+      "createdAt": "2026-06-18T10:43:31.547Z",
+      "updatedAt": "2026-06-18T10:43:31.547Z",
+      "geoPoint": {
+        "lat": 36.56382086841241,
+        "lng": 126.69251556431063
+      },
+      "reviewCount": 19,
+      "serviceRadiusKm": 67,
+      "openingHours": {
+        "weekend": {
+          "close": 18,
+          "closed": true,
+          "open": 9
+        },
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        }
+      },
+      "baseAddress": "충청남도 홍성군 홍북읍 충남대로 21",
+      "services": [
+        "유품 선별 및 보존 처리",
+        "유품 기증·기탁 연계",
+        "바이오해저드 방역",
+        "해충 방제",
+        "범죄 현장 청소"
+      ],
+      "status": "approved",
+      "ratingAvg": 4.7,
+      "phone": "010-7420-2330",
+      "ratingCount": 28,
+      "tags": [
+        "친환경 약품 사용",
+        "배상책임보험 가입",
+        "방문 견적 무료",
+        "원스톱 처리 (청소+방역+폐기)",
+        "유족 심리 배려 서비스",
+        "24시간 출동"
+      ],
+      "coverageType": "radius"
+    },
+    {
+      "id": "dummy_biz_042",
+      "serviceRadiusKm": 68,
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": true,
+          "close": 18
+        },
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        }
+      },
+      "services": [
+        "공사 후 분진·폐기물 청소",
+        "유품 정리",
+        "변사·부패 현장 복구",
+        "수해·침수 복구 청소",
+        "고독사 현장 청소",
+        "대량 폐기물 수거·처리",
+        "혈흔 제거"
+      ],
+      "baseAddress": "대구광역시 중구 공평로 88",
+      "status": "approved",
+      "phone": "010-3729-4245",
+      "ratingAvg": 4.7,
+      "tags": [
+        "소독업 신고 업체",
+        "남성 팀 구성",
+        "주말·공휴일 운영",
+        "작업자 상해보험 가입",
+        "정찰제 운영",
+        "외국어 상담 가능"
+      ],
+      "ratingCount": 5,
+      "coverageType": "radius",
+      "description": "안심리사이클 42호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "안심리사이클 42호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 0,
+      "name": "안심리사이클 42호점",
+      "businessRegNumber": "350-83-13604",
+      "ownerEmail": "owner42@example.com",
+      "updatedAt": "2026-06-18T10:43:31.793Z",
+      "createdAt": "2026-06-18T10:43:31.793Z",
+      "reviewCount": 3,
+      "geoPoint": {
+        "lng": 128.60271557109388,
+        "lat": 35.90726009272822
+      }
+    },
+    {
+      "id": "dummy_biz_043",
+      "tags": [
+        "긴급 당일 처리",
+        "유족 심리 배려 서비스",
+        "폐기물처리업 허가"
+      ],
+      "ratingCount": 19,
+      "phone": "010-2203-4807",
+      "ratingAvg": 4.1,
+      "coverageType": "radius",
+      "openingHours": {
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        }
+      },
+      "serviceRadiusKm": 76,
+      "status": "approved",
+      "services": [
+        "바이러스·세균 방역",
+        "그을음·연기 냄새 제거",
+        "유품 폐기 처리",
+        "대량 폐기물 수거·처리"
+      ],
+      "baseAddress": "제주특별자치도 제주시 문송길 12",
+      "updatedAt": "2026-06-18T10:43:32.045Z",
+      "createdAt": "2026-06-18T10:43:32.045Z",
+      "name": "푸른케어 43호점",
+      "businessRegNumber": "876-25-93929",
+      "ownerEmail": "owner43@example.com",
+      "reviewCount": 13,
+      "geoPoint": {
+        "lat": 33.524065467486466,
+        "lng": 126.54427088039316
+      },
+      "description": "푸른케어 43호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "bookmarkCount": 38,
+      "shortDescription": "푸른케어 43호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다."
+    },
+    {
+      "id": "dummy_biz_044",
+      "coverageType": "radius",
+      "ratingAvg": 0,
+      "phone": "010-2055-7191",
+      "ratingCount": 0,
+      "tags": [
+        "24시간 출동",
+        "긴급 당일 처리",
+        "주말·공휴일 운영",
+        "전담 매니저 배정",
+        "비밀 보장"
+      ],
+      "baseAddress": "충청북도 청주시 상당구 상당로 82",
+      "services": [
+        "폐업 점포 청소",
+        "그을음·연기 냄새 제거",
+        "악취 원인 제거 및 탈취",
+        "신규 입주 청소",
+        "동물 사체 처리",
+        "고독사 현장 청소"
+      ],
+      "status": "approved",
+      "serviceRadiusKm": 36,
+      "openingHours": {
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        },
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": false
+        }
+      },
+      "geoPoint": {
+        "lat": 36.63931633092954,
+        "lng": 127.52000304750493
+      },
+      "reviewCount": 0,
+      "ownerEmail": "owner44@example.com",
+      "name": "스마트클린클린 44호점",
+      "businessRegNumber": "587-71-96478",
+      "createdAt": "2026-06-18T10:43:32.303Z",
+      "updatedAt": "2026-06-18T10:43:32.303Z",
+      "shortDescription": "스마트클린클린 44호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 65,
+      "description": "스마트클린클린 44호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다."
+    },
+    {
+      "id": "dummy_biz_045",
+      "serviceRadiusKm": 35,
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": false,
+          "close": 18
+        },
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        }
+      },
+      "services": [
+        "귀중품 분류 및 인계",
+        "차량 내부 특수청소",
+        "그을음·연기 냄새 제거",
+        "해충 방제"
+      ],
+      "baseAddress": "강원특별자치도 춘천시 중앙로 1",
+      "status": "approved",
+      "phone": "010-1711-8984",
+      "ratingAvg": 4.3,
+      "ratingCount": 15,
+      "tags": [
+        "2시간 이내 출동",
+        "전담 매니저 배정",
+        "외국어 상담 가능",
+        "24시간 출동"
+      ],
+      "coverageType": "radius",
+      "description": "깨끗한119 45호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "깨끗한119 45호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 44,
+      "name": "깨끗한119 45호점",
+      "businessRegNumber": "945-99-76936",
+      "ownerEmail": "owner45@example.com",
+      "updatedAt": "2026-06-18T10:43:32.545Z",
+      "createdAt": "2026-06-18T10:43:32.545Z",
+      "geoPoint": {
+        "lat": 37.864322197094346,
+        "lng": 127.68175004784162
+      },
+      "reviewCount": 10
+    },
+    {
+      "id": "dummy_biz_046",
+      "bookmarkCount": 23,
+      "shortDescription": "에코환경 46호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "description": "에코환경 46호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "reviewCount": 9,
+      "geoPoint": {
+        "lng": 129.09843287624943,
+        "lat": 35.22475106665996
+      },
+      "updatedAt": "2026-06-18T10:43:32.779Z",
+      "createdAt": "2026-06-18T10:43:32.779Z",
+      "name": "에코환경 46호점",
+      "businessRegNumber": "495-29-15613",
+      "ownerEmail": "owner46@example.com",
+      "status": "approved",
+      "services": [
+        "혈흔 제거",
+        "악취 원인 제거 및 탈취",
+        "바이러스·세균 방역",
+        "수해·침수 복구 청소",
+        "공실 청소"
+      ],
+      "baseAddress": "부산광역시 연제구 중앙대로 1001",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": false,
+          "close": 18
+        },
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        }
+      },
+      "serviceRadiusKm": 24,
+      "coverageType": "radius",
+      "tags": [
+        "정찰제 운영",
+        "주말·공휴일 운영",
+        "카드 결제 가능",
+        "AS 보장",
+        "원스톱 처리 (청소+방역+폐기)"
+      ],
+      "ratingCount": 14,
+      "phone": "010-4255-5345",
+      "ratingAvg": 4.3
+    },
+    {
+      "id": "dummy_biz_047",
+      "baseAddress": "인천광역시 남동구 정각로 29",
+      "services": [
+        "유품 선별 및 보존 처리",
+        "극단적 선택 현장 처리",
+        "유품 기증·기탁 연계",
+        "의료·병원 청소",
+        "수해·침수 복구 청소",
+        "혈흔 제거"
+      ],
+      "status": "approved",
+      "serviceRadiusKm": 79,
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "closed": false,
+          "close": 18
+        },
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        }
+      },
+      "coverageType": "radius",
+      "ratingAvg": 4.1,
+      "phone": "010-7924-6358",
+      "tags": [
+        "폐기물처리업 허가",
+        "전담 매니저 배정",
+        "카드 결제 가능",
+        "긴급 당일 처리",
+        "배상책임보험 가입"
+      ],
+      "ratingCount": 20,
+      "shortDescription": "든든케어 47호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 54,
+      "description": "든든케어 47호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "geoPoint": {
+        "lng": 126.67992700045585,
+        "lat": 37.410554813082186
+      },
+      "reviewCount": 14,
+      "ownerEmail": "owner47@example.com",
+      "name": "든든케어 47호점",
+      "businessRegNumber": "996-23-81855",
+      "createdAt": "2026-06-18T10:43:33.045Z",
+      "updatedAt": "2026-06-18T10:43:33.045Z"
+    },
+    {
+      "id": "dummy_biz_048",
+      "reviewCount": 15,
+      "geoPoint": {
+        "lng": 128.59203327207464,
+        "lat": 35.89604426812696
+      },
+      "ownerEmail": "owner48@example.com",
+      "name": "미래환경 48호점",
+      "businessRegNumber": "477-21-74661",
+      "createdAt": "2026-06-18T10:43:33.280Z",
+      "updatedAt": "2026-06-18T10:43:33.280Z",
+      "shortDescription": "미래환경 48호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 55,
+      "description": "미래환경 48호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "coverageType": "radius",
+      "ratingAvg": 4.2,
+      "phone": "010-9577-6429",
+      "tags": [
+        "2시간 이내 출동",
+        "야간 출동",
+        "외국어 상담 가능",
+        "사진·영상 작업 기록 제공",
+        "원스톱 처리 (청소+방역+폐기)"
+      ],
+      "ratingCount": 22,
+      "services": [
+        "그을음·연기 냄새 제거",
+        "곰팡이 제거",
+        "유품 폐기 처리"
+      ],
+      "baseAddress": "대구광역시 중구 공평로 88",
+      "status": "approved",
+      "serviceRadiusKm": 37,
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": true
+        },
+        "weekday": {
+          "close": 20,
+          "closed": false,
+          "open": 8
+        }
+      }
+    },
+    {
+      "id": "dummy_biz_049",
+      "bookmarkCount": 22,
+      "shortDescription": "케어클린 49호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "description": "케어클린 49호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "geoPoint": {
+        "lat": 36.45004959029593,
+        "lng": 127.33714408177525
+      },
+      "reviewCount": 16,
+      "updatedAt": "2026-06-18T10:43:33.506Z",
+      "createdAt": "2026-06-18T10:43:33.506Z",
+      "name": "케어클린 49호점",
+      "businessRegNumber": "873-61-55273",
+      "ownerEmail": "owner49@example.com",
+      "status": "approved",
+      "services": [
+        "대량 폐기물 수거·처리",
+        "의료·병원 청소",
+        "혈흔 제거",
+        "화재 현장 청소",
+        "공사 후 분진·폐기물 청소"
+      ],
+      "baseAddress": "세종특별자치시 한누리대로 2130",
+      "openingHours": {
+        "weekend": {
+          "open": 9,
+          "close": 18,
+          "closed": true
+        },
+        "weekday": {
+          "open": 8,
+          "close": 20,
+          "closed": false
+        }
+      },
+      "serviceRadiusKm": 79,
+      "coverageType": "radius",
+      "ratingCount": 24,
+      "tags": [
+        "주말·공휴일 운영",
+        "폐기물처리업 허가",
+        "카드 결제 가능",
+        "비밀 보장",
+        "친환경 약품 사용",
+        "정찰제 운영"
+      ],
+      "phone": "010-7735-3641",
+      "ratingAvg": 3.6
+    },
+    {
+      "id": "dummy_biz_050",
+      "name": "신속솔루션 50호점",
+      "businessRegNumber": "503-96-68771",
+      "ownerEmail": "owner50@example.com",
+      "updatedAt": "2026-06-18T10:43:33.748Z",
+      "createdAt": "2026-06-18T10:43:33.748Z",
+      "geoPoint": {
+        "lat": 35.86125047369543,
+        "lng": 127.11202759853238
+      },
+      "reviewCount": 5,
+      "description": "신속솔루션 50호점 상세 설명: 저희 업체는 다양한 특수 청소 환경에서 수년간 쌓아온 노하우를 가진 정식 등록 업체입니다. 고객님의 소중한 환경을 쾌적하고 깨끗하게 복구해 드립니다. 24시간 상담 및 신속한 견적 확인이 가능하오니 언제든 문의해 주시기 바랍니다.",
+      "shortDescription": "신속솔루션 50호점은 최고의 신뢰와 기술력으로 만족을 드리는 특수 청소 전문 업체입니다.",
+      "bookmarkCount": 38,
+      "phone": "010-6387-3319",
+      "ratingAvg": 4.1,
+      "ratingCount": 8,
+      "tags": [
+        "야간 출동",
+        "주말·공휴일 운영",
+        "친환경 약품 사용",
+        "원스톱 처리 (청소+방역+폐기)",
+        "정찰제 운영",
+        "특수청소관리사 자격 보유"
+      ],
+      "coverageType": "radius",
+      "serviceRadiusKm": 57,
+      "openingHours": {
+        "weekend": {
+          "close": 18,
+          "closed": false,
+          "open": 9
+        },
+        "weekday": {
+          "closed": false,
+          "close": 20,
+          "open": 8
+        }
+      },
+      "baseAddress": "전북특별자치도 전주시 완산구 효자로 225",
+      "services": [
+        "바이오해저드 방역",
+        "유품 선별 및 보존 처리",
+        "범죄 현장 청소",
+        "유품 정리",
+        "폐업 점포 청소",
+        "공사 후 분진·폐기물 청소",
+        "곰팡이 제거"
+      ],
+      "status": "approved"
+    }
+  ]
+}

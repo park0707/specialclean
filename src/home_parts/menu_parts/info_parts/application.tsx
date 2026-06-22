@@ -201,6 +201,7 @@ export default function Application() {
         phone: form.phone,
         businessRegNumber: form.businessRegNumber,
         ownerEmail: user!.email,
+        ownerUid: user!.uid,
         shortDescription: form.shortDescription,
         description: form.description,
         services: selectedServices,
