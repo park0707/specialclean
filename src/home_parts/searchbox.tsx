@@ -86,7 +86,7 @@ export default function SearchBox() {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-md">
+    <div id="search-box" ref={containerRef} className="relative w-full max-w-md">
       <form onSubmit={handleSubmit} className="relative flex items-center">
         <input
           type="text"

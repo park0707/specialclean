@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -16,10 +17,12 @@
     "@tanstack/react-router": "^1.158.1",
     "firebase": "^12.9.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-joyride": "^3.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.61.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/router-plugin": "^1.158.1",
     "@types/node": "^24.10.1",

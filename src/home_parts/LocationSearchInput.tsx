@@ -77,6 +77,7 @@ export default function LocationSearchInput() {
       <div className="flex items-center gap-2 w-100 h-10">
         <div className="relative flex-1 h-full">
           <input
+            id="location-search-input"
             type="text"
             value={locationQuery}
             onFocus={handleFocus} 

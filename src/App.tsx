@@ -1,9 +1,12 @@
 import { Outlet } from '@tanstack/react-router'
 import { AuthProvider } from './logincontext'
 import { SearchProvider } from './searchcontext'
+import { TutorialProvider } from './tutorialcontext'
 import Footer from './footer'
 import { useState, useEffect } from 'react'
 import { ArrowUpIcon } from '@heroicons/react/24/outline'
+import TutorialWelcomeModal from './tutorial/TutorialWelcomeModal'
+import HomeTour from './tutorial/HomeTour'
 
 function App() {
   const [showButton, setShowButton] = useState(false);
@@ -33,7 +36,11 @@ function App() {
       <main className="flex-1">
         <AuthProvider>
           <SearchProvider>
-            <Outlet />
+            <TutorialProvider>
+              <TutorialWelcomeModal />
+              <HomeTour />
+              <Outlet />
+            </TutorialProvider>
           </SearchProvider>
         </AuthProvider>
       </main>

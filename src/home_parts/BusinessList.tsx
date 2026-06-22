@@ -121,7 +121,7 @@ export default function BusinessList() {
   }
 
   return (
-    <div ref={listTopRef} className="w-full max-w-3xl mx-auto flex flex-col gap-4 px-4 pb-10">
+    <div id="business-list" ref={listTopRef} className="w-full max-w-3xl mx-auto flex flex-col gap-4 px-4 pb-10">
       <p className="text-xs text-gray-400 pt-2">
         총 {filtered.length}개 업체 중 {(currentPage - 1) * itemsPerPage + 1}~{Math.min(currentPage * itemsPerPage, filtered.length)}번째 업체 표시
       </p>

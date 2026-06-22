@@ -1,18 +1,18 @@
 // src/home_parts/menu_parts/BusinessDetail.tsx
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from '@tanstack/react-router';
-import { doc, getDoc, collection, query, where, orderBy, getDocs, runTransaction, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, orderBy, getDocs, runTransaction, arrayUnion, arrayRemove, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useAuth } from '../../logincontext';
 import Header from '../header';
 import LoginDialog from './login';
 import { 
-  HeartIcon as HeartOutline, 
-  PhoneIcon, 
+  BookmarkIcon as BookmarkOutline, 
+  GlobeAltIcon, 
   MapPinIcon, 
   StarIcon as StarOutline 
 } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartSolid, StarIcon as StarSolid } from '@heroicons/react/24/solid';
+import { BookmarkIcon as BookmarkSolid, StarIcon as StarSolid } from '@heroicons/react/24/solid';
 
 interface Business {
   id: string;
@@ -36,6 +36,7 @@ interface Business {
   reviewCount: number;
   bookmarkCount: number;
   status: string;
+  website?: string;
 }
 
 interface Review {
@@ -99,9 +100,15 @@ export default function BusinessDetail() {
       return;
     }
     try {
-      const bookmarkRef = doc(db, 'users', user.uid, 'bookmarks', businessId);
-      const snap = await getDoc(bookmarkRef);
-      setIsBookmarked(snap.exists());
+      const userRef = doc(db, 'users', user.uid);
+      const snap = await getDoc(userRef);
+      if (snap.exists()) {
+        const userData = snap.data();
+        const bookmarks = userData.bookmarks || [];
+        setIsBookmarked(bookmarks.includes(businessId));
+      } else {
+        setIsBookmarked(false);
+      }
     } catch (e) {
       console.error('Failed to check bookmark status:', e);
     }
@@ -132,6 +139,41 @@ export default function BusinessDetail() {
     checkBookmarkStatus();
   }, [user, businessId]);
 
+  useEffect(() => {
+    if (biz) {
+      try {
+        const recent = localStorage.getItem('recentViewed');
+        let list: { id: string; name: string; region: string }[] = recent ? JSON.parse(recent) : [];
+        if (!Array.isArray(list)) list = [];
+
+        const regionText = biz.coverageType === 'nationwide'
+          ? '전국'
+          : biz.coverageSido && biz.coverageSido.length > 0
+            ? biz.coverageSido[0]
+            : '지역';
+
+        const newItem = {
+          id: biz.id,
+          name: biz.name,
+          region: regionText
+        };
+
+        // 중복 제거
+        list = list.filter((item) => item.id !== biz.id);
+
+        // 맨 앞에 삽입
+        list.unshift(newItem);
+
+        // 최근 3개만 유지
+        list = list.slice(0, 3);
+
+        localStorage.setItem('recentViewed', JSON.stringify(list));
+      } catch (e) {
+        console.error('Failed to update recentViewed in localStorage:', e);
+      }
+    }
+  }, [biz]);
+
   // 북마크 토글 처리
   const handleBookmarkToggle = async () => {
     if (!user) {
@@ -141,47 +183,58 @@ export default function BusinessDetail() {
     }
 
     setBookmarkLoading(true);
-    const bookmarkRef = doc(db, 'users', user.uid, 'bookmarks', businessId);
+    const userRef = doc(db, 'users', user.uid);
     const bizRef = doc(db, 'businessApplications', businessId);
 
     try {
       if (isBookmarked) {
-        // 북마크 해제
-        await deleteDoc(bookmarkRef);
+        // 북마크 해제 (배열에서 제거)
+        await updateDoc(userRef, {
+          bookmarks: arrayRemove(businessId)
+        });
         setIsBookmarked(false);
         if (biz) {
           setBiz(prev => prev ? { ...prev, bookmarkCount: Math.max(0, prev.bookmarkCount - 1) } : null);
         }
-        // Firestore bookmarkCount 차감 (트랜잭션 대신 단순 업데이트)
-        await runTransaction(db, async (transaction) => {
-          const snap = await transaction.get(bizRef);
-          if (snap.exists()) {
-            const count = snap.data().bookmarkCount || 0;
-            transaction.update(bizRef, { bookmarkCount: Math.max(0, count - 1) });
-          }
-        });
+        
+        // Firestore bookmarkCount 차감 (권한 오류 격리)
+        try {
+          await runTransaction(db, async (transaction) => {
+            const snap = await transaction.get(bizRef);
+            if (snap.exists()) {
+              const count = snap.data().bookmarkCount || 0;
+              transaction.update(bizRef, { bookmarkCount: Math.max(0, count - 1) });
+            }
+          });
+        } catch (transactionErr) {
+          console.warn('Failed to update bookmarkCount on businessApplication due to Firestore rules:', transactionErr);
+        }
       } else {
-        // 북마크 설정
-        await setDoc(bookmarkRef, {
-          businessId,
-          createdAt: serverTimestamp()
+        // 북마크 설정 (배열에 추가)
+        await updateDoc(userRef, {
+          bookmarks: arrayUnion(businessId)
         });
         setIsBookmarked(true);
         if (biz) {
           setBiz(prev => prev ? { ...prev, bookmarkCount: prev.bookmarkCount + 1 } : null);
         }
-        // Firestore bookmarkCount 가산
-        await runTransaction(db, async (transaction) => {
-          const snap = await transaction.get(bizRef);
-          if (snap.exists()) {
-            const count = snap.data().bookmarkCount || 0;
-            transaction.update(bizRef, { bookmarkCount: count + 1 });
-          }
-        });
+
+        // Firestore bookmarkCount 가산 (권한 오류 격리)
+        try {
+          await runTransaction(db, async (transaction) => {
+            const snap = await transaction.get(bizRef);
+            if (snap.exists()) {
+              const count = snap.data().bookmarkCount || 0;
+              transaction.update(bizRef, { bookmarkCount: count + 1 });
+            }
+          });
+        } catch (transactionErr) {
+          console.warn('Failed to update bookmarkCount on businessApplication due to Firestore rules:', transactionErr);
+        }
       }
     } catch (e) {
       console.error(e);
-      alert('즐겨찾기 처리 중 오류가 발생했습니다.');
+      alert('북마크 처리 중 오류가 발생했습니다.');
     } finally {
       setBookmarkLoading(false);
     }
@@ -335,7 +388,7 @@ export default function BusinessDetail() {
             </div>
             <p className="text-sm text-gray-600">{biz.shortDescription}</p>
             
-            {/* 별점 정보 및 즐겨찾기 수 */}
+            {/* 별점 정보 및 북마크 수 */}
             <div className="flex items-center gap-4 text-sm text-gray-500 flex-wrap">
               <div className="flex items-center gap-1.5">
                 <StarSolid className="w-5 h-5 text-yellow-500" />
@@ -343,7 +396,7 @@ export default function BusinessDetail() {
                 <span>({biz.reviewCount}개의 후기)</span>
               </div>
               <span className="text-gray-200">|</span>
-              <span>즐겨찾기 {biz.bookmarkCount}회</span>
+              <span>북마크 {biz.bookmarkCount}회</span>
             </div>
 
             {/* 서비스 칩 */}
@@ -368,24 +421,26 @@ export default function BusinessDetail() {
               disabled={bookmarkLoading}
               className={`flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 border rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer ${
                 isBookmarked 
-                  ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100' 
+                  ? 'border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100' 
                   : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
               {isBookmarked ? (
-                <HeartSolid className="w-5 h-5 text-red-500" />
+                <BookmarkSolid className="w-5 h-5 text-blue-500" />
               ) : (
-                <HeartOutline className="w-5 h-5" />
+                <BookmarkOutline className="w-5 h-5" />
               )}
-              {isBookmarked ? '즐겨찾기 완료' : '즐겨찾기'}
+              {isBookmarked ? '북마크 완료' : '북마크'}
             </button>
             
             <a
-              href={`tel:${biz.phone}`}
+              href={biz.website ? biz.website : 'https://www.naver.com'}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-sm transition duration-200"
             >
-              <PhoneIcon className="w-5 h-5" />
-              전화 걸기
+              <GlobeAltIcon className="w-5 h-5" />
+              방문하기
             </a>
           </div>
         </div>

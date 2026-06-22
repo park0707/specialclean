@@ -28,13 +28,18 @@ export default function Tags() {
   const tabs: FilterTab[] = ['지역', '서비스 종류', '업체 특성'];
 
   return (
-    <div className="w-full bg-white flex flex-col items-center">
+    <div id="filter-tabs" className="w-full bg-white flex flex-col items-center">
       {/* 탭 헤더 */}
       <div className="flex items-center border-b border-gray-200">
         <div className="flex flex-1">
           {tabs.map((tab) => (
             <button
               key={tab}
+              id={
+                tab === '지역' ? 'location-filter-tab' :
+                tab === '서비스 종류' ? 'service-filter-tab' :
+                'tag-filter-tab'
+              }
               type="button"
               onClick={() => setActiveTab(tab)}
               className={`px-5 py-3 text-sm font-medium transition-colors duration-150 cursor-pointer ${
@@ -89,7 +94,7 @@ export default function Tags() {
 
           {/* 서비스 종류 탭 */}
           {activeTab === '서비스 종류' && (
-            <div className="space-y-4">
+            <div id="categories-selection" className="space-y-4">
               {SERVICE_CATEGORIES.map(({ category, items }) => (
                 <div key={category}>
                   <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
@@ -132,7 +137,7 @@ export default function Tags() {
 
           {/* 업체 특성 탭 */}
           {activeTab === '업체 특성' && (
-            <div className="space-y-5">
+            <div id="tags-filter" className="space-y-5">
               {TAG_GROUPS.map(({ group, description, tags }) => (
                 <div key={group}>
                   <div className="mb-2">

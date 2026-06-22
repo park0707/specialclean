@@ -21,6 +21,7 @@ interface BaseFormInput {
   weekdayClose: string;
   weekendOpen: string;
   weekendClose: string;
+  website: string;
 }
 
 const INITIAL_FORM: BaseFormInput = {
@@ -33,6 +34,7 @@ const INITIAL_FORM: BaseFormInput = {
   weekdayClose: '',
   weekendOpen: '',
   weekendClose: '',
+  website: '',
 };
 
 // ── 컴포넌트 ──────────────────────────────────────────
@@ -206,6 +208,7 @@ export default function Application() {
         description: form.description,
         services: selectedServices,
         tags: selectedTags,
+        website: form.website || '',
         ...coverageData,
         openingHours: {
           weekday: {
@@ -329,6 +332,17 @@ export default function Application() {
             {user.email}
           </div>
           <p className="mt-1 text-xs text-gray-400">로그인 계정 이메일이 자동으로 사용됩니다.</p>
+        </div>
+
+        {/* 사이트 주소 (선택) */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">사이트 주소 (선택)</label>
+          <input
+            type="url" name="website"
+            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+            placeholder="예: https://example.com"
+            value={form.website} onChange={handleChange}
+          />
         </div>
 
         {/* 4. 서비스 범위 */}

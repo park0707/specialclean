@@ -1,18 +1,22 @@
 //ai돌려서 만든 초안, 내가 직접 수정할 필요 있음. (2026-02-21)
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "@tanstack/react-router"
 import { useAuth } from "../../logincontext"
+import { useTutorial } from "../../tutorialcontext"
 import { PencilIcon } from "@heroicons/react/24/outline"
 import { updateProfile } from "firebase/auth"
+import { doc, getDoc, updateDoc, arrayRemove } from "firebase/firestore"
+import { db } from "../../lib/firebase"
 import ChangePasswordDialog from "./ChangePasswordDialog"
 import DeleteAccountDialog from "./DeleteAccountDialog"
 import { Mymenu } from "../mymenu"
+import MyPageTour from "../../tutorial/MyPageTour"
 
-interface DummyBookmark {
-  id: number;
+interface BookmarkedBusiness {
+  id: string;
   name: string;
   region: string;
-  rating: number;
+  ratingAvg: number;
   tags: string[];
 }
 
@@ -24,28 +28,103 @@ interface DummyReview {
   date: string;
 }
 
-interface DummyRecentViewed {
-  id: number;
+interface RecentViewedItem {
+  id: string;
   name: string;
   region: string;
 }
 
 // 더미 데이터 (나중에 Firebase 연동 시 교체)
-const dummyBookmarks: DummyBookmark[] = [];
 const dummyReviews: DummyReview[] = [];
-const dummyRecentViewed: DummyRecentViewed[] = [];
 
 type Tab = '북마크' | '내 리뷰' | '프로필'
 
 export default function MyPage() {
   const [activeTab, setActiveTab] = useState<Tab>('북마크')
   const { user, isAdmin, isManager } = useAuth()
+  const { startTour } = useTutorial()
   const [isEditing, setIsEditing] = useState(false);
   const [displayNameInput, setDisplayNameInput] = useState(user?.displayName ?? '');
   const [saving, setSaving] = useState(false);
   const [pwchagneOpen, setPwChangeOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [recentViewed, setRecentViewed] = useState<RecentViewedItem[]>([]);
+  const [bookmarks, setBookmarks] = useState<BookmarkedBusiness[]>([]);
+  const [bookmarksLoading, setBookmarksLoading] = useState(false);
 
+  useEffect(() => {
+    try {
+      const recent = localStorage.getItem('recentViewed');
+      if (recent) {
+        const parsed = JSON.parse(recent);
+        if (Array.isArray(parsed)) {
+          setRecentViewed(parsed);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load recentViewed from localStorage:', e);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      if (!user) return;
+      setBookmarksLoading(true);
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          const bookmarkIds: string[] = userData.bookmarks || [];
+          
+          const promises = bookmarkIds.map(async (id) => {
+            const bizRef = doc(db, 'businessApplications', id);
+            const bizSnap = await getDoc(bizRef);
+            if (bizSnap.exists()) {
+              const data = bizSnap.data();
+              const regionText = data.coverageType === 'nationwide'
+                ? '전국'
+                : data.coverageSido && data.coverageSido.length > 0
+                  ? data.coverageSido[0]
+                  : '지역';
+
+              return {
+                id: bizSnap.id,
+                name: data.name,
+                region: regionText,
+                ratingAvg: data.ratingAvg || 0,
+                tags: data.tags || []
+              } as BookmarkedBusiness;
+            }
+            return null;
+          });
+
+          const resolved = await Promise.all(promises);
+          setBookmarks(resolved.filter((item): item is BookmarkedBusiness => item !== null));
+        }
+      } catch (e) {
+        console.error('Failed to fetch bookmarks:', e);
+      } finally {
+        setBookmarksLoading(false);
+      }
+    };
+
+    void fetchBookmarks();
+  }, [user]);
+
+  const handleRemoveBookmark = async (businessId: string) => {
+    if (!user) return;
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, {
+        bookmarks: arrayRemove(businessId)
+      });
+      setBookmarks((prev) => prev.filter((b) => b.id !== businessId));
+    } catch (e) {
+      console.error('Failed to remove bookmark:', e);
+      alert('북마크 해제 중 오류가 발생했습니다.');
+    }
+  };
 
   const tabs: Tab[] = ['프로필', '북마크', '내 리뷰']
 
@@ -106,9 +185,12 @@ export default function MyPage() {
         </div>
       </header>
 
+      {/* MyPage 투어 */}
+      <MyPageTour />
+
       <main className="mx-auto max-w-6xl px-4 py-8">
         {/* ── 프로필 요약 ── */}
-        <section className="flex items-center gap-6 rounded-xl bg-white p-6 shadow-sm">
+        <section id="mypage-profile" className="flex items-center gap-6 rounded-xl bg-white p-6 shadow-sm">
           {/* 아바타 */}
           <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gray-200 text-3xl">
             👤
@@ -133,6 +215,7 @@ export default function MyPage() {
                     {user?.displayName || '사용자'}
                     </h2>
                     <PencilIcon
+                    id="mypage-edit-btn"
                     className="w-4 h-4 inline-block ml-2 text-gray-400 cursor-pointer hover:text-gray-600"
                     onClick={handleStartEdit}
                     />
@@ -156,7 +239,7 @@ export default function MyPage() {
           {/* 활동 요약 */}
           <div className="flex gap-8 text-center">
             <div>
-              <p className="text-2xl font-bold">{dummyBookmarks.length}</p>
+              <p className="text-2xl font-bold">{bookmarks.length}</p>
               <p className="text-xs text-gray-500">북마크</p>
             </div>
             <div>
@@ -171,6 +254,11 @@ export default function MyPage() {
           {tabs.map((tab) => (
             <button
               key={tab}
+              id={
+                tab === '북마크' ? 'mypage-bookmark-tab' :
+                tab === '내 리뷰' ? 'mypage-review-tab' :
+                'mypage-profile-tab'
+              }
               onClick={() => setActiveTab(tab)}
               className={`cursor-pointer px-5 py-2.5 text-sm font-medium transition ${
                 activeTab === tab
@@ -242,13 +330,21 @@ export default function MyPage() {
                             </button>
                         )
                     }
-                  <div className="border-t pt-4">
+                  <div className="border-t pt-4 flex items-center gap-4">
                     <button
+                      id="mypage-withdraw-btn"
                       type="button"
                       onClick={() => setDeleteOpen(true)}
                       className="text-sm text-red-400 hover:text-red-600 border-red-600 hover:border-b cursor-pointer"
                     >
                       회원 탈퇴
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => startTour('mypage')}
+                      className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
+                    >
+                      서비스 튜토리얼 시작
                     </button>
                   </div>
                 </div>
@@ -265,13 +361,17 @@ export default function MyPage() {
             {/* ── 북마크 탭 ── */}
             {activeTab === '북마크' && (
               <div className="space-y-4">
-                {dummyBookmarks.length === 0 ? (
+                {bookmarksLoading ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">북마크를 불러오는 중입니다...</p>
+                  </div>
+                ) : bookmarks.length === 0 ? (
                   <div className="rounded-xl bg-white p-8 text-center shadow-sm">
                     <p className="text-gray-500 text-sm font-medium">북마크한 업체가 없습니다.</p>
                     <p className="text-gray-400 text-xs mt-1">마음에 드는 청소 업체를 찾아 북마크해 보세요.</p>
                   </div>
                 ) : (
-                  dummyBookmarks.map((company) => (
+                  bookmarks.map((company) => (
                     <div
                       key={company.id}
                       className="flex items-center justify-between rounded-xl bg-white p-5 shadow-sm"
@@ -292,12 +392,19 @@ export default function MyPage() {
                       </div>
                       <div className="flex flex-col items-end gap-2">
                         <span className="text-sm font-medium text-yellow-500">
-                          ⭐ {company.rating}
+                          ⭐ {company.ratingAvg > 0 ? company.ratingAvg.toFixed(1) : '평점 없음'}
                         </span>
-                        <button className="rounded border px-3 py-1 text-xs text-blue-500 hover:bg-blue-50">
+                        <Link
+                          to="/business/$businessId"
+                          params={{ businessId: company.id }}
+                          className="rounded border px-3 py-1 text-xs text-blue-500 hover:bg-blue-50 cursor-pointer text-center"
+                        >
                           상세보기
-                        </button>
-                        <button className="text-xs text-gray-400 hover:text-red-400">
+                        </Link>
+                        <button
+                          onClick={() => handleRemoveBookmark(company.id)}
+                          className="text-xs text-gray-400 hover:text-red-400 cursor-pointer"
+                        >
                           북마크 해제
                         </button>
                       </div>
@@ -342,20 +449,23 @@ export default function MyPage() {
           </div>
 
           {/* ── 우측 사이드바: 최근 본 업체 ── */}
-          <aside className="hidden w-64 shrink-0 lg:block">
-            <div className="rounded-xl bg-white p-4 shadow-sm">
+          <aside id="recent-viewed-list" className="hidden w-64 shrink-0 lg:block">
+            <div id="mypage-recent-viewed" className="rounded-xl bg-white p-4 shadow-sm">
               <h3 className="mb-3 text-sm font-semibold text-gray-700">최근 본 업체</h3>
-              {dummyRecentViewed.length === 0 ? (
+              {recentViewed.length === 0 ? (
                 <p className="text-gray-400 text-xs py-4 text-center">최근 본 업체가 없습니다.</p>
               ) : (
                 <ul className="space-y-3">
-                  {dummyRecentViewed.map((item) => (
-                    <li
-                      key={item.id}
-                      className="cursor-pointer rounded-lg border p-3 text-sm hover:bg-gray-50"
-                    >
-                      <p className="font-medium">{item.name}</p>
-                      <p className="text-xs text-gray-400">{item.region}</p>
+                  {recentViewed.map((item) => (
+                    <li key={item.id}>
+                      <Link
+                        to="/business/$businessId"
+                        params={{ businessId: item.id }}
+                        className="block cursor-pointer rounded-lg border p-3 text-sm hover:bg-gray-50"
+                      >
+                        <p className="font-medium">{item.name}</p>
+                        <p className="text-xs text-gray-400">{item.region}</p>
+                      </Link>
                     </li>
                   ))}
                 </ul>
