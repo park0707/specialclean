@@ -21,6 +21,10 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
     const [pwok, setPwok] = useState(0) //0은 초기값 1이면 pw 미입력, 2이면 pw 미입력, 3이면 불일치
     const [msg, setMsg] = useState(''); // 이메일 인증이나 기타 사용자에게 표시하고 싶은 메시지
 
+    const [termsAgree, setTermsAgree] = useState(false);
+    const [privacyAgree, setPrivacyAgree] = useState(false);
+    const [ageAgree, setAgeAgree] = useState(false);
+
     // 모달이 닫히거나 열릴 때 기존 상태들을 리셋하여 이전 메시지/입력값이 잔존하지 않도록 방지
     useEffect(() => {
       if (!isOpen) {
@@ -30,6 +34,9 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
         setIdok(0);
         setPwok(0);
         setMsg('');
+        setTermsAgree(false);
+        setPrivacyAgree(false);
+        setAgeAgree(false);
       }
     }, [isOpen]);
 
@@ -37,7 +44,11 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
       const email = id.trim();
       const password = pw.trim();
 
-      
+      // 약관 및 개인정보 동의 여부 검사
+      if (!termsAgree || !privacyAgree || !ageAgree) {
+        alert('회원가입을 위해 필수 약관 및 동의 항목에 모두 동의해 주세요.');
+        return;
+      }
 
       // 간단 검증: 비어 있으면 그냥 리턴
       if (!email || !password) {
@@ -132,6 +143,54 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
                     pwok === 3 ? <div className="text-red-500 text-sm pl-1">비밀번호가 일치하지 않습니다.</div> :
                     null
                 }
+
+                <div className="space-y-2 py-2 border-t border-gray-100 mt-2 text-[11px] sm:text-xs text-gray-600">
+                  <div className="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      id="termsAgree"
+                      checked={termsAgree}
+                      onChange={(e) => setTermsAgree(e.target.checked)}
+                      className="mt-0.5 accent-blue-500"
+                    />
+                    <label htmlFor="termsAgree" className="cursor-pointer select-none">
+                      <span className="font-semibold text-blue-600">[필수]</span>{' '}
+                      <a href="/info?menu=terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
+                        서비스 이용약관
+                      </a>{' '}
+                      동의
+                    </label>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      id="privacyAgree"
+                      checked={privacyAgree}
+                      onChange={(e) => setPrivacyAgree(e.target.checked)}
+                      className="mt-0.5 accent-blue-500"
+                    />
+                    <label htmlFor="privacyAgree" className="cursor-pointer select-none">
+                      <span className="font-semibold text-blue-600">[필수]</span>{' '}
+                      <a href="/info?menu=privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
+                        개인정보 수집 및 이용
+                      </a>{' '}
+                      동의
+                    </label>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      id="ageAgree"
+                      checked={ageAgree}
+                      onChange={(e) => setAgeAgree(e.target.checked)}
+                      className="mt-0.5 accent-blue-500"
+                    />
+                    <label htmlFor="ageAgree" className="cursor-pointer select-none">
+                      <span className="font-semibold text-blue-600">[필수]</span> 본인은 만 14세 이상입니다.
+                    </label>
+                  </div>
+                </div>
+
                 <button className="w-full rounded bg-blue-500 py-2 text-sm font-semibold text-white hover:bg-blue-600 cursor-pointer"
                 onClick={handleSignUp}>
                   회원 가입

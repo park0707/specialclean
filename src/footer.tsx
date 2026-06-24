@@ -16,8 +16,13 @@ export default function Footer() {
           <Link to="/info" className={footerLinkClass} search={{menu:'notice'}}>공지사항</Link>
         </div>
         
+        {/* 통신판매중개 면책 고지 문구 */}
+        <p className="text-[10px] sm:text-[11px] text-gray-400 max-w-3xl mx-auto leading-normal mt-2">
+          클린매칭은 특수 청소 업체의 정보를 소개하고 연결하는 통신판매중개자이며, 거래의 직접 당사자가 아닙니다. 파트너 업체가 등록한 정보 및 제공하는 청소 서비스, 계약, 작업 결과에 대한 모든 법적 책임은 개별 파트너 업체에 있습니다.
+        </p>
+
         {/* 저작권 문구: 아래 단독 층 배치 */}
-        <p className="text-xs sm:text-sm text-gray-400 mt-2">© 2026 클린 매칭 서비스. All rights reserved.</p>
+        <p className="text-xs sm:text-sm text-gray-400 mt-1">© 2026 클린 매칭 서비스. All rights reserved.</p>
       </div>
     </footer>
   );

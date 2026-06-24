@@ -53,6 +53,8 @@ export default function Application() {
   const [weekdayClosed, setWeekdayClosed] = useState(false);
   const [weekendClosed, setWeekendClosed] = useState(true);
 
+  const [privacyAgree, setPrivacyAgree] = useState(false);
+
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -86,6 +88,13 @@ export default function Application() {
     e.preventDefault();
     setErrorMsg('');
     setDone(false);
+
+    // ── 개인정보 수집 및 이용 동의 검사 ──
+    if (!privacyAgree) {
+      setErrorMsg('개인정보 수집 및 이용에 동의하셔야 업체 신청이 가능합니다.');
+      msgRef.current?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
 
     // ── 공통 유효성 검사 ──
     if (!coverageType) {
@@ -256,6 +265,7 @@ export default function Application() {
       setSelectedTags([]);
       setWeekdayClosed(false);
       setWeekendClosed(true);
+      setPrivacyAgree(false);
       msgRef.current?.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
@@ -615,6 +625,23 @@ export default function Application() {
               선택됨: {selectedTags.map((t) => `#${t}`).join(' ')}
             </div>
           )}
+        </div>
+
+        <div className="flex items-start gap-2 py-3 border-t border-gray-100">
+          <input
+            type="checkbox"
+            id="privacyAgree"
+            checked={privacyAgree}
+            onChange={(e) => setPrivacyAgree(e.target.checked)}
+            className="mt-1 accent-blue-500 cursor-pointer"
+          />
+          <label htmlFor="privacyAgree" className="text-xs sm:text-sm text-gray-600 cursor-pointer select-none leading-relaxed">
+            <span className="font-semibold text-blue-600">[필수]</span> 업체 신청 및 가입 심사를 위한{' '}
+            <a href="/info?menu=privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
+              개인정보 수집 및 이용
+            </a>
+            에 동의합니다.
+          </label>
         </div>
 
         <button
