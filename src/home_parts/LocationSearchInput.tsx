@@ -72,9 +72,9 @@ export default function LocationSearchInput() {
   };
 
   return (
-    <div ref={wrapperRef} className="relative w-full">
+    <div ref={wrapperRef} className="relative w-full flex flex-col items-center">
 
-      <div className="flex items-center gap-2 w-100 h-10">
+      <div className="flex items-center gap-2 w-full max-w-md h-10">
         <div className="relative flex-1 h-full">
           <input
             id="location-search-input"
@@ -113,7 +113,7 @@ export default function LocationSearchInput() {
         </button>
       </div>
 
-      <p className="mt-1.5 text-xs h-4 leading-4 truncate">
+      <p className="mt-1.5 text-xs h-4 leading-4 truncate text-center">
         {locationResult ? (
           <span className="text-blue-600">
             📍 {locationResult.fullAddress} ({locationResult.sido}) 기준으로 검색 중
@@ -124,7 +124,7 @@ export default function LocationSearchInput() {
       </p>
 
       {open && suggestions.length > 0 && (
-        <ul className="absolute z-50 mt-1 w-full rounded border border-gray-200 bg-white shadow-lg max-h-52 overflow-y-auto">
+        <ul className="absolute z-50 mt-11 w-full max-w-md rounded border border-gray-200 bg-white shadow-lg max-h-52 overflow-y-auto">
           {suggestions.map((s, i) => (
             <li
               key={i}

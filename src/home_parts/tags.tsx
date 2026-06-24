@@ -31,7 +31,7 @@ export default function Tags() {
     <div id="filter-tabs" className="w-full bg-white flex flex-col items-center">
       {/* 탭 헤더 */}
       <div className="w-full flex items-center border-b border-gray-200">
-        <div className="flex flex-1 overflow-x-auto scrollbar-hide whitespace-nowrap">
+        <div className="flex flex-1 overflow-x-auto scrollbar-hide whitespace-nowrap justify-center">
           {tabs.map((tab) => (
             <button
               key={tab}
@@ -91,7 +91,7 @@ export default function Tags() {
 
           {/* 지역 탭 */}
           {activeTab === '지역' && (
-            <div>
+            <div className="flex flex-col items-center text-center w-full">
               <p className="text-sm text-gray-500 mb-3">
                 작업을 원하는 주소를 검색하세요
               </p>

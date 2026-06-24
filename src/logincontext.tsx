@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import { auth, db } from './lib/firebase';
-import { onAuthStateChanged, type User } from 'firebase/auth';
+import { onAuthStateChanged, getRedirectResult, type User } from 'firebase/auth';
 import { syncUserDocument, type AppUser } from './lib/firebaseuser';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
@@ -64,6 +64,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    // 구글 리디렉션 로그인 결과 처리
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          console.log('Google redirect sign-in successful:', result.user);
+        }
+      })
+      .catch((error) => {
+        console.error('Error handling Google redirect sign-in:', error);
+      });
+
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       
