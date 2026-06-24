@@ -30,8 +30,8 @@ export default function Tags() {
   return (
     <div id="filter-tabs" className="w-full max-w-2xl mx-auto bg-white flex flex-col items-center">
       {/* 탭 헤더 */}
-      <div className="w-full flex items-center border-b border-gray-200">
-        <div className="flex flex-1 overflow-x-auto md:overflow-x-visible scrollbar-hide whitespace-nowrap justify-start md:justify-center">
+      <div className="max-w-max mx-auto flex items-center border-b border-gray-200">
+        <div className="flex overflow-x-auto md:overflow-x-visible scrollbar-hide whitespace-nowrap justify-start md:justify-center">
           {tabs.map((tab) => (
             <button
               key={tab}
@@ -73,7 +73,7 @@ export default function Tags() {
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="flex items-center justify-center px-3 py-3 text-gray-400 hover:text-gray-600 transition-colors duration-150 cursor-pointer"
+          className="flex items-center justify-center px-4 sm:px-5 py-3 text-gray-400 hover:text-gray-600 transition-colors duration-150 cursor-pointer"
           aria-label={isOpen ? '필터 접기' : '필터 펼치기'}
         >
           {isOpen ? (
