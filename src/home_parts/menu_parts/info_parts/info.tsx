@@ -123,7 +123,7 @@ export default function InfoLayout() {
             <img src="/images/로고.png" alt="로고" className="w-[35px] sm:w-[40px] h-auto"/>
             <div className="logo_text text-[18px] sm:text-[22px] text-[#1d4ed8] pt-1 hidden sm:block">클린 매칭</div>
           </Link>
-          <div className="flex-1 max-w-5xl flex overflow-x-auto scrollbar-hide whitespace-nowrap mx-2 sm:mx-4">
+          <div className="flex-1 max-w-5xl flex justify-start sm:justify-center overflow-x-auto scrollbar-hide whitespace-nowrap mx-2 sm:mx-4">
             {MENUS.map((menu) => (
               <button
                 key={menu.id}
