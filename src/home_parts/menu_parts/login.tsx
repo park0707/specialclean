@@ -74,24 +74,21 @@ export default function LoginDialog({ isOpen, closeModal }: loginprops) {
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
         
-        // 모바일 브라우저 팝업 차단 회피를 위해 UserAgent 기반 판단
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        );
-        
-        if (isMobile) {
-          await signInWithRedirect(auth, provider);
-        } else {
-          try {
-            await signInWithPopup(auth, provider);
-            closeModal();
-          } catch (popupErr: any) {
-            // 데스크톱에서도 팝업이 강제 차단된 경우 리디렉션으로 폴백
-            if (popupErr.code === 'auth/popup-blocked' || popupErr.code === 'auth/cancelled-popup-request') {
-              await signInWithRedirect(auth, provider);
-            } else {
-              throw popupErr;
-            }
+        try {
+          // 모바일/데스크톱 구분 없이 우선 팝업(새 탭) 로그인 시도
+          // (Safari/Chrome 모바일 등에서 서드파티 쿠키 차단으로 인한 리디렉션 로그인 실패 우회)
+          await signInWithPopup(auth, provider);
+          closeModal();
+        } catch (popupErr: any) {
+          // 팝업이 차단되었거나 취소된 경우 리디렉션으로 폴백
+          if (
+            popupErr.code === 'auth/popup-blocked' ||
+            popupErr.code === 'auth/cancelled-popup-request' ||
+            popupErr.code === 'auth/popup-closed-by-user'
+          ) {
+            await signInWithRedirect(auth, provider);
+          } else {
+            throw popupErr;
           }
         }
       } catch (err: any) {
