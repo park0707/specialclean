@@ -153,11 +153,11 @@ export default function BusinessList() {
 
   return (
     <div id="business-list" ref={listTopRef} className="w-full max-w-3xl mx-auto flex flex-col gap-4 px-4 pb-10">
-      <div className="flex items-center justify-between pt-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 pb-1 border-b border-gray-100 sm:border-none">
         <p className="text-xs text-gray-400">
           총 {filtered.length}개 업체 중 {(currentPage - 1) * itemsPerPage + 1}~{Math.min(currentPage * itemsPerPage, filtered.length)}번째 업체 표시
         </p>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
           <label htmlFor="sort-select" className="text-xs text-gray-500 font-medium whitespace-nowrap">
             정렬 기준:
           </label>
@@ -165,11 +165,11 @@ export default function BusinessList() {
             id="sort-select"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'default' | 'bookmarks' | 'reviews')}
-            className="rounded-lg border border-gray-300 bg-white px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer shadow-sm"
+            className="rounded-lg border border-gray-300 bg-white px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer shadow-sm min-w-[110px]"
           >
-            <option value="default">기본 (업체에 가입된 순서)</option>
-            <option value="bookmarks">북마크 많은 순서</option>
-            <option value="reviews">리뷰 많은 순서</option>
+            <option value="default">기본순</option>
+            <option value="bookmarks">북마크 많은 순</option>
+            <option value="reviews">리뷰 많은 순</option>
           </select>
         </div>
       </div>
