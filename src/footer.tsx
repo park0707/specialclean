@@ -1,7 +1,9 @@
-// Layout.tsx 또는 App.tsx
 import { Link } from '@tanstack/react-router';
+
 const footerLinkClass = "text-gray-500 hover:underline hover:underline-offset-4 text-sm border-gray-500 transition-colors duration-200 cursor-pointer";
-//나중에 실제 페이지 연결 필요
+
+export default function Footer() {
+  return (
     <footer className="w-full border-t py-6 bg-white text-center">
       <div className="max-w-6xl mx-auto px-4 flex flex-col gap-3">
         {/* 링크 목록: 모바일에서는 flex-wrap을 적용하여 층층이 가로로 배치 */}
@@ -20,3 +22,4 @@ const footerLinkClass = "text-gray-500 hover:underline hover:underline-offset-4 
     </footer>
   );
 }
+

@@ -28,17 +28,17 @@ export default function Tags() {
   const tabs: FilterTab[] = ['지역', '서비스 종류', '업체 특성'];
 
   return (
-    <div id="filter-tabs" className="w-full bg-white flex flex-col items-center">
+    <div id="filter-tabs" className="w-full max-w-2xl mx-auto bg-white flex flex-col items-center">
       {/* 탭 헤더 */}
       <div className="w-full flex items-center border-b border-gray-200">
-        <div className="flex flex-1 overflow-x-auto scrollbar-hide whitespace-nowrap justify-start md:justify-center">
+        <div className="flex flex-1 overflow-x-auto md:overflow-x-visible scrollbar-hide whitespace-nowrap justify-start md:justify-center">
           {tabs.map((tab) => (
             <button
               key={tab}
               id={
                 tab === '지역' ? 'location-filter-tab' :
-                tab === '서비스 종류' ? 'service-filter-tab' :
-                'tag-filter-tab'
+                  tab === '서비스 종류' ? 'service-filter-tab' :
+                    'tag-filter-tab'
               }
               type="button"
               onClick={() => setActiveTab(tab)}
@@ -49,11 +49,10 @@ export default function Tags() {
                     ? `${tab}, ${selectedTags.length}개 선택됨`
                     : tab
               }
-              className={`px-4 sm:px-5 py-3 text-sm font-medium transition-colors duration-150 cursor-pointer shrink-0 ${
-                activeTab === tab
-                  ? 'border-b-2 border-blue-500 text-blue-600'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+              className={`px-4 sm:px-5 py-3 text-sm font-medium transition-colors duration-150 cursor-pointer shrink-0 ${activeTab === tab
+                ? 'border-b-2 border-blue-500 text-blue-600'
+                : 'text-gray-500 hover:text-gray-700'
+                }`}
             >
               {tab}
               {tab === '서비스 종류' && selectedServices.length > 0 && (
@@ -91,7 +90,7 @@ export default function Tags() {
 
           {/* 지역 탭 */}
           {activeTab === '지역' && (
-            <div className="flex flex-col items-center text-center w-full">
+            <div className="flex flex-col items-center text-center w-full justify-center">
               <p className="text-sm text-gray-500 mb-3">
                 작업을 원하는 주소를 검색하세요
               </p>
@@ -101,7 +100,7 @@ export default function Tags() {
 
           {/* 서비스 종류 탭 */}
           {activeTab === '서비스 종류' && (
-            <div id="categories-selection" className="space-y-4">
+            <div id="categories-selection" className="space-y-4 w-full max-w-2xl mx-auto">
               {SERVICE_CATEGORIES.map(({ category, items }) => (
                 <div key={category}>
                   <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
@@ -113,11 +112,10 @@ export default function Tags() {
                         key={item}
                         type="button"
                         onClick={() => toggleService(item)}
-                        className={`rounded-full px-3 py-1 text-sm border transition-colors duration-150 cursor-pointer ${
-                          selectedServices.includes(item)
-                            ? 'bg-blue-500 text-white border-blue-500'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                        }`}
+                        className={`rounded-full px-3 py-1 text-sm border transition-colors duration-150 cursor-pointer ${selectedServices.includes(item)
+                          ? 'bg-blue-500 text-white border-blue-500'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                          }`}
                       >
                         {item}
                       </button>
@@ -144,7 +142,7 @@ export default function Tags() {
 
           {/* 업체 특성 탭 */}
           {activeTab === '업체 특성' && (
-            <div id="tags-filter" className="space-y-5">
+            <div id="tags-filter" className="space-y-5 w-full max-w-2xl mx-auto">
               {TAG_GROUPS.map(({ group, description, tags }) => (
                 <div key={group}>
                   <div className="mb-2">
@@ -159,11 +157,10 @@ export default function Tags() {
                         key={tag}
                         type="button"
                         onClick={() => toggleTag(tag)}
-                        className={`rounded-full px-3 py-1 text-sm border transition-colors duration-150 cursor-pointer ${
-                          selectedTags.includes(tag)
-                            ? 'bg-emerald-500 text-white border-emerald-500'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-emerald-400'
-                        }`}
+                        className={`rounded-full px-3 py-1 text-sm border transition-colors duration-150 cursor-pointer ${selectedTags.includes(tag)
+                          ? 'bg-emerald-500 text-white border-emerald-500'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-emerald-400'
+                          }`}
                       >
                         #{tag}
                       </button>

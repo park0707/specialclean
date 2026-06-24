@@ -74,43 +74,36 @@ export default function LocationSearchInput() {
   return (
     <div ref={wrapperRef} className="relative w-full flex flex-col items-center">
 
-      <div className="flex items-center gap-2 w-full max-w-md h-10">
-        <div className="relative flex-1 h-full">
-          <input
-            id="location-search-input"
-            type="text"
-            value={locationQuery}
-            onFocus={handleFocus} 
-            onChange={(e) => {
-              setLocationQuery(e.target.value);
-              if (locationResult) setLocationResult(null);
-            }}
-            placeholder="아파트명, 건물명, 도로명 주소 검색..."
-            className={`w-full h-full rounded-lg border px-4 py-0 text-sm focus:outline-none ${
-              locationResult
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-300 focus:border-blue-500 bg-white'
+      <div className="relative w-full max-w-lg h-12">
+        <input
+          id="location-search-input"
+          type="text"
+          value={locationQuery}
+          onFocus={handleFocus}
+          onChange={(e) => {
+            setLocationQuery(e.target.value);
+            if (locationResult) setLocationResult(null);
+          }}
+          placeholder="아파트명, 건물명, 도로명 주소 검색..."
+          className={`w-full h-full rounded-xl border pl-4 pr-24 text-sm focus:outline-none transition-colors duration-150 ${locationResult
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-gray-300 focus:border-blue-500 bg-white'
             }`}
-          />
-          {loading && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">
-              검색중...
-            </span>
-          )}
-        </div>
-
-        <button
-          type="button"
-          onClick={handleClear}
-          disabled={!locationQuery}
-          className={`text-xs whitespace-nowrap w-10 text-center transition-opacity duration-150 ${
-            locationQuery
-              ? 'text-gray-400 hover:text-gray-600 cursor-pointer opacity-100'
-              : 'opacity-0 pointer-events-none'
-          }`}
-        >
-          초기화
-        </button>
+        />
+        {loading && (
+          <span className="absolute right-16 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">
+            검색중...
+          </span>
+        )}
+        {locationQuery && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-600 transition-colors duration-150 cursor-pointer font-medium"
+          >
+            초기화
+          </button>
+        )}
       </div>
 
       <p className="mt-1.5 text-xs h-4 leading-4 truncate text-center">
@@ -124,7 +117,7 @@ export default function LocationSearchInput() {
       </p>
 
       {open && suggestions.length > 0 && (
-        <ul className="absolute z-50 mt-11 w-full max-w-md rounded border border-gray-200 bg-white shadow-lg max-h-52 overflow-y-auto">
+        <ul className="absolute z-50 mt-13 w-full max-w-lg rounded border border-gray-200 bg-white shadow-lg max-h-52 overflow-y-auto">
           {suggestions.map((s, i) => (
             <li
               key={i}
