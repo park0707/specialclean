@@ -124,5 +124,28 @@
 ### 4) 해결 방법 및 장단점 비교
 * **초성 및 자음 분리 검색 라이브러리 도입 (Hangul-JS 등)**: 사용자가 초성 검색을 즐겨 사용할 경우, 한글 자모 코드를 분리 매칭하는 필터링 유틸리티를 `filterByText`에 도입하여 검색 편의성을 비약적으로 향상시킬 수 있습니다.
 
+---
+
+## 6. 협력 업체 노출 순위, 사용자 지정 정렬, 모바일 최적화 및 크로스플랫폼 규칙 등록 (2026-06-24)
+
+### 1) 목적 및 요구사항
+- 협력 업체를 기본 검색 목록 상단에 투명하게 배치하되, 이 정렬 방식을 정보 탭에 상세히 고지하여 노출의 투명성을 담보합니다.
+- 사용자에게 `기본순(가입순)`, `북마크 많은 순`, `리뷰 많은 순` 정렬 기준을 제공합니다.
+- 관리자 페이지의 업체 신청 승인 팝업에서 협력 업체 지정 기능(`isPartner`)을 구현하고, 기존 협력 업체 개수 `n`에 대해 자동으로 `n+1` 순위(`partnerRank`)를 자동 산정하여 저장합니다.
+- 모바일 뷰포트에서 총 개수 안내 영역과 정렬 드롭다운이 겹치거나 왜곡되지 않도록 반응형 층 쌓기 (`flex-col`) 및 텍스트 간소화를 보장하며, 프로젝트 전역의 UI/UX 크로스플랫폼 지침 규칙을 명문화합니다.
+
+### 2) 세부 구현 사항
+- **노출 투명성 정보 고지**:
+  - [about.tsx](file:///c:/project/specialclean/src/home_parts/menu_parts/info_parts/about.tsx) 내에 3단계 노출 우선순위 기준과 "협력 업체 우선 노출 고지"를 신설하여 사용자가 투명하게 인지할 수 있도록 하였습니다.
+- **정렬 옵션 드롭다운 및 뱃지 구현**:
+  - [BusinessList.tsx](file:///c:/project/specialclean/src/home_parts/BusinessList.tsx) 리스트 상단에 `sortBy` 전역 상태와 연계된 셀렉트 박스를 렌더링하고, 모바일 화면에서는 세로 정렬(`flex-col`)로 전환되어 겹침을 방지하고 옵션명을 축약(`기본순`, `북마크 많은 순`, `리뷰 많은 순`)하여 레이아웃 어그러짐을 해소했습니다.
+  - 리스트 카드에 `🤝 협력 업체` 뱃지 UI를 도입하여 제휴 상태를 시각화했습니다.
+- **자동 순위 계산 및 승인 로직 변경**:
+  - [ApplicationDetailModal.tsx](file:///c:/project/specialclean/src/home_parts/menu_parts/mypage_parts/ApplicationDetailModal.tsx) 하단에 "협력 업체로 등록" 체크박스를 구현했습니다.
+  - [mypage.tsx](file:///c:/project/specialclean/src/home_parts/menu_parts/mypage.tsx)의 `handleApprove`에서 `isPartnerSelected` 플래그를 수신하여 `true`일 경우, `businessApplications` 컬렉션에서 `status == 'approved'` 및 `isPartner == true` 조건을 만족하는 기존 협력 업체 문서 개수 `n`을 조회한 후 `partnerRank = n + 1`을 동적 할당하여 저장합니다.
+- **프로젝트 UI/UX 규칙 명문화**:
+  - [.agents/AGENTS.md](file:///c:/project/specialclean/.agents/AGENTS.md)를 생성하여 향후 모든 UI 수정 요구 시 데스크톱과 모바일 레이아웃의 상호 작용 및 반응형 깨짐 문제를 예방하는 크로스플랫폼 설계를 의무 규정으로 명시했습니다.
+
+
 
 
