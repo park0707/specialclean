@@ -25,6 +25,11 @@ export interface Business {
   reviewCount: number;
   bookmarkCount: number;
   status: string;
+  isPartner?: boolean;
+  partnerRank?: number;
+  partnerConsentDate?: any;
+  createdAt?: any;
+  updatedAt?: any;
 }
 
 // ── 위치 기반 필터 ────────────────────────────────────────

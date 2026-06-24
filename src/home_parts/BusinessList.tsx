@@ -16,6 +16,7 @@ export default function BusinessList() {
   const [filtered, setFiltered] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sortBy, setSortBy] = useState<'default' | 'bookmarks' | 'reviews'>('default');
 
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +51,7 @@ export default function BusinessList() {
     fetchBusinesses();
   }, [authLoading]);
 
-  // ── 필터 적용 ────────────────────────────────────────
+  // ── 필터 및 정렬 적용 ──────────────────────────────────
   useEffect(() => {
     const result = applyAllFilters(allBusinesses, {
       loc: locationResult,
@@ -58,8 +59,38 @@ export default function BusinessList() {
       selectedTags,
       query: textQuery,
     });
-    setFiltered(result);
-  }, [allBusinesses, locationResult, selectedServices, selectedTags, textQuery]);
+
+    const sorted = [...result].sort((a, b) => {
+      if (sortBy === 'bookmarks') {
+        return (b.bookmarkCount || 0) - (a.bookmarkCount || 0);
+      }
+      if (sortBy === 'reviews') {
+        return (b.reviewCount || 0) - (a.reviewCount || 0);
+      }
+
+      // 기본 정렬:
+      // 1순위: 협력 업체 (isPartner === true)
+      // 2순위: 협력 업체 중 순위가 높은(partnerRank가 작은) 업체
+      // 3순위: 일반 업체는 가입된 순서 (createdAt 오름차순)
+      const aIsPartner = !!a.isPartner;
+      const bIsPartner = !!b.isPartner;
+
+      if (aIsPartner && !bIsPartner) return -1;
+      if (!aIsPartner && bIsPartner) return 1;
+
+      if (aIsPartner && bIsPartner) {
+        const aRank = a.partnerRank || 999999;
+        const bRank = b.partnerRank || 999999;
+        return aRank - bRank;
+      }
+
+      const aTime = a.createdAt?.seconds || 0;
+      const bTime = b.createdAt?.seconds || 0;
+      return aTime - bTime;
+    });
+
+    setFiltered(sorted);
+  }, [allBusinesses, locationResult, selectedServices, selectedTags, textQuery, sortBy]);
 
   // ── 필터 조건 변경 시 페이지 번호 리셋 ─────────────────────
   useEffect(() => {
@@ -122,9 +153,26 @@ export default function BusinessList() {
 
   return (
     <div id="business-list" ref={listTopRef} className="w-full max-w-3xl mx-auto flex flex-col gap-4 px-4 pb-10">
-      <p className="text-xs text-gray-400 pt-2">
-        총 {filtered.length}개 업체 중 {(currentPage - 1) * itemsPerPage + 1}~{Math.min(currentPage * itemsPerPage, filtered.length)}번째 업체 표시
-      </p>
+      <div className="flex items-center justify-between pt-2">
+        <p className="text-xs text-gray-400">
+          총 {filtered.length}개 업체 중 {(currentPage - 1) * itemsPerPage + 1}~{Math.min(currentPage * itemsPerPage, filtered.length)}번째 업체 표시
+        </p>
+        <div className="flex items-center gap-1.5">
+          <label htmlFor="sort-select" className="text-xs text-gray-500 font-medium whitespace-nowrap">
+            정렬 기준:
+          </label>
+          <select
+            id="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as 'default' | 'bookmarks' | 'reviews')}
+            className="rounded-lg border border-gray-300 bg-white px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer shadow-sm"
+          >
+            <option value="default">기본 (업체에 가입된 순서)</option>
+            <option value="bookmarks">북마크 많은 순서</option>
+            <option value="reviews">리뷰 많은 순서</option>
+          </select>
+        </div>
+      </div>
       {paginatedBusinesses.map((biz) => (
         <BusinessCard key={biz.id} biz={biz} />
       ))}
@@ -209,7 +257,14 @@ const BusinessCard = ({ biz }: BusinessCardProps) => {
       className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-150 cursor-pointer"
     >
       <div className="flex items-start justify-between gap-2 mb-1.5">
-        <h3 className="text-base font-semibold text-gray-800">{biz.name}</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="text-base font-semibold text-gray-800">{biz.name}</h3>
+          {biz.isPartner && (
+            <span className="inline-flex items-center shrink-0 rounded bg-blue-50 border border-blue-200 px-1.5 py-0.5 text-[10px] font-bold text-blue-600">
+              🤝 협력 업체
+            </span>
+          )}
+        </div>
         <CoverageBadge type={biz.coverageType} sido={biz.coverageSido} />
       </div>
 

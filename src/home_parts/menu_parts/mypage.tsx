@@ -62,6 +62,9 @@ export interface BusinessApplication {
   status: 'submitted' | 'approved' | string;
   createdAt: any;
   updatedAt: any;
+  isPartner?: boolean;
+  partnerRank?: number;
+  partnerConsentDate?: any;
 }
 
 export interface UserReview {
@@ -434,18 +437,39 @@ export default function MyPage() {
     }
   };
 
-  const handleApprove = async (app: BusinessApplication) => {
+  const handleApprove = async (app: BusinessApplication, isPartnerSelected: boolean) => {
     if (!user || !isAdmin) return;
-    if (!window.confirm(`'${app.name}' 업체를 승인하시겠습니까?`)) return;
+    const partnerMsg = isPartnerSelected ? " (협력 업체 등록 포함)" : "";
+    if (!window.confirm(`'${app.name}' 업체를 승인하시겠습니까?${partnerMsg}`)) return;
 
     try {
       setSaving(true);
       
       const appRef = doc(db, 'businessApplications', app.id);
-      await updateDoc(appRef, {
+      const updateFields: any = {
         status: 'approved',
         updatedAt: serverTimestamp()
-      });
+      };
+
+      if (isPartnerSelected) {
+        // 기존 협력업체 개수 n 구하기
+        const q = query(
+          collection(db, 'businessApplications'),
+          where('status', '==', 'approved'),
+          where('isPartner', '==', true)
+        );
+        const snap = await getDocs(q);
+        const count = snap.size;
+        
+        updateFields.isPartner = true;
+        updateFields.partnerRank = count + 1;
+        updateFields.partnerConsentDate = serverTimestamp();
+      } else {
+        updateFields.isPartner = false;
+        updateFields.partnerRank = 0;
+      }
+
+      await updateDoc(appRef, updateFields);
 
       if (app.ownerUid) {
         try {
@@ -463,7 +487,13 @@ export default function MyPage() {
       setSelectedApp(null);
       
       setApplications((prev) =>
-        prev.map((item) => (item.id === app.id ? { ...item, status: 'approved' } : item))
+        prev.map((item) => (item.id === app.id ? { 
+          ...item, 
+          status: 'approved',
+          isPartner: updateFields.isPartner,
+          partnerRank: updateFields.partnerRank,
+          partnerConsentDate: updateFields.partnerConsentDate
+        } : item))
       );
     } catch (e) {
       console.error('Failed to approve business application:', e);

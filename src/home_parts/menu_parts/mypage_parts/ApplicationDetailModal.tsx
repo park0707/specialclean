@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
 import type { BusinessApplication } from "../mypage";
 
 interface ApplicationDetailModalProps {
   app: BusinessApplication | null;
   onClose: () => void;
-  onApprove: (app: BusinessApplication) => Promise<void>;
+  onApprove: (app: BusinessApplication, isPartner: boolean) => Promise<void>;
   saving: boolean;
 }
 
@@ -13,6 +14,12 @@ export default function ApplicationDetailModal({
   onApprove,
   saving,
 }: ApplicationDetailModalProps) {
+  const [isPartnerChecked, setIsPartnerChecked] = useState(false);
+
+  useEffect(() => {
+    setIsPartnerChecked(false);
+  }, [app]);
+
   if (!app) return null;
 
   return (
@@ -182,22 +189,37 @@ export default function ApplicationDetailModal({
         </div>
 
         {/* 푸터 버튼 */}
-        <div className="border-t pt-4 mt-6 flex justify-end gap-2.5">
-          <button
-            onClick={onClose}
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition cursor-pointer"
-          >
-            닫기
-          </button>
-          {app.status === "submitted" && (
+        <div className="border-t pt-4 mt-6 flex items-center justify-between gap-4">
+          <div className="flex-1">
+            {app.status === "submitted" && (
+              <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer font-medium select-none">
+                <input
+                  type="checkbox"
+                  checked={isPartnerChecked}
+                  onChange={(e) => setIsPartnerChecked(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                />
+                <span>협력 업체로 등록</span>
+              </label>
+            )}
+          </div>
+          <div className="flex gap-2.5">
             <button
-              onClick={() => void onApprove(app)}
-              disabled={saving}
-              className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition cursor-pointer"
+              onClick={onClose}
+              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition cursor-pointer"
             >
-              {saving ? "승인 중..." : "승인하기"}
+              닫기
             </button>
-          )}
+            {app.status === "submitted" && (
+              <button
+                onClick={() => void onApprove(app, isPartnerChecked)}
+                disabled={saving}
+                className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition cursor-pointer"
+              >
+                {saving ? "승인 중..." : "승인하기"}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
