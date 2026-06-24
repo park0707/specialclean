@@ -80,5 +80,11 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow update, delete: if false; // 삭제 로그는 변조 및 임의 삭제 절대 불가
     }
+
+    // notices 컬렉션 규칙
+    match /notices/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }
