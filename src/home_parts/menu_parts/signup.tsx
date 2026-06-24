@@ -6,6 +6,7 @@ import { useSignUpLogic } from './signuplogic';
 import {auth} from '../../lib/firebase';
 import { createUserWithEmailAndPassword,sendEmailVerification, signOut } from 'firebase/auth';
 import { syncUserDocument } from '../../lib/firebaseuser';
+import { Link } from '@tanstack/react-router';
 
 
 interface signupprops {
@@ -155,9 +156,9 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
                     />
                     <label htmlFor="termsAgree" className="cursor-pointer select-none">
                       <span className="font-semibold text-blue-600">[필수]</span>{' '}
-                      <a href="/info?menu=terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
+                      <Link to="/info" search={{ menu: 'terms' }} target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
                         서비스 이용약관
-                      </a>{' '}
+                      </Link>{' '}
                       동의
                     </label>
                   </div>
@@ -171,9 +172,9 @@ export default function SignUpDialog({ isOpen, closeModal }: signupprops) {
                     />
                     <label htmlFor="privacyAgree" className="cursor-pointer select-none">
                       <span className="font-semibold text-blue-600">[필수]</span>{' '}
-                      <a href="/info?menu=privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
+                      <Link to="/info" search={{ menu: 'privacy' }} target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
                         개인정보 수집 및 이용
-                      </a>{' '}
+                      </Link>{' '}
                       동의
                     </label>
                   </div>

@@ -7,6 +7,7 @@ import { useAuth } from '../../../logincontext';
 import { SIDO_LIST } from '../../../lib/regions';
 import { geocodeAddress } from '../../../lib/geocode';
 import { SERVICE_CATEGORIES, TAG_GROUPS } from '../../../lib/companyFormOptions';
+import { Link } from '@tanstack/react-router';
 
 // ── 타입 ──────────────────────────────────────────────
 type CoverageType = 'nationwide' | 'regional' | 'radius';
@@ -637,9 +638,9 @@ export default function Application() {
           />
           <label htmlFor="privacyAgree" className="text-xs sm:text-sm text-gray-600 cursor-pointer select-none leading-relaxed">
             <span className="font-semibold text-blue-600">[필수]</span> 업체 신청 및 가입 심사를 위한{' '}
-            <a href="/info?menu=privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
+            <Link to="/info" search={{ menu: 'privacy' }} target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-500">
               개인정보 수집 및 이용
-            </a>
+            </Link>{' '}
             에 동의합니다.
           </label>
         </div>
