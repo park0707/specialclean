@@ -114,48 +114,52 @@ export default function InfoLayout() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 상단 큰 항목 탭 */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 flex gap-40 items-center justify-center">
-        <Link
-          to="/"
-          className="flex items-center gap-[2px] cursor-pointer"
-        >
-          <img src="/images/로고.png" alt="로고" className="w-[40px] h-auto"/>
-          <div className="logo_text text-[25px] text-[#1d4ed8] pt-1">클린 매칭</div>
-        </Link>
-        <div className="max-w-5xl flex">
-          {MENUS.map((menu) => (
-            <button
-              key={menu.id}
-              onClick={() => handleMenuChange(menu.id)}
-              className={`px-6 py-4 text-sm font-semibold border-b-2 transition-colors flex items-center gap-1.5 ${
-                activeMenu === menu.id
-                  ? 'border-blue-500 text-blue-500'
-                  : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
-              }`}
-            >
-              {menu.label}
-              {menu.id === 'notice' && hasUnreadNotice && (
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                </span>
-              )}
-            </button>
-          ))}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 w-full">
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-4 h-14">
+          <Link
+            to="/"
+            className="flex items-center gap-[2px] cursor-pointer shrink-0"
+          >
+            <img src="/images/로고.png" alt="로고" className="w-[35px] sm:w-[40px] h-auto"/>
+            <div className="logo_text text-[18px] sm:text-[22px] text-[#1d4ed8] pt-1 hidden sm:block">클린 매칭</div>
+          </Link>
+          <div className="flex-1 max-w-5xl flex overflow-x-auto scrollbar-hide whitespace-nowrap mx-2 sm:mx-4">
+            {MENUS.map((menu) => (
+              <button
+                key={menu.id}
+                onClick={() => handleMenuChange(menu.id)}
+                className={`px-4 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
+                  activeMenu === menu.id
+                    ? 'border-blue-500 text-blue-500'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                }`}
+              >
+                {menu.label}
+                {menu.id === 'notice' && hasUnreadNotice && (
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+          <div className="shrink-0">
+            <Mymenu/>
+          </div>
         </div>
-        <Mymenu/>
       </div>
 
       {/* 사이드바 + 본문 */}
-      <div className="max-w-5xl mx-auto flex gap-6 px-4 py-8">
-        {/* 왼쪽 사이드바 */}
-        <aside className="w-52 shrink-0">
-          <nav className="sticky top-20 bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="max-w-5xl mx-auto flex flex-col lg:flex-row gap-6 px-4 py-8">
+        {/* 왼쪽 사이드바 (데스크톱 전용) */}
+        <aside className="hidden lg:block w-52 shrink-0">
+          <nav className="sticky top-20 bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col">
             {currentMenu.sections.map((section) => (
               <button
                 key={section}
                 onClick={() => setActiveSection(section)}
-                className={`w-full text-left px-4 py-3 text-sm border-b border-gray-100 last:border-none transition-colors ${
+                className={`text-left px-4 py-3 text-sm border-b border-gray-100 last:border-none transition-colors ${
                   activeSection === section
                     ? 'bg-blue-50 text-blue-500 font-semibold'
                     : 'text-gray-600 hover:bg-gray-50'
@@ -167,8 +171,27 @@ export default function InfoLayout() {
           </nav>
         </aside>
 
+        {/* 모바일 하위 탭 슬라이드 */}
+        {currentMenu.sections.length > 1 && (
+          <div className="lg:hidden w-full overflow-x-auto scrollbar-hide bg-white border border-gray-200 rounded-xl flex gap-1 whitespace-nowrap p-1.5 mb-3">
+            {currentMenu.sections.map((section) => (
+              <button
+                key={section}
+                onClick={() => setActiveSection(section)}
+                className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors shrink-0 ${
+                  activeSection === section
+                    ? 'bg-blue-500 text-white shadow-sm'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {section}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* 오른쪽 본문 */}
-        <main className="flex-1 bg-white rounded-xl border border-gray-200 p-8 min-h-[600px]">
+        <main className="flex-1 bg-white rounded-xl border border-gray-200 p-4 sm:p-8 min-h-[600px] min-w-0">
           <CurrentComponent activeSection={activeSection} noticeId={(search as any).id} />
         </main>
       </div>

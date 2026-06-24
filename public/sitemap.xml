@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 
+    주의: 구매하신 진짜 도메인을 연결한 후,
+    아래 [YOUR_DOMAIN] 텍스트들을 모두 실제 도메인 주소(예: cleanmatching.com)로 바꾸어 배포해 주세요.
+  -->
+  <url>
+    <loc>https://[YOUR_DOMAIN]/</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://[YOUR_DOMAIN]/info</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

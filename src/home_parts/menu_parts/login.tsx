@@ -5,7 +5,7 @@ import { useState } from 'react'
 import SignUpDialog from './signup'
 import {auth} from '../../lib/firebase';
 import { signInWithEmailAndPassword,sendEmailVerification } from 'firebase/auth';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import ForgotPasswordDialog from './ForgotPasswordDialog';
 interface loginprops {
   isOpen: boolean
@@ -69,16 +69,34 @@ export default function LoginDialog({ isOpen, closeModal }: loginprops) {
       }
     };
     const handleGoogleLogin = async () => {
+      setMessage('');
       try {
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
-        // 구글 계정 선택 팝업 → 로그인
-        await signInWithPopup(auth, provider);
-        // 성공하면 AuthProvider의 onAuthStateChanged가 user를 채워줌
-        closeModal(); // 로그인 모달 닫기
-      } catch (err) {
+        
+        // 모바일 브라우저 팝업 차단 회피를 위해 UserAgent 기반 판단
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+        
+        if (isMobile) {
+          await signInWithRedirect(auth, provider);
+        } else {
+          try {
+            await signInWithPopup(auth, provider);
+            closeModal();
+          } catch (popupErr: any) {
+            // 데스크톱에서도 팝업이 강제 차단된 경우 리디렉션으로 폴백
+            if (popupErr.code === 'auth/popup-blocked' || popupErr.code === 'auth/cancelled-popup-request') {
+              await signInWithRedirect(auth, provider);
+            } else {
+              throw popupErr;
+            }
+          }
+        }
+      } catch (err: any) {
         console.error(err);
-        // TODO: 에러 메시지 UI로 보여주고 싶으면 여기서 처리
+        setMessage('Google 로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.');
       }
     };
     const handleResendVerification = async () => {

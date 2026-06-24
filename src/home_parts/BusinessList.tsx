@@ -131,12 +131,12 @@ export default function BusinessList() {
 
       {/* 페이지네이션 컨트롤 */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1.5 mt-8 pb-6">
+        <div className="flex items-center justify-center gap-1 sm:gap-1.5 mt-8 pb-6 flex-wrap">
           {/* 처음으로 (<<) */}
           <button
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
-            className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-sm font-medium cursor-pointer"
+            className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-xs sm:text-sm font-medium cursor-pointer"
             title="첫 페이지로"
           >
             &lt;&lt;
@@ -146,7 +146,7 @@ export default function BusinessList() {
           <button
             onClick={() => setCurrentPage(startPage - 1)}
             disabled={startPage === 1}
-            className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-sm font-medium cursor-pointer"
+            className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-xs sm:text-sm font-medium cursor-pointer"
             title="이전 블록으로"
           >
             &lt;
@@ -157,7 +157,7 @@ export default function BusinessList() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`flex items-center justify-center w-9 h-9 rounded-lg border text-sm font-semibold transition-all duration-200 cursor-pointer ${
+              className={`flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
                 currentPage === page
                   ? 'border-blue-600 bg-blue-600 text-white shadow-sm shadow-blue-100'
                   : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900'
@@ -171,7 +171,7 @@ export default function BusinessList() {
           <button
             onClick={() => setCurrentPage(endPage + 1)}
             disabled={endPage === totalPages}
-            className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-sm font-medium cursor-pointer"
+            className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-xs sm:text-sm font-medium cursor-pointer"
             title="다음 블록으로"
           >
             &gt;
@@ -181,7 +181,7 @@ export default function BusinessList() {
           <button
             onClick={() => setCurrentPage(totalPages)}
             disabled={currentPage === totalPages}
-            className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-sm font-medium cursor-pointer"
+            className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-white disabled:cursor-not-allowed transition-all duration-200 text-xs sm:text-sm font-medium cursor-pointer"
             title="마지막 페이지로"
           >
             &gt;&gt;

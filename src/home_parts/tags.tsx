@@ -30,8 +30,8 @@ export default function Tags() {
   return (
     <div id="filter-tabs" className="w-full bg-white flex flex-col items-center">
       {/* 탭 헤더 */}
-      <div className="flex items-center border-b border-gray-200">
-        <div className="flex flex-1">
+      <div className="w-full flex items-center border-b border-gray-200">
+        <div className="flex flex-1 overflow-x-auto scrollbar-hide whitespace-nowrap">
           {tabs.map((tab) => (
             <button
               key={tab}
@@ -49,7 +49,7 @@ export default function Tags() {
                     ? `${tab}, ${selectedTags.length}개 선택됨`
                     : tab
               }
-              className={`px-5 py-3 text-sm font-medium transition-colors duration-150 cursor-pointer ${
+              className={`px-4 sm:px-5 py-3 text-sm font-medium transition-colors duration-150 cursor-pointer shrink-0 ${
                 activeTab === tab
                   ? 'border-b-2 border-blue-500 text-blue-600'
                   : 'text-gray-500 hover:text-gray-700'

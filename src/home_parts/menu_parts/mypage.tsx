@@ -571,15 +571,15 @@ export default function MyPage() {
 
       <main className="mx-auto max-w-6xl px-4 py-8">
         {/* ── 프로필 요약 ── */}
-        <section id="mypage-profile" className="flex items-center gap-6 rounded-xl bg-white p-6 shadow-sm">
+        <section id="mypage-profile" className="flex flex-col sm:flex-row items-center gap-6 rounded-xl bg-white p-6 shadow-sm">
           {/* 아바타 */}
           <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gray-200 text-3xl">
             👤
           </div>
 
           {/* 유저 정보 */}
-          <div className="flex-1">
-            <div className="flex items-center gap-1">
+          <div className="flex-1 text-center sm:text-left space-y-1">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1">
                 {isEditing ? (
                 <input
                     className="border-b border-gray-400 focus:outline-none text-xl font-semibold"
@@ -618,7 +618,7 @@ export default function MyPage() {
           </div>
 
           {/* 활동 요약 */}
-          <div className="flex gap-8 text-center">
+          <div className="flex gap-8 text-center justify-center">
             <div>
               <p className="text-2xl font-bold">{bookmarks.length}</p>
               <p className="text-xs text-gray-500">북마크</p>
@@ -631,7 +631,7 @@ export default function MyPage() {
         </section>
 
         {/* ── 탭 내비게이션 ── */}
-        <nav className="mt-6 flex gap-1 border-b">
+        <nav className="mt-6 flex overflow-x-auto scrollbar-hide whitespace-nowrap gap-1 border-b">
           {tabs.map((tab) => (
             <button
               key={tab}
@@ -644,7 +644,7 @@ export default function MyPage() {
                 'mypage-profile-tab'
               }
               onClick={() => setActiveTab(tab)}
-              className={`cursor-pointer px-5 py-2.5 text-sm font-medium transition ${
+              className={`cursor-pointer px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-medium transition shrink-0 ${
                 activeTab === tab
                   ? 'border-b-2 border-blue-500 text-blue-600'
                   : 'text-gray-500 hover:text-gray-700'
@@ -656,9 +656,9 @@ export default function MyPage() {
         </nav>
 
         {/* ── 메인 콘텐츠 + 사이드바 ── */}
-        <div className="mt-6 flex gap-6">
+        <div className="mt-6 flex flex-col lg:flex-row gap-6">
           {/* 좌측 메인 영역 */}
-          <div className="flex-1 space-y-4">
+          <div className="flex-1 min-w-0 space-y-4">
             {/* ── 프로필 탭 ── */}
             {activeTab === '프로필' && (
               <div className="rounded-xl bg-white p-6 shadow-sm">
