@@ -77,7 +77,7 @@ export function Mymenu() {
                         
                         <Link 
                             to="/info" 
-                            search={{ menu: "privacy" }} 
+                            search={{ menu: "about" }} 
                             className={itemclass(false)}
                             onClick={() => setIsOpen(false)}
                         >

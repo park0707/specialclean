@@ -13,19 +13,39 @@ import { Mymenu } from '../../mymenu';
 // 상단 큰 항목 정의
 const MENUS = [
   {
-    id: 'privacy',
-    label: '개인정보처리방침',
-    component: PrivacyPolicy,
+    id: 'about',
+    label: '사이트 소개',
+    component: AboutPage,
     sections: [
-      '수집하는 개인정보 항목',
-      '수집 및 이용 목적',
-      '보유 및 이용 기간',
-      '제3자 제공 여부',
-      '쿠키 수집 고지',
-      '처리 위탁 안내',
-      '이용자 권리',
-      '보호책임자 연락처',
-      
+      '서비스 소개',
+      '운영자 소개',
+      '서비스 방향성',
+    ],
+  },
+  {
+    id: 'notice',
+    label: '공지사항',
+    component: NoticePage,
+    sections: ['공지사항'],
+  },
+  {
+    id: 'faq',
+    label: '자주 묻는 질문',
+    component: FaqPage,
+    sections: [
+      '이용 안내 (고객)',
+      '업체 파트너 안내',
+      '예약 및 환불',
+    ],
+  },
+  {
+    id: 'contact',
+    label: '문의하기',
+    component: ContactPage,
+    sections: [
+      '문의 안내',
+      '문의 양식',
+      '업체 신청',
     ],
   },
   {
@@ -42,39 +62,19 @@ const MENUS = [
     ],
   },
   {
-    id: 'about',
-    label: '사이트 소개',
-    component: AboutPage,
+    id: 'privacy',
+    label: '개인정보처리방침',
+    component: PrivacyPolicy,
     sections: [
-      '서비스 소개',
-      '운영자 소개',
-      '서비스 방향성',
+      '수집하는 개인정보 항목',
+      '수집 및 이용 목적',
+      '보유 및 이용 기간',
+      '제3자 제공 여부',
+      '쿠키 수집 고지',
+      '처리 위탁 안내',
+      '이용자 권리',
+      '보호책임자 연락처',
     ],
-  },
-  {
-    id: 'contact',
-    label: '문의하기',
-    component: ContactPage,
-    sections: [
-      '문의 안내',
-      '문의 양식',
-      '업체 신청',
-    ],
-  },
-  {
-    id: 'faq',
-    label: '자주 묻는 질문',
-    component: FaqPage,
-    sections: [
-      '이용 안내 (고객)',
-      '업체 파트너 안내',
-      '예약 및 환불',
-    ],
-  },{
-    id: 'notice',
-    label: '공지사항',
-    component: NoticePage,
-    sections: ['공지사항'],
   }
 ];
 
