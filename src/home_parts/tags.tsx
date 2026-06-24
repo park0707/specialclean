@@ -31,7 +31,7 @@ export default function Tags() {
     <div id="filter-tabs" className="w-full bg-white flex flex-col items-center">
       {/* 탭 헤더 */}
       <div className="w-full flex items-center border-b border-gray-200">
-        <div className="flex flex-1 overflow-x-auto scrollbar-hide whitespace-nowrap justify-center">
+        <div className="flex flex-1 overflow-x-auto scrollbar-hide whitespace-nowrap justify-start md:justify-center">
           {tabs.map((tab) => (
             <button
               key={tab}
