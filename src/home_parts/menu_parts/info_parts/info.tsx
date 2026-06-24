@@ -6,10 +6,10 @@ import AboutPage from './about';
 import ContactPage from './contact';
 import NoticePage from './notice';
 import FaqPage from './faq';
-import { Mymenu } from '../../mymenu';
-import { useSearch } from '@tanstack/react-router';
+import { useSearch, useNavigate } from '@tanstack/react-router';
 import { Link } from '@tanstack/react-router';
 import { useAuth } from '../../../logincontext';
+import { Mymenu } from '../../mymenu';
 // 상단 큰 항목 정의
 const MENUS = [
   {
@@ -92,19 +92,24 @@ export default function InfoLayout() {
   const currentMenu = MENUS.find((m) => m.id === activeMenu)!;
   const CurrentComponent = currentMenu.component;
 
+  const navigate = useNavigate({ from: '/info' });
+
   const handleMenuChange = (menuId: string) => {
-    const menu = MENUS.find((m) => m.id === menuId)!;
-    setActiveMenu(menuId);
-    setActiveSection(menu.sections[0]); // 메뉴 바뀌면 첫 소항목으로 초기화
+    navigate({
+      search: (prev: any) => ({
+        ...prev,
+        menu: menuId,
+        id: undefined
+      })
+    });
   };
 
   useEffect(() => {
-    const menu = (search as any).menu;
-    setActiveMenu(menu ?? MENUS[0].id);
-     const section =
-      MENUS.find((m) => m.id === menu)?.sections[0];
+    const menu = (search as any).menu ?? MENUS[0].id;
+    setActiveMenu(menu);
+    const section = MENUS.find((m) => m.id === menu)?.sections[0];
     if (section) setActiveSection(section);
-  }, [( search as any).menu]);
+  }, [(search as any).menu]);
 
   return (
     <div className="min-h-screen bg-gray-50">

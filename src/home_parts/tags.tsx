@@ -42,6 +42,13 @@ export default function Tags() {
               }
               type="button"
               onClick={() => setActiveTab(tab)}
+              aria-label={
+                tab === '서비스 종류' && selectedServices.length > 0
+                  ? `${tab}, ${selectedServices.length}개 선택됨`
+                  : tab === '업체 특성' && selectedTags.length > 0
+                    ? `${tab}, ${selectedTags.length}개 선택됨`
+                    : tab
+              }
               className={`px-5 py-3 text-sm font-medium transition-colors duration-150 cursor-pointer ${
                 activeTab === tab
                   ? 'border-b-2 border-blue-500 text-blue-600'

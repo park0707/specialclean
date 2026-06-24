@@ -40,8 +40,8 @@ export default function LoginDialog({ isOpen, closeModal }: loginprops) {
       try {
         const cred = await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPw);
         
-           // 이메일 인증 여부 체크
-        if (!cred.user.emailVerified) {
+           // 이메일 인증 여부 체크 (로컬 개발 환경에서는 테스트 편의를 위해 우회 가능)
+        if (!cred.user.emailVerified && !import.meta.env.DEV) {
           setLastUser(cred.user); // 인증메일 재전송 위해 마지막 로그인 시도한 사용자 저장
           await auth.signOut(); // or signOut(auth)
           setMessage('이메일 인증 후에만 로그인할 수 있습니다. 메일함을 확인해 주세요.');

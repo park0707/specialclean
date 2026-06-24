@@ -31,9 +31,9 @@ export default function DeleteAccountDialog({
   const [isDeleted, setIsDeleted] = useState(false);
   const navigate = useNavigate();
 
-  const isGoogleUser = user?.providerData.some(
+  const isGoogleUser = user?.providerData?.some(
     (p) => p.providerId === 'google.com'
-  );
+  ) ?? false;
 
   const handleClose = useCallback(() => {
     setPassword('');

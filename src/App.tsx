@@ -1,4 +1,4 @@
-import { Outlet } from '@tanstack/react-router'
+import { Outlet, useLocation } from '@tanstack/react-router'
 import { AuthProvider } from './logincontext'
 import { SearchProvider } from './searchcontext'
 import { TutorialProvider } from './tutorialcontext'
@@ -7,9 +7,30 @@ import { useState, useEffect } from 'react'
 import { ArrowUpIcon } from '@heroicons/react/24/outline'
 import TutorialWelcomeModal from './tutorial/TutorialWelcomeModal'
 import HomeTour from './tutorial/HomeTour'
+import ReactGA from 'react-ga4'
 
 function App() {
   const [showButton, setShowButton] = useState(false);
+  const location = useLocation();
+
+  // GA 이니셜라이즈 (최초 1회)
+  useEffect(() => {
+    const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+    if (gaId) {
+      ReactGA.initialize(gaId);
+      console.log('[GA4] Initialized with ID:', gaId);
+    }
+  }, []);
+
+  // 페이지 이동 시마다 pageview 전송
+  useEffect(() => {
+    const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+    if (gaId) {
+      const path = window.location.pathname + window.location.search;
+      ReactGA.send({ hitType: 'pageview', page: path });
+      console.log('[GA4] Tracked pageview:', path);
+    }
+  }, [location]);
 
   useEffect(() => {
     const handleScroll = () => {

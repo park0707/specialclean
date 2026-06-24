@@ -101,15 +101,21 @@ export default function Application() {
       msgRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
-    if (selectedServices.length === 0) {
-      setErrorMsg('제공 서비스를 1개 이상 선택해주세요.');
-      msgRef.current?.scrollIntoView({ behavior: 'smooth' });
-      return;
+
+    // ── 사이트, 서비스, 태그 미입력/미선택 경고 ──
+    const warnings: string[] = [];
+    if (!form.website.trim()) {
+      warnings.push('사이트를 입력하지 않았습니다');
     }
-    if (selectedTags.length === 0) {
-      setErrorMsg('태그를 1개 이상 선택해주세요.');
-      msgRef.current?.scrollIntoView({ behavior: 'smooth' });
-      return;
+    if (selectedServices.length === 0 || selectedTags.length === 0) {
+      warnings.push('서비스나 태그를 선택하지 않았습니다');
+    }
+
+    if (warnings.length > 0) {
+      const confirmMsg = `${warnings.join(', ')}, 제출하시겠습니까?`;
+      if (!window.confirm(confirmMsg)) {
+        return;
+      }
     }
 
     // ── 운영시간 검사 ──
@@ -439,11 +445,8 @@ export default function Application() {
         {/* 5. 제공 서비스 (카테고리별 칩 선택) */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            제공 서비스 * (1개 이상 선택)
+            제공 서비스 (선택)
           </label>
-          {selectedServices.length === 0 && (
-            <p className="text-xs text-red-400 mb-2">최소 1개 이상 선택해주세요.</p>
-          )}
           <div className="space-y-4">
             {SERVICE_CATEGORIES.map(({ category, items }) => (
               <div key={category}>
@@ -577,7 +580,7 @@ export default function Application() {
         {/* 9. 태그 (3그룹 구조화) */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            태그 * (업체 특징 선택, 1개 이상)
+            태그 (선택 - 업체 특징 선택)
           </label>
           <div className="space-y-5">
             {TAG_GROUPS.map(({ group, description, tags }) => (

@@ -1,11 +1,10 @@
-//ai돌려서 만든 초안, 내가 직접 수정할 필요 있음. (2026-02-21)
 import { useState, useEffect } from "react"
 import { Link } from "@tanstack/react-router"
 import { useAuth } from "../../logincontext"
 import { useTutorial } from "../../tutorialcontext"
 import { PencilIcon } from "@heroicons/react/24/outline"
 import { updateProfile } from "firebase/auth"
-import { doc, getDoc, updateDoc, arrayRemove, collection, getDocs, serverTimestamp } from "firebase/firestore"
+import { doc, getDoc, updateDoc, arrayRemove, collection, getDocs, query, where, orderBy, serverTimestamp, deleteDoc, runTransaction, writeBatch } from "firebase/firestore"
 import { db } from "../../lib/firebase"
 import ChangePasswordDialog from "./ChangePasswordDialog"
 import DeleteAccountDialog from "./DeleteAccountDialog"
@@ -20,13 +19,6 @@ interface BookmarkedBusiness {
   tags: string[];
 }
 
-interface DummyReview {
-  id: number;
-  companyName: string;
-  rating: number;
-  content: string;
-  date: string;
-}
 
 interface RecentViewedItem {
   id: string;
@@ -64,10 +56,32 @@ interface BusinessApplication {
   updatedAt: any;
 }
 
-// 더미 데이터 (나중에 Firebase 연동 시 교체)
-const dummyReviews: DummyReview[] = [];
+interface UserReview {
+  id: string;
+  businessId: string;
+  businessName: string;
+  rating: number;
+  content: string;
+  date: string;
+  createdAt: any;
+}
 
-type Tab = '북마크' | '내 리뷰' | '프로필' | '업체 신청 목록'
+interface ReviewDeleteLog {
+  id: string;
+  reviewId: string;
+  reviewUid: string;
+  reviewUserEmail: string;
+  businessId: string;
+  businessName: string;
+  reviewContent: string;
+  reviewRating: number;
+  deletedByUid: string;
+  deletedByEmail: string;
+  deletedByRole: string;
+  deletedAt: any;
+}
+
+type Tab = '북마크' | '내 리뷰' | '프로필' | '업체 신청 목록' | '내 업체' | '리뷰 로그'
 
 export default function MyPage() {
   const [activeTab, setActiveTab] = useState<Tab>('북마크')
@@ -86,6 +100,21 @@ export default function MyPage() {
   const [applicationsLoading, setApplicationsLoading] = useState(false);
   const [selectedApp, setSelectedApp] = useState<BusinessApplication | null>(null);
   const [appFilter, setAppFilter] = useState<'submitted' | 'approved'>('submitted');
+
+  // 내 업체 목록 (업체주용 - 여러 업체 지원)
+  const [myBusinesses, setMyBusinesses] = useState<BusinessApplication[]>([]);
+  const [myBusinessLoading, setMyBusinessLoading] = useState(false);
+
+  // 내 리뷰 목록 및 수정 관련 상태
+  const [myReviews, setMyReviews] = useState<UserReview[]>([]);
+  const [myReviewsLoading, setMyReviewsLoading] = useState(false);
+  const [editingReviewId, setEditingReviewId] = useState<string | null>(null);
+  const [editRating, setEditRating] = useState<number>(5);
+  const [editContent, setEditContent] = useState<string>('');
+
+  // 리뷰 삭제 로그 (Admin용)
+  const [reviewDeleteLogs, setReviewDeleteLogs] = useState<ReviewDeleteLog[]>([]);
+  const [reviewDeleteLogsLoading, setReviewDeleteLogsLoading] = useState(false);
 
   useEffect(() => {
     try {
@@ -192,6 +221,218 @@ export default function MyPage() {
     void fetchApplications();
   }, [user, isAdmin, activeTab]);
 
+  // 업체주: 내 업체 목록 로드 (isManager일 때만 실행, 모든 승인 업체)
+  useEffect(() => {
+    if (!user || !isManager) return;
+
+    const fetchMyBusinesses = async () => {
+      setMyBusinessLoading(true);
+      try {
+        // ownerEmail 기준으로 모든 업체 조회 (복합 인덱스 방지)
+        const q = query(
+          collection(db, 'businessApplications'),
+          where('ownerEmail', '==', user.email)
+        );
+        const snap = await getDocs(q);
+        const list = snap.docs
+          .map(d => ({ id: d.id, ...d.data() } as BusinessApplication))
+          .filter(biz => biz.status === 'approved'); // 메모리 필터링
+        setMyBusinesses(list);
+      } catch (e) {
+        console.error('Failed to fetch my businesses:', e);
+        setMyBusinesses([]);
+      } finally {
+        setMyBusinessLoading(false);
+      }
+    };
+
+    void fetchMyBusinesses();
+  }, [user, isManager]);
+
+  // Admin: 리뷰 삭제 로그 로드
+  useEffect(() => {
+    if (!user || !isAdmin || activeTab !== '리뷰 로그') return;
+
+    const fetchReviewDeleteLogs = async () => {
+      setReviewDeleteLogsLoading(true);
+      try {
+        const q = query(
+          collection(db, 'reviewDeleteLogs'),
+          orderBy('deletedAt', 'desc')
+        );
+        const snap = await getDocs(q);
+        const list = snap.docs.map(d => ({ id: d.id, ...d.data() } as ReviewDeleteLog));
+        setReviewDeleteLogs(list);
+      } catch (e) {
+        console.error('Failed to fetch review delete logs:', e);
+      } finally {
+        setReviewDeleteLogsLoading(false);
+      }
+    };
+
+    void fetchReviewDeleteLogs();
+  }, [user, isAdmin, activeTab]);
+
+  // 내 리뷰 목록 로드
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchMyReviews = async () => {
+      setMyReviewsLoading(true);
+      try {
+        const q = query(
+          collection(db, 'reviews'),
+          where('uid', '==', user.uid)
+        );
+        const snap = await getDocs(q);
+        const list = await Promise.all(
+          snap.docs.map(async (d) => {
+            const data = d.data();
+            let bizName = data.businessName || '알 수 없는 업체';
+            if (!data.businessName && data.businessId) {
+              try {
+                const bizSnap = await getDoc(doc(db, 'businessApplications', data.businessId));
+                if (bizSnap.exists()) {
+                  bizName = bizSnap.data().name || '알 수 없는 업체';
+                }
+              } catch (e) {
+                console.error('Failed to fetch business name:', e);
+              }
+            }
+
+            let dateStr = '';
+            if (data.createdAt) {
+              const date = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
+              dateStr = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+            }
+
+            return {
+              id: d.id,
+              businessId: data.businessId,
+              businessName: bizName,
+              rating: data.rating,
+              content: data.content,
+              date: dateStr,
+              createdAt: data.createdAt
+            };
+          })
+        );
+
+        list.sort((a, b) => {
+          const t1 = a.createdAt?.seconds || 0;
+          const t2 = b.createdAt?.seconds || 0;
+          return t2 - t1;
+        });
+
+        setMyReviews(list);
+      } catch (e) {
+        console.error('Failed to fetch my reviews:', e);
+      } finally {
+        setMyReviewsLoading(false);
+      }
+    };
+
+    void fetchMyReviews();
+  }, [user, activeTab]);
+
+  const handleSaveMyReview = async (review: UserReview) => {
+    if (!user) return;
+    if (!editContent.trim()) {
+      alert('리뷰 내용을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const reviewRef = doc(db, 'reviews', review.id);
+      const bizRef = doc(db, 'businessApplications', review.businessId);
+      const oldRating = review.rating;
+
+      // 1. 리뷰 문서 업데이트 (보안 규칙 준수를 위해 uid 포함 및 userNickname 갱신)
+      await updateDoc(reviewRef, {
+        uid: user.uid,
+        rating: editRating,
+        content: editContent,
+        userNickname: user.displayName || user.email?.split('@')[0] || '익명',
+        updatedAt: serverTimestamp()
+      });
+
+      // 2. 평점 정보 업데이트 시도 (보안 규칙에 의한 롤백 방지용 예외 처리)
+      try {
+        await runTransaction(db, async (transaction) => {
+          const bizSnap = await transaction.get(bizRef);
+          if (!bizSnap.exists()) return;
+
+          const ratingDiff = editRating - oldRating;
+          const bizData = bizSnap.data();
+          const currentRatingCount = bizData.ratingCount || 0;
+          const currentRatingSum = (bizData.ratingAvg || 0) * currentRatingCount;
+
+          const newRatingSum = currentRatingSum + ratingDiff;
+          const newRatingAvg = currentRatingCount > 0 ? newRatingSum / currentRatingCount : 0;
+
+          transaction.update(bizRef, {
+            ratingAvg: newRatingAvg
+          });
+        });
+      } catch (bizErr) {
+        console.warn('Failed to update business rating during edit, ignoring:', bizErr);
+      }
+
+      alert('리뷰가 수정되었습니다.');
+      // 로컬 목록 즉시 갱신
+      setMyReviews(prev => prev.map(r => r.id === review.id ? { ...r, rating: editRating, content: editContent } : r));
+      setEditingReviewId(null);
+    } catch (e) {
+      console.error('Failed to update review:', e);
+      alert('리뷰 수정 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleDeleteMyReview = async (review: UserReview) => {
+    if (!user) return;
+    if (!window.confirm('이 리뷰를 삭제하시겠습니까?')) return;
+
+    try {
+      const reviewRef = doc(db, 'reviews', review.id);
+      const bizRef = doc(db, 'businessApplications', review.businessId);
+
+      // 1. 리뷰 문서 삭제
+      await deleteDoc(reviewRef);
+
+      // 2. 평점 정보 업데이트 시도 (보안 규칙에 의한 롤백 방지용 예외 처리)
+      try {
+        await runTransaction(db, async (transaction) => {
+          const bizSnap = await transaction.get(bizRef);
+          if (!bizSnap.exists()) return;
+
+          const bizData = bizSnap.data();
+          const currentRatingCount = bizData.ratingCount || 0;
+          const currentRatingSum = (bizData.ratingAvg || 0) * currentRatingCount;
+
+          const newRatingCount = Math.max(0, currentRatingCount - 1);
+          const newRatingSum = currentRatingSum - review.rating;
+          const newRatingAvg = newRatingCount > 0 ? newRatingSum / newRatingCount : 0;
+          const newReviewCount = Math.max(0, (bizData.reviewCount || 0) - 1);
+
+          transaction.update(bizRef, {
+            ratingAvg: newRatingAvg,
+            ratingCount: newRatingCount,
+            reviewCount: newReviewCount
+          });
+        });
+      } catch (bizErr) {
+        console.warn('Failed to update business rating during delete, ignoring:', bizErr);
+      }
+
+      alert('리뷰가 삭제되었습니다.');
+      // 로컬 목록 즉시 갱신
+      setMyReviews(prev => prev.filter(r => r.id !== review.id));
+    } catch (e) {
+      console.error('Failed to delete review:', e);
+      alert('리뷰 삭제 중 오류가 발생했습니다.');
+    }
+  };
+
   const handleApprove = async (app: BusinessApplication) => {
     if (!user || !isAdmin) return;
     if (!window.confirm(`'${app.name}' 업체를 승인하시겠습니까?`)) return;
@@ -232,8 +473,12 @@ export default function MyPage() {
   };
 
   const tabs: Tab[] = ['프로필', '북마크', '내 리뷰']
+  if (isManager && !isAdmin) {
+    tabs.push('내 업체')
+  }
   if (isAdmin) {
     tabs.push('업체 신청 목록')
+    tabs.push('리뷰 로그')
   }
   const handleStartEdit = () => {
     if (!user) return;
@@ -256,8 +501,37 @@ export default function MyPage() {
 
     try {
       setSaving(true);
-      await updateProfile(user, { displayName: trimmed }); // Firebase에 닉네임 저장 [web:68][web:118]
+      // 1. Firebase Auth 프로필 업데이트
+      await updateProfile(user, { displayName: trimmed });
+
+      // 2. users 컬렉션 문서 업데이트 (있을 경우)
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        await updateDoc(userRef, {
+          displayName: trimmed
+        });
+      } catch (err) {
+        console.warn('Failed to update displayName in users document:', err);
+      }
+
+      // 3. 작성한 모든 리뷰의 userNickname 필드 일괄 업데이트 (writeBatch 사용)
+      try {
+        const q = query(collection(db, 'reviews'), where('uid', '==', user.uid));
+        const snap = await getDocs(q);
+        const batch = writeBatch(db);
+        snap.docs.forEach((docSnap) => {
+          batch.update(doc(db, 'reviews', docSnap.id), {
+            uid: user.uid,
+            userNickname: trimmed
+          });
+        });
+        await batch.commit();
+      } catch (err) {
+        console.error('Failed to batch update userNickname in reviews:', err);
+      }
+
       setIsEditing(false);
+      window.location.reload();
     } finally {
       setSaving(false);
     }
@@ -350,7 +624,7 @@ export default function MyPage() {
               <p className="text-xs text-gray-500">북마크</p>
             </div>
             <div>
-              <p className="text-2xl font-bold">{dummyReviews.length}</p>
+              <p className="text-2xl font-bold">{myReviews.length}</p>
               <p className="text-xs text-gray-500">후기</p>
             </div>
           </div>
@@ -365,6 +639,8 @@ export default function MyPage() {
                 tab === '북마크' ? 'mypage-bookmark-tab' :
                 tab === '내 리뷰' ? 'mypage-review-tab' :
                 tab === '업체 신청 목록' ? 'mypage-applications-tab' :
+                tab === '내 업체' ? 'mypage-my-business-tab' :
+                tab === '리뷰 로그' ? 'mypage-review-logs-tab' :
                 'mypage-profile-tab'
               }
               onClick={() => setActiveTab(tab)}
@@ -419,7 +695,7 @@ export default function MyPage() {
                   <div>
                     <label className="mb-1 block text-sm font-medium text-gray-700">로그인 방식</label>
                     {
-                        user?.providerData.find((p) => p.providerId === 'google.com') ? (
+                        user?.providerData?.find((p) => p.providerId === 'google.com') ? (
                             <span className="inline-block rounded bg-green-100 px-2 py-1 text-sm font-medium text-green-700">
                               구글 로그인
                             </span>
@@ -431,7 +707,7 @@ export default function MyPage() {
                     }
                   </div>
                     {
-                        user?.providerData.find((p) => p.providerId === 'google.com') ? null : (
+                        user?.providerData?.find((p) => p.providerId === 'google.com') ? null : (
                             <button className="rounded border px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
                             onClick={()=>setPwChangeOpen(true)}>
                                 비밀번호 변경
@@ -525,32 +801,150 @@ export default function MyPage() {
             {/* ── 내 리뷰 탭 ── */}
             {activeTab === '내 리뷰' && (
               <div className="space-y-4">
-                {dummyReviews.length === 0 ? (
+                {myReviewsLoading ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">후기를 불러오는 중입니다...</p>
+                  </div>
+                ) : myReviews.length === 0 ? (
                   <div className="rounded-xl bg-white p-8 text-center shadow-sm">
                     <p className="text-gray-500 text-sm font-medium">작성한 후기가 없습니다.</p>
                     <p className="text-gray-400 text-xs mt-1">이용한 청소 서비스의 솔직한 후기를 남겨 보세요.</p>
                   </div>
                 ) : (
-                  dummyReviews.map((review) => (
+                  myReviews.map((review) => (
                     <div key={review.id} className="rounded-xl bg-white p-5 shadow-sm">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold">{review.companyName}</h4>
-                        <span className="text-xs text-gray-400">{review.date}</span>
-                      </div>
-                      <span className="mt-1 inline-block text-sm text-yellow-500">
-                        {'⭐'.repeat(review.rating)}
-                      </span>
-                      <p className="mt-2 text-sm text-gray-700">{review.content}</p>
-                      <div className="mt-3 flex gap-2">
-                        <button className="rounded border px-3 py-1 text-xs text-gray-600 hover:bg-gray-50">
-                          수정
-                        </button>
-                        <button className="rounded border px-3 py-1 text-xs text-red-400 hover:bg-red-50">
-                          삭제
-                        </button>
-                      </div>
+                      {editingReviewId === review.id ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-semibold text-gray-800">{review.businessName}</h4>
+                            <span className="text-xs text-gray-400">{review.date}</span>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-500 mb-1">평점 선택</label>
+                            <select
+                              value={editRating}
+                              onChange={(e) => setEditRating(Number(e.target.value))}
+                              className="rounded border border-gray-300 p-1 text-sm bg-white focus:border-blue-500 focus:outline-none"
+                            >
+                              <option value={5}>⭐⭐⭐⭐⭐ (5점)</option>
+                              <option value={4}>⭐⭐⭐⭐ (4점)</option>
+                              <option value={3}>⭐⭐⭐ (3점)</option>
+                              <option value={2}>⭐⭐ (2점)</option>
+                              <option value={1}>⭐ (1점)</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-500 mb-1">리뷰 내용</label>
+                            <textarea
+                              rows={3}
+                              value={editContent}
+                              onChange={(e) => setEditContent(e.target.value)}
+                              className="w-full rounded border border-gray-300 p-2 text-sm focus:border-blue-500 focus:outline-none"
+                              placeholder="리뷰 내용을 입력하세요..."
+                            />
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleSaveMyReview(review)}
+                              className="rounded bg-blue-500 hover:bg-blue-600 px-3 py-1.5 text-xs text-white font-medium cursor-pointer"
+                            >
+                              저장
+                            </button>
+                            <button
+                              onClick={() => setEditingReviewId(null)}
+                              className="rounded border border-gray-300 hover:bg-gray-50 px-3 py-1.5 text-xs text-gray-600 font-medium cursor-pointer"
+                            >
+                              취소
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-semibold">{review.businessName}</h4>
+                            <span className="text-xs text-gray-400">{review.date}</span>
+                          </div>
+                          <span className="mt-1 inline-block text-sm text-yellow-500">
+                            {'⭐'.repeat(review.rating)}
+                          </span>
+                          <p className="mt-2 text-sm text-gray-700 whitespace-pre-wrap">{review.content}</p>
+                          <div className="mt-3 flex gap-2">
+                            <button
+                              onClick={() => {
+                                setEditingReviewId(review.id);
+                                setEditRating(review.rating);
+                                setEditContent(review.content);
+                              }}
+                              className="rounded border px-3 py-1 text-xs text-gray-600 hover:bg-gray-50 cursor-pointer"
+                            >
+                              수정
+                            </button>
+                            <button
+                              onClick={() => handleDeleteMyReview(review)}
+                              className="rounded border px-3 py-1 text-xs text-red-400 hover:bg-red-50 cursor-pointer"
+                            >
+                              삭제
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))
+                )}
+              </div>
+            )}
+
+            {/* ── 내 업체 탭 (manager 전용) ── */}
+            {activeTab === '내 업체' && isManager && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold text-gray-700 text-sm">내 등록 업체 ({myBusinesses.length}개)</h4>
+                </div>
+                {myBusinessLoading ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">업체 정보를 불러오는 중입니다...</p>
+                  </div>
+                ) : myBusinesses.length === 0 ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">등록된 업체가 없습니다.</p>
+                    <p className="text-gray-400 text-xs mt-1">업체 신청 후 승인이 완료되면 여기서 확인할 수 있습니다.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {myBusinesses.map((biz) => (
+                      <div key={biz.id} className="rounded-xl bg-white p-5 shadow-sm border border-gray-200">
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="space-y-1 flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h4 className="font-bold text-gray-800 text-base">{biz.name}</h4>
+                              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                                biz.status === 'approved'
+                                  ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                                  : 'bg-amber-50 text-amber-600 border border-amber-100'
+                              }`}>
+                                {biz.status === 'approved' ? '✓ 승인 완료' : '⏳ 승인 대기 중'}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-500 truncate">{biz.shortDescription}</p>
+                            <div className="flex items-center gap-4 text-xs text-gray-400 mt-1">
+                              <span>⭐ {biz.ratingAvg && biz.ratingAvg > 0 ? biz.ratingAvg.toFixed(1) : '평점 없음'}</span>
+                              <span>💬 후기 {biz.reviewCount ?? 0}개</span>
+                              <span>🔖 북마크 {biz.bookmarkCount ?? 0}회</span>
+                            </div>
+                          </div>
+                          {biz.status === 'approved' && (
+                            <Link
+                              to="/business/$businessId"
+                              params={{ businessId: biz.id }}
+                              className="shrink-0 rounded-lg bg-blue-500 hover:bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition cursor-pointer"
+                            >
+                              상세 페이지로 →
+                            </Link>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             )}
@@ -645,6 +1039,70 @@ export default function MyPage() {
                       </div>
                     ));
                   })()
+                )}
+              </div>
+            )}
+
+            {/* ── 리뷰 로그 탭 (Admin용) ── */}
+            {activeTab === '리뷰 로그' && isAdmin && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold text-gray-700 text-sm">리뷰 삭제 이력 ({reviewDeleteLogs.length}건)</h4>
+                </div>
+                {reviewDeleteLogsLoading ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">로그를 불러오는 중입니다...</p>
+                  </div>
+                ) : reviewDeleteLogs.length === 0 ? (
+                  <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                    <p className="text-gray-500 text-sm font-medium">리뷰 삭제 이력이 없습니다.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto rounded-xl bg-white shadow-sm border border-gray-200">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-gray-50 border-b border-gray-200">
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 whitespace-nowrap">삭제 일시</th>
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 whitespace-nowrap">업체명</th>
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 whitespace-nowrap">리뷰 작성자</th>
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500">리뷰 내용</th>
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 whitespace-nowrap">별점</th>
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 whitespace-nowrap">삭제자</th>
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 whitespace-nowrap">역할</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {reviewDeleteLogs.map((log) => {
+                          const deletedDate = log.deletedAt
+                            ? new Date(log.deletedAt.seconds * 1000).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+                            : '-';
+                          return (
+                            <tr key={log.id} className="hover:bg-gray-50 transition">
+                              <td className="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">{deletedDate}</td>
+                              <td className="px-4 py-3 text-xs font-medium text-gray-800 whitespace-nowrap">{log.businessName}</td>
+                              <td className="px-4 py-3 text-xs text-gray-600 whitespace-nowrap">{log.reviewUserEmail}</td>
+                              <td className="px-4 py-3 text-xs text-gray-600 max-w-[200px]">
+                                <span className="line-clamp-2">{log.reviewContent}</span>
+                              </td>
+                              <td className="px-4 py-3 text-xs text-yellow-500 whitespace-nowrap">
+                                {'⭐'.repeat(log.reviewRating)}
+                              </td>
+                              <td className="px-4 py-3 text-xs text-gray-600 whitespace-nowrap">{log.deletedByEmail}</td>
+                              <td className="px-4 py-3 whitespace-nowrap">
+                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                                  log.deletedByRole === 'admin'
+                                    ? 'bg-red-50 text-red-600 border border-red-100'
+                                    : 'bg-green-50 text-green-600 border border-green-100'
+                                }`}>
+                                  {log.deletedByRole === 'admin' ? '관리자' : '업체주'}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
               </div>
             )}

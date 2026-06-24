@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 어드민 권한 여부 판별 함수
+    function isAdmin() {
+      return request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // users 컬렉션 규칙
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      
+      // 신규 가입 시에는 반드시 본인 uid로, role은 'user'로 강제 설정
+      allow create: if request.auth != null && request.auth.uid == uid 
+                     && request.resource.data.role == 'user';
+                     
+      // 수정 시 일반 유저는 role 필드를 절대 수정할 수 없으며, 어드민만 유저의 role을 수정할 수 있음
+      allow update: if request.auth != null 
+                     && (
+                       (request.auth.uid == uid && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role'])))
+                       || isAdmin()
+                     );
+                     
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // businessApplications 컬렉션 규칙
+    match /businessApplications/{docId} {
+      allow read: if true;
+      
+      // 업체 신청서 최초 작성 시 status는 반드시 'submitted'여야 하며 ownerUid는 본인이어야 함
+      allow create: if request.auth != null 
+                     && request.resource.data.ownerUid == request.auth.uid
+                     && request.resource.data.status == 'submitted';
+                     
+      // 수정 시 어드민이거나, 본인 업체인 경우에 한해서만 가능 (단, 본인이라도 status, ownerUid, ownerEmail은 수정 불가)
+      allow update: if request.auth != null 
+                     && (
+                       isAdmin() 
+                       || (
+                         resource.data.ownerUid == request.auth.uid 
+                         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status', 'ownerUid', 'ownerEmail']))
+                       )
+                     );
+                     
+      allow delete: if request.auth != null && (isAdmin() || resource.data.ownerUid == request.auth.uid);
+    }
+
+    // reviews 컬렉션 규칙
+    match /reviews/{docId} {
+      allow read: if true;
+      
+      // 신규 리뷰 작성 시 uid는 본인이어야 하고, 별점은 1~5점 사이여야 함
+      allow create: if request.auth != null 
+                     && request.resource.data.uid == request.auth.uid
+                     && request.resource.data.rating >= 1 
+                     && request.resource.data.rating <= 5;
+                     
+      // 리뷰 수정 시 작성자 본인이어야 하고, uid 위조가 불가능하며, 별점은 1~5점 사이여야 함
+      allow update: if request.auth != null 
+                     && resource.data.uid == request.auth.uid
+                     && request.resource.data.uid == request.auth.uid
+                     && request.resource.data.rating >= 1 
+                     && request.resource.data.rating <= 5;
+                     
+      allow delete: if request.auth != null 
+                     && (resource.data.uid == request.auth.uid || isAdmin());
+    }
+
+    // visitLogs 컬렉션 규칙 (본인 로그만 조회 및 기록 가능)
+    match /visitLogs/{docId} {
+      allow read, write: if request.auth != null && docId.matches('^' + request.auth.uid + '_.*');
+    }
+
+    // reviewDeleteLogs 컬렉션 규칙
+    match /reviewDeleteLogs/{docId} {
+      allow create: if request.auth != null;
+      allow read: if isAdmin();
+      allow update, delete: if false; // 삭제 로그는 변조 및 임의 삭제 절대 불가
+    }
+  }
+}
