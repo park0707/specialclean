@@ -2,12 +2,14 @@
 import { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
 import Application from './application';
+import { useAuth } from '../../../logincontext';
 
 interface Props {
   activeSection: string;
 }
 
 export default function ContactPage({ activeSection }: Props) {
+  const { user } = useAuth();
   const formRef = useRef<HTMLFormElement>(null);
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
@@ -57,6 +59,24 @@ export default function ContactPage({ activeSection }: Props) {
   }
 
   if (activeSection === '문의 양식') {
+    if (!user) {
+      return (
+        <div>
+          <h2 className="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-200">
+            문의 양식
+          </h2>
+          <div className="rounded-lg bg-amber-50 border border-amber-200 p-6 text-center max-w-lg">
+            <p className="text-amber-700 font-semibold text-sm">
+              문의하기는 로그인 후 이용하실 수 있습니다.
+            </p>
+            <p className="text-gray-500 text-xs mt-1">
+              상단 메뉴를 통해 로그인 후 다시 시도해 주세요.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div>
         <h2 className="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-200">
@@ -76,32 +96,31 @@ export default function ContactPage({ activeSection }: Props) {
             </button>
           </div>
         ) : (
-          // ref를 form에 직접 연결
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 max-w-lg">
+            <input type="hidden" name="from_email" value={user.email || ''} />
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 이름
               </label>
-              {/* name 속성이 EmailJS 템플릿 변수명과 일치해야 함 */}
               <input
                 type="text"
                 name="from_name"
+                defaultValue={user.displayName || ''}
                 required
                 className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-                placeholder="홍길동"
+                placeholder="이름을 입력해 주세요."
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                이메일
+                답변 수신 이메일
               </label>
-              <input
-                type="email"
-                name="from_email"
-                required
-                className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-                placeholder="example@email.com"
-              />
+              <div className="w-full rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-500">
+                {user.email} (로그인된 계정)
+              </div>
+              <p className="text-[11px] text-gray-400 mt-1">
+                답변은 위 로그인된 계정 이메일로 발송됩니다.
+              </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
