@@ -780,7 +780,7 @@ export default function BusinessDetail() {
                       href={`mailto:${biz.ownerEmail}`}
                       className="text-gray-700 hover:text-blue-500 transition-colors break-all"
                     >
-                      {maskEmail(biz.ownerEmail)}
+                      {biz.ownerEmail}
                     </a>
                   </div>
                 )}
