@@ -65,7 +65,7 @@ export default function ContactPage({ activeSection }: Props) {
           <h2 className="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-200">
             문의 양식
           </h2>
-          <div className="rounded-lg bg-amber-50 border border-amber-200 p-6 text-center max-w-lg">
+          <div className="rounded-lg bg-amber-50 border border-amber-200 p-6 text-center w-full">
             <p className="text-amber-700 font-semibold text-sm">
               문의하기는 로그인 후 이용하실 수 있습니다.
             </p>
@@ -96,7 +96,7 @@ export default function ContactPage({ activeSection }: Props) {
             </button>
           </div>
         ) : (
-          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 max-w-lg">
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 w-full max-w-lg">
             <input type="hidden" name="from_email" value={user.email || ''} />
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
