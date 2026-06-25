@@ -61,29 +61,31 @@ export default function BusinessList() {
     });
 
     const sorted = [...result].sort((a, b) => {
+      // 1. 주 정렬 조건 비교 (북마크 또는 리뷰)
       if (sortBy === 'bookmarks') {
-        return (b.bookmarkCount || 0) - (a.bookmarkCount || 0);
-      }
-      if (sortBy === 'reviews') {
-        return (b.reviewCount || 0) - (a.reviewCount || 0);
+        const diff = (b.bookmarkCount || 0) - (a.bookmarkCount || 0);
+        if (diff !== 0) return diff;
+      } else if (sortBy === 'reviews') {
+        const diff = (b.reviewCount || 0) - (a.reviewCount || 0);
+        if (diff !== 0) return diff;
       }
 
-      // 기본 정렬:
-      // 1순위: 협력 업체 (isPartner === true)
-      // 2순위: 협력 업체 중 순위가 높은(partnerRank가 작은) 업체
-      // 3순위: 일반 업체는 가입된 순서 (createdAt 오름차순)
+      // 2. 부 정렬 조건 (주 정렬 수치가 같거나, 기본 정렬일 때 적용)
+      // 2-1순위: 협력 업체 (isPartner === true) 우선
       const aIsPartner = !!a.isPartner;
       const bIsPartner = !!b.isPartner;
 
       if (aIsPartner && !bIsPartner) return -1;
       if (!aIsPartner && bIsPartner) return 1;
 
+      // 2-2순위: 협력 업체 간에는 순위가 높은(partnerRank가 작은) 업체 우선
       if (aIsPartner && bIsPartner) {
         const aRank = a.partnerRank || 999999;
         const bRank = b.partnerRank || 999999;
-        return aRank - bRank;
+        if (aRank !== bRank) return aRank - bRank;
       }
 
+      // 2-3순위: 일반 업체 간에는 가입일 순서 (createdAt 오름차순)
       const aTime = a.createdAt?.seconds || 0;
       const bTime = b.createdAt?.seconds || 0;
       return aTime - bTime;
