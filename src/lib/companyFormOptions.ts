@@ -29,6 +29,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
       '귀중품 분류 및 인계',
       '상속 차량 행정·폐차 대행',
       '유품 소각 대행',
+      '생전정리',
     ],
   },
   {
@@ -136,6 +137,7 @@ export const TAG_GROUPS: TagGroup[] = [
       '위생관리용역업',
       '장비임대 가능',
       '청소용품 납품',
+      '예비사회적기업',
     ],
   },
   {
