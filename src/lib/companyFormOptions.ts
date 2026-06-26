@@ -42,6 +42,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
       '비대면 야간·새벽 작업',
       '방치된 냉장고 정밀 살균',
       '반려동물 분변 및 요독 제거',
+      '전문 정리수납',
     ],
   },
   {
@@ -141,6 +142,8 @@ export const TAG_GROUPS: TagGroup[] = [
       'LH공사 협약 업체',
       '공공기관 협약',
       '전국 지점망 구축',
+      '정식 법인 기업',
+      '미디어·방송 출연',
     ],
   },
   {
@@ -162,6 +165,7 @@ export const TAG_GROUPS: TagGroup[] = [
       '이웃 비밀 보장',
       '보험 청구 서류 지원',
       '차량 행정 대행 가능',
+      '정규직 청년팀 투입',
     ],
   },
   {
